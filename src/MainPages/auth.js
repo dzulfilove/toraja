@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/button.css";
 import Wave from "../utils/wave";
-import loginBg from "../assets/login.jpg";
+import loginBg from "https://res.cloudinary.com/diipdl14x/image/upload/v1751188952/pxoqhdsvzooxu7cngspx.jpg";
 import { motion } from "framer-motion";
 
 function Login() {

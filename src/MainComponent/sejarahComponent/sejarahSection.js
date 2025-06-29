@@ -4,7 +4,7 @@ import img1 from "../../assets/weaving.jpg";
 import img2 from "../../assets/tongkonan.jpg";
 import img3 from "../../assets/pagelu.jpeg";
 import img4 from "../../assets/mountain.jpg";
-import map from "../../assets/map-toraja.jpg";
+import map from "https://res.cloudinary.com/diipdl14x/image/upload/v1751188894/zxaidrvzrs7qkljjzqtf.jpg";
 
 // Animasi container
 const containerVariants = {

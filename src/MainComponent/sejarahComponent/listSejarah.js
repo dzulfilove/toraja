@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import filosofi from "../../assets/filosofi.jpg";
 import asal from "../../assets/asal.jpg";
 import sejarah from "../../assets/sejarah-slider.jpg";
-import back from "../../assets/back.jpg";
+import back from "https://res.cloudinary.com/diipdl14x/image/upload/v1751188919/yzpayn5exorb3qrqcdjl.jpg";
 
 // Variants untuk container animasi
 const containerVariants = {

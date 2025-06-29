@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import sejarah from "../../assets/sejarah.jpg"; // pastikan path sesuai
+import sejarah from "https://res.cloudinary.com/diipdl14x/image/upload/v1751188952/pxoqhdsvzooxu7cngspx.jpg"; // pastikan path sesuai
 
 const HeaderList = ({ title }) => {
   return (

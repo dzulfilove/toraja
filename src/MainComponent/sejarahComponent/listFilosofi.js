@@ -1,6 +1,6 @@
 import React from "react";
 import "../../styles/filosofiCard.css";
-import back from "../../assets/back.jpg";
+import back from "https://res.cloudinary.com/diipdl14x/image/upload/v1751188919/yzpayn5exorb3qrqcdjl.jpg";
 import { motion } from "framer-motion";
 
 const filosofiToraja = [

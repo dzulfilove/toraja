@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import mapImage from "../../assets/map.jpg"; // pastikan path sesuai
+import mapImage from "https://res.cloudinary.com/diipdl14x/image/upload/v1751188897/j4iqyoswwezcuffznhkh.jpg"; // pastikan path sesuai
 
 const MapSection = () => {
   return (

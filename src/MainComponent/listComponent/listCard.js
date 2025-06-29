@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import Card from "./card";
-import back from "../../assets/back.jpg"; // ganti dengan path gambar kamu
+import back from "https://res.cloudinary.com/diipdl14x/image/upload/v1751188919/yzpayn5exorb3qrqcdjl.jpg"; // ganti dengan path gambar kamu
 
 const itemsPerPage = 8;
 
