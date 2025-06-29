@@ -1,0 +1,244 @@
+.cookieCard {
+  height: 8rem;
+  background: linear-gradient(to right, #1d4ed8, #7298ff);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.cookieCard::before {
+  width: 120px;
+  height: 120px;
+  content: "";
+  background: linear-gradient(to right, #1d4ed8, #7298ff);
+  position: absolute;
+  z-index: 1;
+  border-radius: 50%;
+  right: -25%;
+  top: -25%;
+}
+
+.cookieHeading {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgb(241, 241, 241);
+  z-index: 2;
+}
+
+.cookieDescription {
+  display: flex;
+
+  justify-content: flex-start;
+  gap: 12px;
+  font-size: 0.9em;
+  color: rgb(241, 241, 241);
+  z-index: 99;
+}
+
+.cookieDescription a {
+  color: rgb(241, 241, 241);
+}
+
+.acceptButton {
+  padding: 11px 20px;
+  background-color: #1d4ed8;
+  transition-duration: 0.2s;
+  border: none;
+  color: rgb(241, 241, 241);
+  cursor: pointer;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.acceptButton:hover {
+  background-color: #1d4ed8;
+  transition-duration: 0.2s;
+}
+
+.glass-effect {
+  /* From https://css.glass */
+  background: rgba(255, 255, 255, 0.17);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10.6px);
+  -webkit-backdrop-filter: blur(10.6px);
+  border: 1px solid rgba(255, 255, 255, 0.347);
+}
+
+/* wave */
+@keyframes move_wave {
+  0% {
+    transform: translateX(0) translateZ(0) scaleY(1);
+  }
+  50% {
+    transform: translateX(-25%) translateZ(0) scaleY(0.55);
+  }
+  100% {
+    transform: translateX(-50%) translateZ(0) scaleY(1);
+  }
+}
+.waveWrapper {
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  margin: auto;
+}
+.waveWrapperInner {
+  position: absolute;
+  width: 100%;
+  overflow: hidden;
+  height: 100%;
+  bottom: -1px;
+  /* background-image: linear-gradient(to top, #86377b 20%, #27273c 80%); */
+}
+.bgTop {
+  z-index: 15;
+  opacity: 0.5;
+}
+.bgMiddle {
+  z-index: 10;
+  opacity: 0.75;
+}
+.bgBottom {
+  z-index: 5;
+}
+.wave {
+  position: absolute;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background-repeat: repeat no-repeat;
+  background-position: 0 bottom;
+  transform-origin: center bottom;
+}
+.waveTop {
+  background-size: 50% 100px;
+}
+.waveAnimation .waveTop {
+  animation: move-wave 4s;
+  -webkit-animation: move-wave 4s;
+  -webkit-animation-delay: 1s;
+  animation-delay: 1s;
+}
+.waveMiddle {
+  background-size: 50% 120px;
+}
+.waveAnimation .waveMiddle {
+  animation: move_wave 10s linear infinite;
+}
+.waveBottom {
+  background-size: 50% 100px;
+}
+.waveAnimation .waveBottom {
+  animation: move_wave 15s linear infinite;
+}
+
+.cardL-container {
+  width: 300px;
+  height: 400px;
+  cursor: pointer;
+  position: relative;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+
+  @media (max-width: 500px) {
+    width: 90%;
+    height: 250px;
+  }
+}
+
+.cardL {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  position: relative;
+}
+
+.cardL .front-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.cardL .front-content .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* gelap transparan */
+  border-radius: inherit;
+}
+
+.cardL .front-content p {
+  font-size: 28px;
+  font-weight: 700;
+  z-index: 1;
+  background: linear-gradient(-45deg, #B8860B 0%, #8B4513 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  text-align: center;
+  padding: 0 10px;
+}
+
+.cardL .content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+  background: linear-gradient(-45deg, #B8860B 0%, #8B4513 100%);
+  color: #e8e8e8;
+  padding: 20px;
+  line-height: 1.5;
+  border-radius: 5px;
+  pointer-events: none;
+  transform: translateX(-96%);
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+
+  @media (max-width: 500px) {
+    padding: 10px;
+  }
+}
+
+.cardL .content .heading {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.cardL:hover .content {
+  transform: translateY(0);
+}
+
+.cardL:hover .front-content {
+  transform: translateX(-30%);
+}
+
+.cardL:hover .front-content p {
+  opacity: 0;
+}
