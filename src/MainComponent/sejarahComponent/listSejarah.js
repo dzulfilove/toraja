@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import filosofi from "../../assets/filosofi.jpg";
 import asal from "../../assets/asal.jpg";
 import sejarah from "../../assets/sejarah-slider.jpg";
-import back from "https://res.cloudinary.com/diipdl14x/image/upload/v1751188919/yzpayn5exorb3qrqcdjl.jpg";
 
 // Variants untuk container animasi
 const containerVariants = {
@@ -55,7 +54,7 @@ const ListSejarah = () => {
         <div
           className="w-full h-full bg-cover bg-center"
           style={{
-            backgroundImage: `url(${back})`,
+            backgroundImage: `url(https://res.cloudinary.com/diipdl14x/image/upload/v1751188919/yzpayn5exorb3qrqcdjl.jpg)`,
           }}
         />
         <div className="absolute inset-0 bg-white opacity-90" />

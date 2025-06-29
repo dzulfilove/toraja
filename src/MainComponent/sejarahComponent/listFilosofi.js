@@ -1,6 +1,6 @@
 import React from "react";
 import "../../styles/filosofiCard.css";
-import back from "https://res.cloudinary.com/diipdl14x/image/upload/v1751188919/yzpayn5exorb3qrqcdjl.jpg";
+
 import { motion } from "framer-motion";
 
 const filosofiToraja = [
@@ -64,7 +64,9 @@ const ListFilosofi = () => {
       <div className="absolute inset-0 z-0">
         <div
           className="w-full h-full bg-cover bg-center"
-          style={{ backgroundImage: `url(${back})` }}
+          style={{
+            backgroundImage: `url(https://res.cloudinary.com/diipdl14x/image/upload/v1751188919/yzpayn5exorb3qrqcdjl.jpg)`,
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/100 to-black/40" />
       </div>

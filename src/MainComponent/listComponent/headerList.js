@@ -1,6 +1,5 @@
 import React from "react";
 import { motion } from "framer-motion";
-import sejarah from "https://res.cloudinary.com/diipdl14x/image/upload/v1751188952/pxoqhdsvzooxu7cngspx.jpg"; // pastikan path sesuai
 
 const HeaderList = ({ title }) => {
   return (
@@ -8,7 +7,9 @@ const HeaderList = ({ title }) => {
       {/* Background image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${sejarah})` }}
+        style={{
+          backgroundImage: `url(https://res.cloudinary.com/diipdl14x/image/upload/v1751188952/pxoqhdsvzooxu7cngspx.jpg)`,
+        }}
       ></div>
 
       {/* Overlay gradient: hitam → transparan */}

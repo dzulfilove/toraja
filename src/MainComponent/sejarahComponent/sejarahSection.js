@@ -4,7 +4,6 @@ import img1 from "../../assets/weaving.jpg";
 import img2 from "../../assets/tongkonan.jpg";
 import img3 from "../../assets/pagelu.jpeg";
 import img4 from "../../assets/mountain.jpg";
-import map from "https://res.cloudinary.com/diipdl14x/image/upload/v1751188894/zxaidrvzrs7qkljjzqtf.jpg";
 
 // Animasi container
 const containerVariants = {
@@ -44,7 +43,7 @@ const SejarahSection = () => {
         </div>
         <div className="w-[30%] mt-8 md:mt-0">
           <motion.img
-            src={map}
+            src="https://res.cloudinary.com/diipdl14x/image/upload/v1751188894/zxaidrvzrs7qkljjzqtf.jpg"
             alt="Toraja Map"
             className="w-60 mx-auto md:mx-0"
             initial={{ opacity: 0, x: 50 }}

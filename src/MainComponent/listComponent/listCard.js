@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import Card from "./card";
-import back from "https://res.cloudinary.com/diipdl14x/image/upload/v1751188919/yzpayn5exorb3qrqcdjl.jpg"; // ganti dengan path gambar kamu
 
 const itemsPerPage = 8;
 
@@ -49,7 +48,8 @@ const ListCard = ({ topic,data, categories, title, description }) => {
       <div className="absolute inset-0 z-0">
         <div
           className="w-full h-full bg-cover bg-center"
-          style={{ backgroundImage: `url(${back})` }}
+          style={{ backgroundImage: `url(https://res.cloudinary.com/diipdl14x/image/upload/v1751188919/yzpayn5exorb3qrqcdjl.jpg)` }}
+
         />
         <div className="absolute inset-0 bg-white opacity-90" />
       </div>

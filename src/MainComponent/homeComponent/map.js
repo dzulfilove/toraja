@@ -1,6 +1,5 @@
 import React from "react";
 import { motion } from "framer-motion";
-import mapImage from "https://res.cloudinary.com/diipdl14x/image/upload/v1751188897/j4iqyoswwezcuffznhkh.jpg"; // pastikan path sesuai
 
 const MapSection = () => {
   return (
@@ -22,7 +21,7 @@ const MapSection = () => {
 
       {/* Gambar peta dengan shadow */}
       <motion.img
-        src={mapImage}
+        src="https://res.cloudinary.com/diipdl14x/image/upload/v1751188897/j4iqyoswwezcuffznhkh.jpg"
         alt="Peta Sulawesi Selatan"
         className="max-w-full w-[900px] h-[400px] rounded"
         initial={{ opacity: 0, scale: 0.95 }}

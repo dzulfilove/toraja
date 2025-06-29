@@ -1,5 +1,4 @@
 import React from "react";
-import torajaVideo from "../../assets/hero.mp4"; // Sesuaikan path
 import { motion } from "framer-motion";
 
 const HeroWithVideo = () => {
@@ -13,7 +12,7 @@ const HeroWithVideo = () => {
         playsInline
         className="absolute inset-0 w-full h-full object-cover"
       >
-        <source src={torajaVideo} type="video/mp4" />
+        <source src="https://res.cloudinary.com/diipdl14x/video/upload/v1751189334/kueoypc3rnqljsj7gkb5.3gp" type="video/mp4" />
         Browser Anda tidak mendukung tag video.
       </video>
 

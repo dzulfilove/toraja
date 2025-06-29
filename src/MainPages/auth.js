@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/button.css";
 import Wave from "../utils/wave";
-import loginBg from "https://res.cloudinary.com/diipdl14x/image/upload/v1751188952/pxoqhdsvzooxu7cngspx.jpg";
+
 import { motion } from "framer-motion";
 
 function Login() {
@@ -14,7 +14,9 @@ function Login() {
   return (
     <div
       className="relative flex items-center justify-center min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: `url(${loginBg})` }}
+      style={{
+        backgroundImage: `url(https://res.cloudinary.com/diipdl14x/image/upload/v1751188952/pxoqhdsvzooxu7cngspx.jpg)`,
+      }}
     >
       {/* Overlay gradasi kiri ke kanan */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/100 to-transparent z-10"></div>
