@@ -115,8 +115,8 @@ const HomeMakanan = () => {
           >
             {makananToraja.map((makanan) => (
               <SwiperSlide key={makanan.id}>
-                <Link to={`/detail/tarian/${makanan.id}`}>
-                  {({ isActive }) => (
+                {({ isActive }) => (
+                  <Link to={`/detail/makanan/${makanan.id}`}>
                     <motion.div
                       variants={textVariants}
                       className={`relative rounded-xl overflow-hidden transition-all duration-500 ${
@@ -153,8 +153,8 @@ const HomeMakanan = () => {
                         )}
                       </div>
                     </motion.div>
-                  )}
-                </Link>
+                  </Link>
+                )}
               </SwiperSlide>
             ))}
           </Swiper>
