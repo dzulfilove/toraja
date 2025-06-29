@@ -76,15 +76,18 @@ const HomeMakanan = () => {
         <div className="flex px-6 justify-between items-center mb-8">
           <div className="flex justify-between w-full items-center">
             <div className="flex flex-col justify-between items-start w-[50%]">
-              <p className="uppercase text-lg tracking-wider text-toraja-merah font-semibold">
-                Kebudayaan
-              </p>
               <h2 className="text-5xl font-bold text-toraja-emas">
                 Explore Kuliner Khas Toraja
               </h2>
+              <p className="uppercase text-lg tracking-wider text-toraja-merah font-semibold">
+                Kebudayaan
+              </p>
             </div>
             <div className="w-[40%] flex justify-end items-end h-full">
-              <Link to="/makanan" className="border-2 w-[15rem] font-bold text-toraja-merah border-toraja-merah py-4 px-4 inline-flex items-center hover:bg-toraja-merah hover:border-toraja-merah rounded-lg hover:text-toraja-putih transition">
+              <Link
+                to="/makanan"
+                className="border-2 w-[15rem] font-bold text-toraja-merah border-toraja-merah py-4 px-4 inline-flex items-center hover:bg-toraja-merah hover:border-toraja-merah rounded-lg hover:text-toraja-putih transition"
+              >
                 Lihat Lebih Lanjut
                 <span className="ml-2">→</span>
               </Link>
@@ -112,44 +115,46 @@ const HomeMakanan = () => {
           >
             {makananToraja.map((makanan) => (
               <SwiperSlide key={makanan.id}>
-                {({ isActive }) => (
-                  <motion.div
-                    variants={textVariants}
-                    className={`relative rounded-xl overflow-hidden transition-all duration-500 ${
-                      isActive ? "h-[30rem]" : "h-[24rem] mt-8"
-                    }`}
-                  >
-                    <div
-                      className="absolute inset-0 bg-cover bg-center"
-                      style={{ backgroundImage: `url(${makanan.image})` }}
-                    >
-                      <div className="absolute inset-0 bg-black/30"></div>
-                    </div>
-                    <div
-                      className={`absolute bottom-0 left-0 right-0 p-6 text-white ${
-                        isActive ? "bg-black/40" : "bg-black/20"
+                <Link to={`/detail/tarian/${makanan.id}`}>
+                  {({ isActive }) => (
+                    <motion.div
+                      variants={textVariants}
+                      className={`relative rounded-xl overflow-hidden transition-all duration-500 ${
+                        isActive ? "h-[30rem]" : "h-[24rem] mt-8"
                       }`}
                     >
-                      <h3
-                        className={`font-bold ${
-                          isActive ? "text-2xl" : "text-xl"
+                      <div
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{ backgroundImage: `url(${makanan.image})` }}
+                      >
+                        <div className="absolute inset-0 bg-black/30"></div>
+                      </div>
+                      <div
+                        className={`absolute bottom-0 left-0 right-0 p-6 text-white ${
+                          isActive ? "bg-black/40" : "bg-black/20"
                         }`}
                       >
-                        {makanan.title}
-                      </h3>
-                      <p
-                        className={`${
-                          isActive ? "text-lg" : "text-sm"
-                        } text-toraja-emas mb-2`}
-                      >
-                        {makanan.subtitle}
-                      </p>
-                      {isActive && (
-                        <p className="text-sm">{makanan.description}</p>
-                      )}
-                    </div>
-                  </motion.div>
-                )}
+                        <h3
+                          className={`font-bold ${
+                            isActive ? "text-2xl" : "text-xl"
+                          }`}
+                        >
+                          {makanan.title}
+                        </h3>
+                        <p
+                          className={`${
+                            isActive ? "text-lg" : "text-sm"
+                          } text-toraja-emas mb-2`}
+                        >
+                          {makanan.subtitle}
+                        </p>
+                        {isActive && (
+                          <p className="text-sm">{makanan.description}</p>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </Link>
               </SwiperSlide>
             ))}
           </Swiper>

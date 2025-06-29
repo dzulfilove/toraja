@@ -72,7 +72,7 @@ const ListFilosofi = () => {
       </div>
 
       {/* Content */}
-      <div className="container mx-auto relative z-10">
+      <div className="container mx-auto relative z-10 font-semi">
         <div className="text-start mb-12 ml-10">
           <h2 className="text-4xl md:text-5xl font-bold text-toraja-putih mb-2">
             Filosofi Suku Toraja

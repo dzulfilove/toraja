@@ -117,13 +117,14 @@ const MakananPage = () => {
   return (
     <div className="h-screen overflow-y-auto snap-y snap-mandatory">
       {/* Hero Section */}
-      <HeaderList title="Makanan Khas Toraja" />
+      <HeaderList title="Makanan Khas Toraja" image={"https://i.pinimg.com/1200x/1d/3f/60/1d3f60d5b1ae11bfc8aa92f769bfe95a.jpg"} />
       <ListCard
         topic={"makanan"}
         data={makananToraja} // Rename this prop to 'foods' or 'items' if you want, but keeping 'dances' as per instruction
         categories={categories}
         title={"Makanan Tradisional Khas Toraja"}
         description={desc}
+        image={"https://i.pinimg.com/1200x/fc/0b/dd/fc0bdd8b1b86fff3cc8080ec650985f1.jpg"}
       />
 
       <Footer />

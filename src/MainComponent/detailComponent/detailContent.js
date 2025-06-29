@@ -10,12 +10,23 @@ const DetailContent = ({ data }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <img
-        src={data.image}
-        alt={data.title}
-        className="rounded-lg shadow mb-6 w-full object-cover h-64 md:h-80"
-      />
-      <h2 className="text-3xl font-semibold mb-4 text-toraja-merah">{data.title}</h2>
+      <div className="relative w-full aspect-[4/3] overflow-hidden rounded-xl shadow-lg">
+        {/* Background blur */}
+        <div
+          className="absolute inset-0 bg-center bg-cover filter blur-md scale-100"
+          style={{ backgroundImage: `url(${data.image})` }}
+        ></div>
+
+        {/* Gambar asli */}
+        <img
+          src={data.image}
+          alt={data.title}
+          className="relative z-10 w-auto h-full mx-auto object-contain"
+        />
+      </div>
+      <h2 className="text-3xl font-semibold mb-4 mt-8 text-toraja-merah">
+        {data.title}
+      </h2>
       <p className="text-gray-700 leading-relaxed">{data.description}</p>
 
       {/* Galeri gambar tambahan */}

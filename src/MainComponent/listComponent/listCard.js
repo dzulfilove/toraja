@@ -9,7 +9,7 @@ const containerVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
 };
 
-const ListCard = ({ topic,data, categories, title, description }) => {
+const ListCard = ({ topic, data, categories, title, description, image }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
@@ -48,10 +48,9 @@ const ListCard = ({ topic,data, categories, title, description }) => {
       <div className="absolute inset-0 z-0">
         <div
           className="w-full h-full bg-cover bg-center"
-          style={{ backgroundImage: `url(https://res.cloudinary.com/diipdl14x/image/upload/v1751188919/yzpayn5exorb3qrqcdjl.jpg)` }}
-
+          style={{ backgroundImage: `url(${image})` }}
         />
-        <div className="absolute inset-0 bg-white opacity-90" />
+        <div className="absolute inset-0 bg-white opacity-80" />
       </div>
 
       <div className="container mx-auto mt-4 relative z-10">
@@ -121,7 +120,7 @@ const ListCard = ({ topic,data, categories, title, description }) => {
                 transition={{ duration: 0.4, delay: index * 0.05 }}
               >
                 <Card
-                id={item.id}
+                  id={item.id}
                   title={item.title}
                   description={item.description}
                   category={item.category}

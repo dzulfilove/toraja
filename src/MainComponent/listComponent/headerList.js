@@ -1,14 +1,14 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-const HeaderList = ({ title }) => {
+const HeaderList = ({ title,image }) => {
   return (
     <div className="relative w-full h-[25rem] overflow-hidden font-montserrat">
       {/* Background image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage: `url(https://res.cloudinary.com/diipdl14x/image/upload/v1751188952/pxoqhdsvzooxu7cngspx.jpg)`,
+          backgroundImage: `url(${image})`,
         }}
       ></div>
 

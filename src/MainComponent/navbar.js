@@ -39,6 +39,11 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
+            <Link to="/wisata" className="hover:text-toraja-kuning">
+              Wisata
+            </Link>
+          </li>
+          <li>
             <Link to="/login" className="hover:text-toraja-kuning">
               Login
             </Link>

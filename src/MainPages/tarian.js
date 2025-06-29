@@ -75,13 +75,21 @@ const TarianPage = () => {
   return (
     <div className="h-screen overflow-y-auto snap-y snap-mandatory">
       {/* Hero Section */}
-      <HeaderList title="Tarian Khas Toraja" />
+      <HeaderList
+        title="Tarian Khas Toraja"
+        image={
+          "https://i.pinimg.com/1200x/9d/5c/26/9d5c26608b1364bbb47ae4761f6f3a55.jpg"
+        }
+      />
       <ListCard
         topic={"tarian"}
         data={tarianToraja}
         categories={categories}
         title={"Tarian Tradisional Khas Toraja"}
         description={desc}
+        image={
+          "https://i.pinimg.com/1200x/11/ce/30/11ce30ac14196a6aa5c4312016583cca.jpg"
+        }
       />
 
       <Footer />

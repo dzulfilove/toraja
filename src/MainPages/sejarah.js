@@ -11,7 +11,12 @@ const SejarahPage = () => {
   return (
     <div className="h-screen overflow-y-auto snap-y snap-mandatory">
       {/* Hero Section */}
-      <HeaderList title="Sejarah dan Asal Usul" />
+      <HeaderList
+        title="Sejarah dan Asal Usul"
+        image={
+          "https://i.pinimg.com/736x/3c/22/3f/3c223fb465fcd2f831cb1b27ebc8cdf7.jpg"
+        }
+      />
 
       <ListSejarah />
       <SejarahSection />

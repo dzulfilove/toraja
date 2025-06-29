@@ -77,12 +77,12 @@ const HomeTarian = () => {
       <div className="flex flex-col justify-between items-center mb-8 mt-6 gap-8">
         <div className="flex justify-between w-full items-center">
           <div className="flex flex-col justify-between items-start w-[50%]">
-            <p className="uppercase text-lg tracking-wider text-toraja-merah font-semibold">
-              Kebudayaan
-            </p>
             <h2 className="text-5xl font-bold text-toraja-emas mt-3">
               Tarian Tradisional Suku Toraja
             </h2>
+            <p className="uppercase text-lg tracking-wider text-toraja-merah font-semibold">
+              Kebudayaan
+            </p>
           </div>
           <div className="w-[40%] flex justify-end items-end h-full">
             <Link
@@ -118,46 +118,48 @@ const HomeTarian = () => {
         >
           {tarianToraja.map((tarian) => (
             <SwiperSlide key={tarian.id}>
-              <div className="relative h-[500px] rounded-xl overflow-hidden shadow-lg group hover:cursor-pointer">
-                {/* Gambar dengan efek zoom */}
-                <div
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                  style={{ backgroundImage: `url(${tarian.image})` }}
-                ></div>
+              <Link to={`/detail/tarian/${tarian.id}`}>
+                <div className="relative h-[500px] rounded-xl overflow-hidden shadow-lg group hover:cursor-pointer">
+                  {/* Gambar dengan efek zoom */}
+                  <div
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                    style={{ backgroundImage: `url(${tarian.image})` }}
+                  ></div>
 
-                {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                  {/* Overlay gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
 
-                {/* Konten card */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                  <div className="mb-2">
-                    <span className="inline-block px-3 py-1 bg-toraja-merah rounded-full text-xs font-semibold">
-                      {tarian.jenis}
-                    </span>
-                  </div>
-                  <h3 className="text-2xl font-bold mb-2">{tarian.title}</h3>
-                  <p className="text-sm mb-4">{tarian.description}</p>
-                  <div className="flex items-center">
-                    <svg
-                      className="w-4 h-4 mr-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                      />
-                    </svg>
-                    <span className="text-sm font-medium">
-                      Properti: {tarian.properti}
-                    </span>
+                  {/* Konten card */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <div className="mb-2">
+                      <span className="inline-block px-3 py-1 bg-toraja-merah rounded-full text-xs font-semibold">
+                        {tarian.jenis}
+                      </span>
+                    </div>
+                    <h3 className="text-2xl font-bold mb-2">{tarian.title}</h3>
+                    <p className="text-sm mb-4">{tarian.description}</p>
+                    <div className="flex items-center">
+                      <svg
+                        className="w-4 h-4 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                        />
+                      </svg>
+                      <span className="text-sm font-medium">
+                        Properti: {tarian.properti}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>

@@ -5,6 +5,7 @@ import MapSection from "../MainComponent/homeComponent/map";
 import HomeTarian from "../MainComponent/homeComponent/homeTarian";
 import HomeMakanan from "../MainComponent/homeComponent/homeMakanan";
 import Footer from "../MainComponent/footer";
+import HomeWisata from "../MainComponent/homeComponent/homeWisata";
 
 const HomePage = () => {
   return (
@@ -26,6 +27,9 @@ const HomePage = () => {
       </div>
       <div className="snap-start h-screen">
         <HomeMakanan />
+      </div>
+      <div className="snap-start h-screen">
+        <HomeWisata />
       </div>
       <div className="snap-start h-screen">
         <Footer />
