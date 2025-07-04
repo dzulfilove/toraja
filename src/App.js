@@ -8,6 +8,9 @@ import TarianPage from "./MainPages/tarian";
 import MakananPage from "./MainPages/makanan";
 import DetailPage from "./MainPages/detailPage";
 import WisataPage from "./MainPages/wisata";
+import History from "./MainPages/adminPage/historyPage";
+import UploadImage from "./MainPages/adminPage/upload";
+import DetailHistory from "./MainPages/adminPage/detailHistory";
 // import About from "./pages/About";
 // import Services from "./pages/Services";
 // import Contact from "./pages/Contact";
@@ -20,10 +23,13 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="login" element={<Login />} />
           <Route path="sejarah" element={<SejarahPage />} />
+          <Route path="sejarah-admin" element={<History />} />
+          <Route path="/detail/sejarah-admin/:id" element={<DetailHistory />} />
+          <Route path="upload" element={<UploadImage />} />
           <Route path="tarian" element={<TarianPage />} />
           <Route path="makanan" element={<MakananPage />} />
           <Route path="wisata" element={<WisataPage />} />
-           <Route path="/detail/:topic/:id" element={<DetailPage />} />
+          <Route path="/detail/:topic/:id" element={<DetailPage />} />
           {/* <Route path="layanan" element={<Services />} />
           <Route path="kontak" element={<Contact />} /> */}
         </Route>
