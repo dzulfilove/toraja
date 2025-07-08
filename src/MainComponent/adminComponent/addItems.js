@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../../styles/button.css";
 import RichTextEditor from "./richText";
+import SearchableDropdown from "./dropdown";
 // Helper: revoke blob URL jika ada
 const revokeIfBlob = (url) => {
   if (url && url.startsWith("blob:")) {
@@ -8,26 +9,14 @@ const revokeIfBlob = (url) => {
   }
 };
 
-const DetailAdmin = ({ data, updateText }) => {
+const AddItems = ({ addItem, categories }) => {
   // title & description
-  const [title, setTitle] = useState(data.title || "");
-  const [description, setDescription] = useState(data.description || "");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
 
   // images: [{ id, url, file?, isEdit? }]
-  const [images, setImages] = useState(() => {
-    // Awalnya data.images dari props
-    const initial = data.images.map((img) => ({
-      id: img.id,
-      url: `http://localhost:5000/${img.image}`,
-    }));
-
-    // Jika kurang dari 4, tambah slot kosong
-    while (initial.length < 4) {
-      initial.push({}); // slot kosong
-    }
-
-    return initial;
-  });
+  const [images, setImages] = useState([{}]);
 
   // Cleanup blob URLs saat unmount
   useEffect(() => {
@@ -70,7 +59,10 @@ const DetailAdmin = ({ data, updateText }) => {
   };
 
   const handleSave = () => {
-    updateText(title, description, images);
+    addItem(title, description, images);
+  };
+  const handleSelect = (data) => {
+    setCategory(data);
   };
   console.log(description, "desc");
 
@@ -91,6 +83,18 @@ const DetailAdmin = ({ data, updateText }) => {
             type="text"
             placeholder=""
             className="peer w-full pl-6 pr-4 py-6 text-base text-gray-800 bg-white border border-gray-200 rounded-lg shadow-md focus:border-transparent focus:ring-2 focus:ring-indigo-300 focus:outline-none transition-all duration-300 delay-200 placeholder-transparent"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-lg font-semibold">Kategori</label>
+        <div className="relative w-full group mt-4">
+          <SearchableDropdown
+            options={categories}
+            onSelect={handleSelect}
+            placeholder="Select an option"
+            searchPlaceholder="Search options..."
           />
         </div>
       </div>
@@ -158,7 +162,7 @@ const DetailAdmin = ({ data, updateText }) => {
       {/* Buttons */}
       <div className="w-full py-4">
         <button className="mt-16 c-button c-button--gooey" onClick={handleSave}>
-          Update Data
+          Simpan Data
           <div className="c-button__blobs">
             <div></div>
             <div></div>
@@ -170,4 +174,4 @@ const DetailAdmin = ({ data, updateText }) => {
   );
 };
 
-export default DetailAdmin;
+export default AddItems;

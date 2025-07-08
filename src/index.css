@@ -16,3 +16,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.custom-richtext strong {
+  color: #8b0000; /* warna merah sesuai selera */
+}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import API from "../../config/api";
-import HeaderAdmin from "../../MainComponent/adminComponent/headerAdmin";
-import ListCardAdmin from "../../MainComponent/adminComponent/listCardAdmin";
+import API from "../../../config/api";
+import HeaderAdmin from "../../../MainComponent/adminComponent/headerAdmin";
+import ListCardAdmin from "../../../MainComponent/adminComponent/listCardAdmin";
 
 export default function History() {
   const [data, setData] = useState([]);
@@ -12,6 +12,7 @@ export default function History() {
   const getData = async () => {
     try {
       const res = await API.get("/history");
+      console.log(res.data);
       setData(res.data);
       setError(""); // clear error
     } catch (err) {
@@ -53,11 +54,7 @@ export default function History() {
   };
 
   return (
-    <div
-      className="relative h-screen overflow-y-auto snap-y snap-mandatory font-montserrat p-10 bg-toraja-putih"
-    
-    >
-      
+    <div className="relative h-screen overflow-y-auto snap-y snap-mandatory font-montserrat p-10 bg-toraja-putih">
       <HeaderAdmin title={"Kelola Data Sejarah"} />
       <ListCardAdmin
         topic={"sejarah"}

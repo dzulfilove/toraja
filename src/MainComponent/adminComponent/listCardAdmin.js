@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import CardAdmin from "./cardAdmin";
+import { FiPlus } from "react-icons/fi"; // Using Feather Icons (similar style)
+import { Link } from "react-router-dom";
 
 const itemsPerPage = 8;
 
@@ -51,7 +53,7 @@ const ListCardAdmin = ({
   return (
     <div
       ref={containerRef}
-      className="w-full py-8 px-4 font-montserrat relative mt-10 rounded-3xl shadow-md"
+      className="w-full py-8 px-4 font-montserrat relative mt-8 rounded-3xl shadow-md"
     >
       {/* Background */}
       <div className="absolute inset-0 z-0  rounded-3xl">
@@ -82,16 +84,41 @@ const ListCardAdmin = ({
 
         {/* Filter & Search */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-          <input
-            type="text"
-            placeholder="Cari..."
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="border-2 border-toraja-emas px-4 py-2 rounded-lg w-full md:w-1/3"
-          />
+          <div className="flex justify-start gap-8 w-[50%] items-center">
+            <input
+              type="text"
+              placeholder="Cari..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="border-2 border-toraja-emas px-4 py-2 rounded-lg w-full md:w-1/3"
+            />
+            {topic == "sejarah" ? (
+              <></>
+            ) : (
+              <>
+                <div className="group relative flex justify-center items-center hover:text-toraja-merah p-2 rounded-xl bg-toraja-merah hover:bg-white transition-all">
+                  <Link to={`/admin/add/${topic}`}>
+                    <FiPlus
+                      className="w-6 h-6 text-white hover:scale-125 duration-200 hover:text-toraja-merah"
+                      strokeWidth="2"
+                    />
+                  </Link>
+                  <span
+                    className="absolute -top-14 left-[50%] -translate-x-[50%] 
+    z-20 origin-left scale-0 px-3 rounded-lg border 
+    border-gray-300 bg-white py-2 text-sm font-bold
+    shadow-md transition-all duration-300 ease-in-out 
+    group-hover:scale-100"
+                  >
+                    Tambah<span></span>
+                  </span>
+                </div>
+              </>
+            )}
+          </div>
           <div className="flex flex-wrap gap-2">
             {["All", ...categories].map((cat) => (
               <button
@@ -133,7 +160,7 @@ const ListCardAdmin = ({
                   title={item.title}
                   description={item.description}
                   category={item.category}
-                  image={item.image}
+                  image={item.images}
                   topic={topic}
                 />
               </motion.div>
