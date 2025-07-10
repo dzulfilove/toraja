@@ -2,33 +2,47 @@ import { useEffect, useState } from "react";
 import API from "../../../config/api";
 import HeaderAdmin from "../../../MainComponent/adminComponent/headerAdmin";
 import ListCardAdmin from "../../../MainComponent/adminComponent/listCardAdmin";
+import Swal from "sweetalert2";
 
 export default function FoodPage() {
   const [data, setData] = useState([]);
   const [newTitle, setNewTitle] = useState("");
   const [newDesc, setNewDesc] = useState("");
   const [error, setError] = useState(""); // opsional: untuk tampilkan pesan error
+  const [loading, setLoading] = useState(false);
+
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  const getCategories = async () => {
+    try {
+      setLoading(true);
+      const res = await API.get(`/food/categories`);
+      const transformedData = res.data.map((item) => ({
+        value: item.id,
+        label: item.name_category,
+      }));
+      setCategories(transformedData);
+    } catch (err) {
+      console.error(err);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Gagal memuat kategori makanan.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getData = async () => {
     try {
       const res = await API.get("/food");
 
-      // Transformasi data
-      const transformedData = res.data.map((item) => ({
-        ...item, // Pertahankan properti lainnya
-        title: item.nama, // Ubah 'nama' menjadi 'title'
-        image: [
-          {
-            // Ubah 'image' string menjadi array objek
-            url: item.image,
-            id: Math.random().toString(36).substring(2, 9), // Generate random ID
-          },
-        ],
-        nama: undefined, // Hapus properti nama lama (optional)
-      }));
-
-      console.log(transformedData);
-      setData(transformedData);
+      setData(res.data);
       setError(""); // clear error
     } catch (err) {
       console.error("Error loading data:", err);
@@ -40,43 +54,16 @@ export default function FoodPage() {
     getData();
   }, []);
 
-  const handleCreate = async () => {
-    try {
-      await API.post("/food", {
-        title: newTitle,
-        description: newDesc,
-        image: "", // atau path default
-      });
-      setNewTitle(""); // reset input
-      setNewDesc("");
-      getData();
-      setError("");
-    } catch (err) {
-      console.error("Error creating data:", err);
-      setError("Gagal menambah data");
-    }
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await API.delete(`/food/${id}`);
-      getData();
-      setError("");
-    } catch (err) {
-      console.error("Error deleting data:", err);
-      setError("Gagal menghapus data");
-    }
-  };
-
   return (
     <div className="relative h-screen overflow-y-auto snap-y snap-mandatory font-montserrat p-10 bg-toraja-putih">
       <HeaderAdmin title={"Kelola Data Makanan Tradisional"} />
       <ListCardAdmin
-        topic={"food"}
+        topic={"makanan"}
         data={data}
         image="https://res.cloudinary.com/diipdl14x/image/upload/v1751567242/filosofi_dlh9dl.jpg"
         title="Makanan Tradisional Khas Budaya Toraja"
         description=""
+        categories={categories}
       />
     </div>
   );

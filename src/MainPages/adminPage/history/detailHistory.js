@@ -16,6 +16,7 @@ const DetailHistory = () => {
     try {
       setLoading(true);
       const res = await API.get(`/history/${id}`);
+      console.log(res.data, "data detail");
       setData(res.data);
     } catch (err) {
       console.error(err);
@@ -35,10 +36,16 @@ const DetailHistory = () => {
       console.log("update begin");
       await API.put(`/history/${id}`, { title, description });
       console.log("Update title & description sukses");
-
+      console.log(images);
       const editedImages = images.filter(
         (img) => img.isEdit === true && img.id && img.file
       );
+      const deletedImage = images.filter(
+        (img) => img.isDeleted === true && img.id
+      );
+      for (const img of deletedImage) {
+        await deleteSingleImage(img.id, img.file);
+      }
       for (const img of editedImages) {
         await updateSingleImage(img.id, img.file);
       }
@@ -85,6 +92,13 @@ const DetailHistory = () => {
     });
   };
 
+  const deleteSingleImage = async (imageId) => {
+    const formData = new FormData();
+
+    await API.delete(`/history/${id}/image/${imageId}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+  };
   if (loading) return <p>Loading...</p>;
   if (!data) return <p>Data tidak ditemukan</p>;
 
@@ -98,7 +112,12 @@ const DetailHistory = () => {
         ]}
       />
       <HeaderAdmin title={"Update Detail Data Sejarah"} />
-      <DetailAdmin data={data} updateText={updateText} />
+      <DetailAdmin
+        data={data}
+        updateText={updateText}
+        categories={[]}
+        topic={"sejarah"}
+      />
     </div>
   );
 };

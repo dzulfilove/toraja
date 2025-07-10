@@ -20,7 +20,11 @@ const ListCardAdmin = ({
   image = "",
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState({
+    value: "All",
+    label: "All",
+  });
+
   const [searchTerm, setSearchTerm] = useState("");
 
   const containerRef = useRef(null);
@@ -34,8 +38,11 @@ const ListCardAdmin = ({
   // Filter & search yang aman
   const filteredData = data.filter((item) => {
     const categoryValue = item.category ?? "Unknown";
+
     const matchCategory =
-      selectedCategory === "All" || categoryValue === selectedCategory;
+      selectedCategory.value === "All"
+        ? true
+        : categoryValue == selectedCategory.value;
 
     const titleValue = item.title ?? "";
     const matchSearch = titleValue
@@ -50,6 +57,7 @@ const ListCardAdmin = ({
   const indexOfFirst = indexOfLast - itemsPerPage;
   const currentData = filteredData.slice(indexOfFirst, indexOfLast);
 
+  console.log("currentData", selectedCategory, filteredData);
   return (
     <div
       ref={containerRef}
@@ -61,7 +69,7 @@ const ListCardAdmin = ({
           className="w-full h-full bg-cover bg-center  rounded-3xl"
           style={{ backgroundImage: `url(${image})` }}
         />
-        <div className="absolute inset-0 bg-white opacity-80  rounded-3xl" />
+        <div className="absolute inset-0 bg-white opacity-90  rounded-3xl" />
       </div>
 
       <div className="container mx-auto relative z-10">
@@ -119,24 +127,30 @@ const ListCardAdmin = ({
               </>
             )}
           </div>
-          <div className="flex flex-wrap gap-2">
-            {["All", ...categories].map((cat) => (
-              <button
-                key={cat}
-                onClick={() => {
-                  setSelectedCategory(cat);
-                  setCurrentPage(1);
-                }}
-                className={`px-6 py-1 rounded-xl transition-all text-sm ${
-                  selectedCategory === cat
-                    ? "bg-toraja-merah text-white"
-                    : "bg-toraja-putih text-toraja-merah border border-toraja-merah"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+          {topic == "sejarah" ? (
+            <></>
+          ) : (
+            <>
+              <div className="flex flex-wrap gap-2">
+                {[{ value: "All", label: "All" }, ...categories].map((cat) => (
+                  <button
+                    key={cat.value}
+                    onClick={() => {
+                      setSelectedCategory(cat);
+                      setCurrentPage(1);
+                    }}
+                    className={`px-6 py-1 rounded-xl transition-all text-sm ${
+                      selectedCategory.value === cat.value
+                        ? "bg-toraja-merah text-white"
+                        : "bg-toraja-putih text-toraja-merah border border-toraja-merah"
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
         </div>
 
         {/* Cards */}
@@ -145,7 +159,7 @@ const ListCardAdmin = ({
           whileInView="visible"
           viewport={{ once: true }}
           variants={containerVariants}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4"
+          className="flex justify-between items-start w-full flex-wrap gap-8 px-4"
         >
           {currentData.length > 0 ? (
             currentData.map((item, index) => (

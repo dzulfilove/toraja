@@ -1,71 +1,129 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import API from "../../../config/api";
 import DetailAdmin from "../../../MainComponent/adminComponent/detailAdmin";
 import HeaderAdmin from "../../../MainComponent/adminComponent/headerAdmin";
 import Breadcrumb from "../../../MainComponent/adminComponent/breadcrumb";
 import Swal from "sweetalert2";
 import AddItems from "../../../MainComponent/adminComponent/addItems";
+import AddCategory from "../../../MainComponent/adminComponent/addCategory";
 
 const AddFood = () => {
   const { id } = useParams();
-  const [categories, setCategories] = useState([
-    { value: null, label: "none" },
-  ]);
+  const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getCategories();
-  }, [id]);
+  }, []);
 
   const getCategories = async () => {
     try {
       setLoading(true);
       const res = await API.get(`/food/categories`);
       const transformedData = res.data.map((item) => ({
-        // Pertahankan properti lainnya
-        value: item.id, // Ubah 'nama' menjadi 'title'
+        value: item.id,
         label: item.name_category,
       }));
-      console.log(transformedData);
       setCategories(transformedData);
     } catch (err) {
       console.error(err);
-      alert("Gagal memuat data.");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Gagal memuat kategori makanan.",
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  // ✅ Update title & description + update/tambah gambar
-  const createFood = async (name, description, category, imageFile) => {
+  const createFood = async (title, description, category, images) => {
     try {
-      console.log("create food begin");
+      setLoading(true);
 
+      // 1. Buat makanan terlebih dahulu
       const formData = new FormData();
-      formData.append("name", name);
+      formData.append("name", title);
       formData.append("description", description);
       formData.append("category", category);
-      formData.append("image", imageFile);
 
-      await API.post("/food", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await API.post("/food", formData);
+      const newFoodId = response.data.id;
 
-      console.log("Food created successfully");
+      console.log(images, "gambar");
+      // 2. Upload gambar satu per satu (sequential)
+      if (images && images.length > 0) {
+        for (const img of images) {
+          if (!img.file) continue; // Skip jika file tidak ada
 
+          const imgFormData = new FormData();
+          imgFormData.append("image", img.file); // Field name "image" (sesuai backend)
+
+          try {
+            await API.post(`/food/${newFoodId}/image`, imgFormData, {
+              headers: { "Content-Type": "multipart/form-data" },
+            });
+            console.log(`Gambar ${img.file.name} berhasil diupload`);
+          } catch (err) {
+            console.error(`Gagal upload ${img.file.name}:`, err);
+            // Lanjut ke gambar berikutnya meskipun ada error
+            continue;
+          }
+        }
+      }
+
+      // 3. Tampilkan notifikasi sukses
       await Swal.fire({
         icon: "success",
         title: "Berhasil!",
-        text: "Data berhasil ditambahkan.",
+        text: "Makanan dan gambar berhasil ditambahkan.",
       });
+
+      navigate(`/admin/makanan/`);
     } catch (err) {
-      console.error(err);
+      console.error("Error utama:", err);
       Swal.fire({
         icon: "error",
-        title: "Oops...",
-        text: "Gagal menambahkan data!",
+        title: "Gagal",
+        text: err.response?.data?.message || "Gagal menambahkan makanan.",
       });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createFoodCategory = async (title) => {
+    try {
+      setLoading(true);
+
+      const formData = new FormData();
+      formData.append("name", title);
+
+      console.log(title, "title");
+
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ": " + pair[1]);
+      }
+
+      const response = await API.post("/food/category", formData);
+
+      await getCategories();
+      await Swal.fire({
+        icon: "success",
+        title: "Berhasil!",
+        text: "Kategori Makanan berhasil ditambahkan.",
+      });
+    } catch (err) {
+      console.error("Error utama:", err);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: err.response?.data?.message || "Gagal menambahkan makanan.",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -75,11 +133,22 @@ const AddFood = () => {
         items={[
           { label: "Dashboard", href: "/admin" },
           { label: "Makanan", href: "/admin/makanan" },
-          { label: "Tambah Makanan" }, // halaman aktif biasanya tidak ada href
+          { label: "Tambah Makanan" },
         ]}
       />
       <HeaderAdmin title={"Tambah Data Makanan"} />
-      <AddItems addItem={createFood} categories={categories} />
+      <div className="w-full h-auto flex justify-between items-start gap-6">
+        <div className="w-[60%]">
+          <AddItems
+            addItem={createFood}
+            categories={categories}
+            loading={loading}
+          />
+        </div>
+        <div className="w-[40%]">
+          <AddCategory addItem={createFoodCategory} />
+        </div>
+      </div>
     </div>
   );
 };

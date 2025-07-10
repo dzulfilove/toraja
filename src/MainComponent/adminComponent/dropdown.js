@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 
 const SearchableDropdown = ({
   options,
@@ -7,14 +7,23 @@ const SearchableDropdown = ({
   searchPlaceholder = "Search...",
   disabled = false,
   className = "",
+  defaultValue = null, // defaultValue sebaiknya null atau object
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedOption, setSelectedOption] = useState(null);
+
+  // Awalnya set ke defaultValue (object) atau null
+  const [selectedOption, setSelectedOption] = useState(defaultValue);
+
+  useEffect(() => {
+    if (defaultValue && defaultValue.value) {
+      setSelectedOption(defaultValue);
+    }
+  }, [defaultValue]);
+
   const dropdownRef = useRef(null);
 
-  // Filter options based on search term
-  const filteredOptions = options.filter(option =>
+  const filteredOptions = options.filter((option) =>
     option.label.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -37,21 +46,21 @@ const SearchableDropdown = ({
     setSearchTerm("");
   };
 
+  console.log(selectedOption);
   return (
-    <div 
-      ref={dropdownRef}
-      className={`relative ${className}`}
-    >
+    <div ref={dropdownRef} className={`relative ${className}`}>
       {/* Display selected option or placeholder */}
       <button
         type="button"
-        className={`w-full px-4 py-2 text-left border rounded-md shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500  ${
-          disabled ? "bg-gray-100 cursor-not-allowed" : "bg-white cursor-pointer"
+        className={`w-full px-4 py-2 text-left border rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500  ${
+          disabled
+            ? "bg-gray-100 cursor-not-allowed"
+            : "bg-white cursor-pointer"
         }`}
         onClick={() => !disabled && setIsOpen(!isOpen)}
         disabled={disabled}
       >
-        {selectedOption ? selectedOption.label : placeholder}
+        {selectedOption?.label || placeholder}
         <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
           <svg
             className="h-5 w-5 text-gray-400"

@@ -14,6 +14,10 @@ import DetailHistory from "./MainPages/adminPage/history/detailHistory";
 import FoodPage from "./MainPages/adminPage/food/foodPage";
 import AddItems from "./MainComponent/adminComponent/addItems";
 import AddFood from "./MainPages/adminPage/food/addFood";
+import DetailFood from "./MainPages/adminPage/food/detailFood";
+import DancePage from "./MainPages/adminPage/dance/dancePage";
+import DetailDance from "./MainPages/adminPage/dance/detailDance";
+import AddDance from "./MainPages/adminPage/dance/addDance";
 // import About from "./pages/About";
 // import Services from "./pages/Services";
 // import Contact from "./pages/Contact";
@@ -28,8 +32,12 @@ function App() {
           <Route path="sejarah" element={<SejarahPage />} />
           <Route path="/admin/sejarah" element={<History />} />
           <Route path="/admin/makanan" element={<FoodPage />} />
-          <Route path="/detail/sejarah-admin/:id" element={<DetailHistory />} />
-          <Route path="/admin/add/:topic" element={<AddFood />} />
+          <Route path="/admin/sejarah/detail/:id" element={<DetailHistory />} />
+          <Route path="/admin/makanan/detail/:id" element={<DetailFood />} />
+          <Route path="/admin/tarian" element={<DancePage />} />
+          <Route path="/admin/tarian/detail/:id" element={<DetailDance />} />
+          <Route path="/admin/add/makanan" element={<AddFood />} />
+          <Route path="/admin/add/tarian" element={<AddDance />} />
           <Route path="upload" element={<UploadImage />} />
           <Route path="tarian" element={<TarianPage />} />
           <Route path="makanan" element={<MakananPage />} />
