@@ -7,7 +7,7 @@ import Breadcrumb from "../../../MainComponent/adminComponent/breadcrumb";
 import Swal from "sweetalert2";
 import AddCategory from "../../../MainComponent/adminComponent/addCategory";
 
-const DetailDance = () => {
+const DetailTour = () => {
   const { id } = useParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -18,7 +18,7 @@ const DetailDance = () => {
   const loadData = async () => {
     try {
       setLoading(true);
-      const res = await API.get(`/dance/${id}`);
+      const res = await API.get(`/tourist/${id}`);
       setData(res.data);
     } catch (err) {
       console.error(err);
@@ -35,7 +35,7 @@ const DetailDance = () => {
   const getCategories = async () => {
     try {
       setLoading(true);
-      const res = await API.get(`/dance/categories`);
+      const res = await API.get(`/tourist/categories`);
       const transformedData = res.data.map((item) => ({
         value: item.id,
         label: item.name_category,
@@ -46,7 +46,7 @@ const DetailDance = () => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Gagal memuat kategori Tarian.",
+        text: "Gagal memuat kategori Wisata.",
       });
     } finally {
       setLoading(false);
@@ -56,7 +56,7 @@ const DetailDance = () => {
     loadData();
   }, [id]);
 
-  const createDanceCategory = async (title) => {
+  const createTourCategory = async (title) => {
     try {
       setLoading(true);
 
@@ -69,20 +69,20 @@ const DetailDance = () => {
         console.log(pair[0] + ": " + pair[1]);
       }
 
-      const response = await API.post("/dance/category", formData);
+      const response = await API.post("/tourist/category", formData);
 
       await getCategories();
       await Swal.fire({
         icon: "success",
         title: "Berhasil!",
-        text: "Kategori Tarian berhasil ditambahkan.",
+        text: "Kategori Wisata berhasil ditambahkan.",
       });
     } catch (err) {
       console.error("Error utama:", err);
       Swal.fire({
         icon: "error",
         title: "Gagal",
-        text: err.response?.data?.message || "Gagal menambahkan Tarian.",
+        text: err.response?.data?.message || "Gagal menambahkan Wisata.",
       });
     } finally {
       setLoading(false);
@@ -92,7 +92,7 @@ const DetailDance = () => {
   const updateText = async (title, category, description, images) => {
     try {
       console.log("update begin");
-      await API.put(`/dance/${id}`, { title, category, description });
+      await API.put(`/tourist/${id}`, { title, category, description });
       console.log("Update title & description sukses");
 
       const editedImages = images.filter(
@@ -134,7 +134,7 @@ const DetailDance = () => {
     const formData = new FormData();
     formData.append("image", file);
     console.log(file, "ADD");
-    await API.post(`/dance/${id}/image`, formData, {
+    await API.post(`/tourist/${id}/image`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
   };
@@ -145,23 +145,23 @@ const DetailDance = () => {
     formData.append("image", file);
     console.log(file, "UPDATE");
 
-    await API.put(`/dance/${id}/image/${imageId}`, formData, {
+    await API.put(`/tourist/${id}/image/${imageId}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
   };
   const deleteSingleImage = async (imageId) => {
     const formData = new FormData();
 
-    await API.delete(`/dance/${id}/image/${imageId}`, formData, {
+    await API.delete(`/tourist/${id}/image/${imageId}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
   };
 
-  const deleteDance = async () => {
+  const deleteTour = async () => {
     try {
       const result = await Swal.fire({
-        title: "Hapus Tarian?",
-        text: "Apakah Anda yakin ingin menghapus Tarian ini? Tindakan ini tidak dapat dibatalkan!",
+        title: "Hapus Wisata?",
+        text: "Apakah Anda yakin ingin menghapus Wisata ini? Tindakan ini tidak dapat dibatalkan!",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#d33",
@@ -173,17 +173,17 @@ const DetailDance = () => {
       if (result.isConfirmed) {
         const formData = new FormData();
 
-        await API.delete(`/dance/${id}`, formData, {
+        await API.delete(`/tourist/${id}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
 
         await Swal.fire({
           title: "Berhasil!",
-          text: "Tarian berhasil dihapus.",
+          text: "Wisata berhasil dihapus.",
           icon: "success",
           confirmButtonText: "OK",
         });
-        navigate(`/admin/Tarian/`);
+        navigate(`/admin/wisata/`);
 
         // opsional: reload halaman atau update state
         // window.location.reload();
@@ -192,7 +192,7 @@ const DetailDance = () => {
       console.error(error);
       Swal.fire({
         title: "Gagal!",
-        text: "Terjadi kesalahan saat menghapus Tarian.",
+        text: "Terjadi kesalahan saat menghapus Wisata.",
         icon: "error",
         confirmButtonText: "OK",
       });
@@ -207,27 +207,27 @@ const DetailDance = () => {
       <Breadcrumb
         items={[
           { label: "Dashboard", href: "/admin" },
-          { label: "Tarian", href: "/admin/tarian" },
+          { label: "Wisata", href: "/admin/wisata" },
           { label: "Detail" }, // halaman aktif biasanya tidak ada href
         ]}
       />
-      <HeaderAdmin title={"Update Detail Data Tarian "} />
+      <HeaderAdmin title={"Update Detail Data Wisata "} />
       <div className="w-full h-auto flex justify-between items-start gap-6">
         <div className="w-[60%]">
           <DetailAdmin
             data={data}
-            deleteData={deleteDance}
+            deleteData={deleteTour}
             updateText={updateText}
             categories={categories}
-            topic={"Tarian"}
+            topic={"Wisata"}
           />
         </div>
         <div className="w-[40%]">
-          <AddCategory addItem={createDanceCategory} />
+          <AddCategory addItem={createTourCategory} />
         </div>
       </div>
     </div>
   );
 };
 
-export default DetailDance;
+export default DetailTour;

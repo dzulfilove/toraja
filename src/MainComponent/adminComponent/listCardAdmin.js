@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import CardAdmin from "./cardAdmin";
 import { FiPlus } from "react-icons/fi"; // Using Feather Icons (similar style)
 import { Link } from "react-router-dom";
+import CardAdminFilosofi from "./cardAdminFilosofi";
 
 const itemsPerPage = 8;
 
@@ -169,14 +170,27 @@ const ListCardAdmin = ({
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
               >
-                <CardAdmin
-                  id={item.id}
-                  title={item.title}
-                  description={item.description}
-                  category={item.category}
-                  image={item.images}
-                  topic={topic}
-                />
+                {topic == "filosofi" ? (
+                  <>
+                    <CardAdminFilosofi
+                      id={item.id}
+                      title={item.title}
+                      description={item.description}
+                      topic={topic}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <CardAdmin
+                      id={item.id}
+                      title={item.title}
+                      description={item.description}
+                      category={item.category}
+                      image={item.images}
+                      topic={topic}
+                    />
+                  </>
+                )}
               </motion.div>
             ))
           ) : (

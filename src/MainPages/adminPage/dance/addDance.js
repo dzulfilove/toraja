@@ -128,7 +128,7 @@ const AddDance = () => {
   };
 
   return (
-    <div className="relative h-screen overflow-y-auto snap-y snap-mandatory font-montserrat p-4 bg-toraja-putih">
+    <div className="relative h-screen overflow-y-auto snap-y snap-mandatory font-montserrat p-4 bg-white">
       <Breadcrumb
         items={[
           { label: "Dashboard", href: "/admin" },

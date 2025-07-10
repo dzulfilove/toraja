@@ -1,20 +1,18 @@
 import React from "react";
 import { motion } from "framer-motion";
+import back from "../../assets/hero.png";
 
-const HeroWithVideo = () => {
+const HeroWithImage = () => {
   return (
     <div className="relative h-screen w-full overflow-hidden font-montserrat">
-      {/* Video Background */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-      >
-        <source src="https://res.cloudinary.com/diipdl14x/video/upload/v1751189334/kueoypc3rnqljsj7gkb5.3gp" type="video/mp4" />
-        Browser Anda tidak mendukung tag video.
-      </video>
+      {/* Image Background */}
+      <div className="absolute inset-0 w-full h-full">
+        <img
+          src={back}
+          alt="Tana Toraja Landscape"
+          className="w-full h-full object-cover"
+        />
+      </div>
 
       {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/100 to-black/0"></div>
@@ -24,7 +22,7 @@ const HeroWithVideo = () => {
         transition={{ duration: 1, ease: "easeOut" }}
         className="relative z-10 h-full flex flex-col justify-end items-center text-center px-4"
       >
-        <h1 className="text-white text-4xl md:text-5xl  font-medium mb-6">
+        <h1 className="text-white text-4xl md:text-5xl font-medium mb-6">
           Selamat Datang di Website Kebudayaan Tana Toraja
         </h1>
         <p className="text-white text-xl md:text-2xl font-medium max-w-2xl mb-32">
@@ -35,4 +33,4 @@ const HeroWithVideo = () => {
   );
 };
 
-export default HeroWithVideo;
+export default HeroWithImage;

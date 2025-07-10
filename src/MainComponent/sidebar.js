@@ -1,13 +1,34 @@
 import React from "react";
 import { Home, FileText, Users, Settings } from "lucide-react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { MdEmojiFoodBeverage } from "react-icons/md";
+import { FaMountainSun } from "react-icons/fa6";
+import { FaPeoplePulling } from "react-icons/fa6";
 const Sidebar = () => {
   const menuItems = [
     { label: "Dashboard", icon: <Home size={20} />, href: "/admin" },
-    { label: "Sejarah", icon: <FileText size={20} />, href: "/admin/history" },
-    { label: "Pengguna", icon: <Users size={20} />, href: "/admin/users" },
+    { label: "Sejarah", icon: <FileText size={20} />, href: "/admin/sejarah" },
+    {
+      label: "Makanan",
+      icon: <MdEmojiFoodBeverage className="text-xl " />,
+      href: "/admin/makanan",
+    },
+    {
+      label: "Tarian",
+      icon: <FaPeoplePulling className="text-xl " />,
+      href: "/admin/tarian",
+    },
+    {
+      label: "Wisata",
+      icon: <FaMountainSun className="text-xl " />,
+      href: "/admin/wisata",
+    },
+      {
+      label: "Filosofi",
+      icon: <FaMountainSun className="text-xl " />,
+      href: "/admin/filosofi",
+    },
     {
       label: "Pengaturan",
       icon: <Settings size={20} />,
@@ -15,8 +36,16 @@ const Sidebar = () => {
     },
   ];
 
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate(`/`);
+    window.location.reload();
+  };
+
   return (
-    <div className="fixed top-0 left-0 h-screen w-56 bg-gradient-to-b from-toraja-merah to-toraja-emas text-toraja-putih shadow-xl flex flex-col p-4 space-y-2">
+    <div className="fixed top-0 left-0 h-screen w-56 bg-[#8b0000] text-toraja-putih shadow-xl flex flex-col p-4 space-y-2">
       <div className="mb-6 text-center font-bold text-xl tracking-wide">
         Admin Panel
       </div>
@@ -38,7 +67,10 @@ const Sidebar = () => {
       <div className="flex-grow"></div>{" "}
       {/* biar menu di atas, space kosong di bawah */}
       <motion.div whileHover={{ scale: 1.05 }}>
-        <button className="w-full py-2 px-3 rounded-xl bg-toraja-putih text-toraja-merah font-semibold hover:bg-toraja-emas hover:text-toraja-putih transition-colors duration-300">
+        <button
+          onClick={handleLogout}
+          className="w-full py-2 px-3 rounded-xl bg-toraja-putih text-toraja-merah font-semibold hover:bg-toraja-merah hover:text-toraja-putih border hover:border-white transition-colors duration-300"
+        >
           Logout
         </button>
       </motion.div>

@@ -13,7 +13,7 @@ const revokeIfBlob = (url) => {
   }
 };
 
-const AddItems = ({ addItem, categories }) => {
+const AddItemsFilosofi = ({ addItem, categories }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
@@ -54,7 +54,7 @@ const AddItems = ({ addItem, categories }) => {
   };
 
   const handleSave = () => {
-    addItem(title, description, category, images);
+    addItem(title, description);
   };
 
   const handleSelect = (data) => {
@@ -102,7 +102,7 @@ const AddItems = ({ addItem, categories }) => {
         </div>
       </motion.div>
 
-      <motion.div variants={itemVariants}>
+      {/* <motion.div variants={itemVariants}>
         <label className="block text-lg font-semibold">Kategori</label>
         <div className="relative w-full group mt-4">
           <SearchableDropdown
@@ -112,7 +112,7 @@ const AddItems = ({ addItem, categories }) => {
             searchPlaceholder="Search options..."
           />
         </div>
-      </motion.div>
+      </motion.div> */}
 
       <motion.div variants={itemVariants}>
         <label className="block text-lg font-semibold">Deskripsi</label>
@@ -121,7 +121,7 @@ const AddItems = ({ addItem, categories }) => {
         </div>
       </motion.div>
 
-      <motion.div variants={itemVariants}>
+      {/* <motion.div variants={itemVariants}>
         <label className="block text-lg font-semibold mb-2">Gambar</label>
         <div className="flex flex-row gap-4 flex-wrap justify-start bg-toraja-putih p-8 rounded-xl mt-4">
           {images.map((img, idx) => (
@@ -188,16 +188,16 @@ const AddItems = ({ addItem, categories }) => {
             Tambah Gambar
           </motion.button>
         </div>
-      </motion.div>
+      </motion.div> */}
 
       <motion.div variants={itemVariants}>
         <div className="w-full py-4 flex justify-start items-start">
           <button
-          onClick={handleSave}
+            onClick={handleSave}
             className="w-full font-sans flex justify-center gap-2 items-center mx-auto text-sm text-gray-50 bg-toraja-merah backdrop-blur-md lg:font-semibold isolation-auto border-gray-50 before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-[#FFFFFF] hover:text-toraja-merah before:-z-10 before:aspect-square before:hover:scale-200 before:hover:duration-500 relative z-10 px-12 py-2 overflow-hidden border-2 rounded-full group"
             type="submit"
           >
-         Simpan Data
+            Simpan Data
             <FaRegSave className="w-8 h-8 text-toraja-merah justify-end bg-gray-50 group-hover:rotate-90 group-hover:bg-gray-50  ease-linear duration-300 rounded-full border border-toraja-merah group-hover:border-toraja-merah p-2" />
           </button>
         </div>
@@ -206,4 +206,4 @@ const AddItems = ({ addItem, categories }) => {
   );
 };
 
-export default AddItems;
+export default AddItemsFilosofi;

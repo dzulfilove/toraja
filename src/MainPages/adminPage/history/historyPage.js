@@ -54,7 +54,7 @@ export default function History() {
   };
 
   return (
-    <div className="relative h-screen overflow-y-auto snap-y snap-mandatory font-montserrat p-10 bg-toraja-putih">
+    <div className="relative h-screen overflow-y-auto snap-y snap-mandatory font-montserrat p-10 bg-white">
       <HeaderAdmin title={"Kelola Data Sejarah"} />
       <ListCardAdmin
         topic={"sejarah"}

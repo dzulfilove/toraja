@@ -20,6 +20,7 @@ const DetailAdmin = ({ data, updateText, categories, topic, deleteData }) => {
   const [category, setCategory] = useState(data.category);
 
   // images: [{ id?, url, file?, isEdit?, isNew? }]
+  
   const [images, setImages] = useState(() =>
     data.images.map((img) => ({
       id: img.id,
@@ -93,6 +94,8 @@ const DetailAdmin = ({ data, updateText, categories, topic, deleteData }) => {
   const handleSave = () => {
     if (topic == "sejarah") {
       updateText(title, description, images);
+    } else if (topic == "filosofi") {
+      updateText(title, description);
     } else {
       updateText(title, category, description, images);
     }
@@ -134,7 +137,7 @@ const DetailAdmin = ({ data, updateText, categories, topic, deleteData }) => {
         <div className="w-[30%] py-4">
           <button
             onClick={handleDelete}
-            className="w-full font-sans flex justify-center gap-2 items-center mx-auto text-base text-gray-50 bg-red-600 backdrop-blur-md lg:font-semibold isolation-auto border-gray-50 before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-[#FFFFFF] hover:text-red-600 before:-z-10 before:aspect-square before:hover:scale-200 before:hover:duration-500 relative z-10 px-6 py-2 overflow-hidden border-2 rounded-full group"
+            className="w-full font-sans flex justify-center gap-2 items-center mx-auto text-sm text-gray-50 bg-red-600 backdrop-blur-md lg:font-semibold isolation-auto border-gray-50 before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-[#FFFFFF] hover:text-red-600 before:-z-10 before:aspect-square before:hover:scale-200 before:hover:duration-500 relative z-10 px-6 py-2 overflow-hidden border-2 rounded-full group"
             type="submit"
           >
             Hapus Data
@@ -165,7 +168,7 @@ const DetailAdmin = ({ data, updateText, categories, topic, deleteData }) => {
         </div>
       </motion.div>
 
-      {topic !== "sejarah" ? (
+      {topic !== "sejarah" || topic !== "filosofi" ? (
         <>
           <motion.div variants={itemVariants}>
             <label className="block text-lg font-semibold">Kategori</label>
@@ -183,79 +186,86 @@ const DetailAdmin = ({ data, updateText, categories, topic, deleteData }) => {
       ) : (
         <></>
       )}
-      {/* Images */}
-      <motion.div variants={itemVariants}>
-        <label className="block text-lg font-semibold mb-2">Gambar</label>
-        <div className="flex flex-row gap-4 flex-wrap justify-start bg-toraja-putih p-8 rounded-xl mt-4">
-          {displayImages.map((img, idx) => (
-            <div
-              key={idx}
-              className="flex flex-col border w-[16rem] rounded-xl p-4 bg-white shadow-xl"
-            >
-              {img.url ? (
-                <div className="relative w-full h-[15rem] overflow-hidden rounded-xl mb-2">
-                  <img
-                    src={img.url}
-                    alt=""
-                    className="absolute inset-0 w-full h-full object-cover filter blur-sm scale-110"
-                  />
-                  <img
-                    src={img.url}
-                    alt=""
-                    className="relative w-full h-full object-contain"
-                  />
-                </div>
-              ) : (
-                <div className="w-full h-[15rem] bg-gray-100 flex items-center justify-center mb-2 rounded-xl">
-                  <span className="text-gray-400">Kosong</span>
-                </div>
-              )}
 
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleFileChange(idx, e.target.files[0])}
-              />
-
-              <div className="flex gap-2 mt-4">
-                <button
-                  onClick={() => handleRemoveImage(idx)}
-                  className="flex justify-between items-center gap-2 px-4 py-2 text-red-600 border border-red-600 rounded-xl hover:bg-red-600 hover:text-white transition"
+      {topic == "filosofi" ? (
+        <></>
+      ) : (
+        <>
+          {/* Images */}
+          <motion.div variants={itemVariants}>
+            <label className="block text-lg font-semibold mb-2">Gambar</label>
+            <div className="flex flex-row gap-4 flex-wrap justify-start bg-toraja-putih p-8 rounded-xl mt-4">
+              {displayImages.map((img, idx) => (
+                <div
+                  key={idx}
+                  className="flex flex-col border w-[16rem] rounded-xl p-4 bg-white shadow-xl"
                 >
-                  <MdDeleteOutline className="text-base" />
-                  Hapus
-                </button>
-                {img.url && (
-                  <button
-                    onClick={() => window.open(img.url, "_blank")}
-                    className="flex justify-between items-center gap-2 px-4 py-2 text-toraja-merah border border-toraja-merah rounded-xl hover:bg-toraja-merah hover:text-white transition"
-                  >
-                    <IoEyeSharp className="text-base" />
-                    Lihat
-                  </button>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+                  {img.url ? (
+                    <div className="relative w-full h-[15rem] overflow-hidden rounded-xl mb-2">
+                      <img
+                        src={img.url}
+                        alt=""
+                        className="absolute inset-0 w-full h-full object-cover filter blur-sm scale-110"
+                      />
+                      <img
+                        src={img.url}
+                        alt=""
+                        className="relative w-full h-full object-contain"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-full h-[15rem] bg-gray-100 flex items-center justify-center mb-2 rounded-xl">
+                      <span className="text-gray-400">Kosong</span>
+                    </div>
+                  )}
 
-        {/* Tombol tambah gambar */}
-        <motion.button
-          onClick={handleAddImage}
-          className="flex justify-between mt-4 items-center gap-2 px-6 py-2 bg-toraja-emas text-white rounded-xl hover:bg-toraja-putih hover:text-toraja-emas border hover:border-toraja-emas transition"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <IoMdAddCircleOutline className="text-base" />
-          Tambah Gambar
-        </motion.button>
-      </motion.div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleFileChange(idx, e.target.files[0])}
+                  />
+
+                  <div className="flex gap-2 mt-4">
+                    <button
+                      onClick={() => handleRemoveImage(idx)}
+                      className="flex justify-between items-center gap-2 px-4 py-2 text-red-600 border border-red-600 rounded-xl hover:bg-red-600 hover:text-white transition"
+                    >
+                      <MdDeleteOutline className="text-base" />
+                      Hapus
+                    </button>
+                    {img.url && (
+                      <button
+                        onClick={() => window.open(img.url, "_blank")}
+                        className="flex justify-between items-center gap-2 px-4 py-2 text-toraja-merah border border-toraja-merah rounded-xl hover:bg-toraja-merah hover:text-white transition"
+                      >
+                        <IoEyeSharp className="text-base" />
+                        Lihat
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Tombol tambah gambar */}
+            <motion.button
+              onClick={handleAddImage}
+              className="flex justify-between mt-4 items-center gap-2 px-6 py-2 bg-toraja-emas text-white rounded-xl hover:bg-toraja-putih hover:text-toraja-emas border hover:border-toraja-emas transition"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <IoMdAddCircleOutline className="text-base" />
+              Tambah Gambar
+            </motion.button>
+          </motion.div>
+        </>
+      )}
 
       {/* Button Save */}
       <div className="w-full py-4">
         <button
           onClick={handleSave}
-          className="w-full font-sans flex justify-center gap-2 items-center mx-auto text-base text-gray-50 bg-toraja-merah backdrop-blur-md lg:font-semibold isolation-auto border-gray-50 before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-[#FFFFFF] hover:text-toraja-merah before:-z-10 before:aspect-square before:hover:scale-200 before:hover:duration-500 relative z-10 px-12 py-2 overflow-hidden border-2 rounded-full group"
+          className="w-full font-sans flex justify-center gap-2 items-center mx-auto text-sm text-gray-50 bg-toraja-merah backdrop-blur-md lg:font-semibold isolation-auto border-gray-50 before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-[#FFFFFF] hover:text-toraja-merah before:-z-10 before:aspect-square before:hover:scale-200 before:hover:duration-500 relative z-10 px-12 py-2 overflow-hidden border-2 rounded-full group"
           type="submit"
         >
           Simpan Data

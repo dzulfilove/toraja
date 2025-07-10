@@ -4,7 +4,7 @@ import HeaderAdmin from "../../../MainComponent/adminComponent/headerAdmin";
 import ListCardAdmin from "../../../MainComponent/adminComponent/listCardAdmin";
 import Swal from "sweetalert2";
 
-export default function DancePage() {
+export default function PhilosophyPage() {
   const [data, setData] = useState([]);
   const [newTitle, setNewTitle] = useState("");
   const [newDesc, setNewDesc] = useState("");
@@ -14,33 +14,33 @@ export default function DancePage() {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    getCategories();
+    // getCategories();
   }, []);
 
-  const getCategories = async () => {
-    try {
-      setLoading(true);
-      const res = await API.get(`/dance/categories`);
-      const transformedData = res.data.map((item) => ({
-        value: item.id,
-        label: item.name_category,
-      }));
-      setCategories(transformedData);
-    } catch (err) {
-      console.error(err);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Gagal memuat kategori Tarian.",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getCategories = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const res = await API.get(`/tourist/categories`);
+  //     const transformedData = res.data.map((item) => ({
+  //       value: item.id,
+  //       label: item.name_category,
+  //     }));
+  //     setCategories(transformedData);
+  //   } catch (err) {
+  //     console.error(err);
+  //     Swal.fire({
+  //       icon: "error",
+  //       title: "Error",
+  //       text: "Gagal memuat kategori Tarian.",
+  //     });
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const getData = async () => {
     try {
-      const res = await API.get("/dance");
+      const res = await API.get("/philosophy");
 
       setData(res.data);
       setError(""); // clear error
@@ -56,12 +56,12 @@ export default function DancePage() {
 
   return (
     <div className="relative h-screen overflow-y-auto snap-y snap-mandatory font-montserrat p-10 bg-white">
-      <HeaderAdmin title={"Kelola Data Tarian Tradisional"} />
+      <HeaderAdmin title={"Kelola Data Wisata Daerah Toraja"} />
       <ListCardAdmin
-        topic={"tarian"}
+        topic={"filosofi"}
         data={data}
         image="https://res.cloudinary.com/diipdl14x/image/upload/v1751567242/filosofi_dlh9dl.jpg"
-        title="Tarian Tradisional Khas Budaya Toraja"
+        title="Filosofi Masayarakat Daerah Toraja"
         description=""
         categories={categories}
       />

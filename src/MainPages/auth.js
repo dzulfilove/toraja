@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import API from "../config/api";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [step, setStep] = useState("login"); // 'login' | 'requestToken' | 'reset'
@@ -8,6 +9,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [resetToken, setResetToken] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -15,6 +17,9 @@ function Login() {
       const res = await API.post("/auth/login", { username, password });
       localStorage.setItem("token", res.data.token);
       alert("Login berhasil");
+      navigate(`/admin`);
+      window.location.reload();
+
       // TODO: navigate ke dashboard
     } catch (err) {
       alert("Login failed");

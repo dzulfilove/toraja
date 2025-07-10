@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 import AddItems from "../../../MainComponent/adminComponent/addItems";
 import AddCategory from "../../../MainComponent/adminComponent/addCategory";
 
-const AddFood = () => {
+const AddTour = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
@@ -21,7 +21,7 @@ const AddFood = () => {
   const getCategories = async () => {
     try {
       setLoading(true);
-      const res = await API.get(`/food/categories`);
+      const res = await API.get(`/tourist/categories`);
       const transformedData = res.data.map((item) => ({
         value: item.id,
         label: item.name_category,
@@ -32,14 +32,14 @@ const AddFood = () => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Gagal memuat kategori makanan.",
+        text: "Gagal memuat kategori tarian.",
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const createFood = async (title, description, category, images) => {
+  const createTourist = async (title, description, category, images) => {
     try {
       setLoading(true);
 
@@ -49,8 +49,8 @@ const AddFood = () => {
       formData.append("description", description);
       formData.append("category", category);
 
-      const response = await API.post("/food", formData);
-      const newFoodId = response.data.id;
+      const response = await API.post("/tourist", formData);
+      const newTouristId = response.data.id;
 
       console.log(images, "gambar");
       // 2. Upload gambar satu per satu (sequential)
@@ -62,7 +62,7 @@ const AddFood = () => {
           imgFormData.append("image", img.file); // Field name "image" (sesuai backend)
 
           try {
-            await API.post(`/food/${newFoodId}/image`, imgFormData, {
+            await API.post(`/tourist/${newTouristId}/image`, imgFormData, {
               headers: { "Content-Type": "multipart/form-data" },
             });
             console.log(`Gambar ${img.file.name} berhasil diupload`);
@@ -78,23 +78,23 @@ const AddFood = () => {
       await Swal.fire({
         icon: "success",
         title: "Berhasil!",
-        text: "Makanan dan gambar berhasil ditambahkan.",
+        text: "Tarian dan gambar berhasil ditambahkan.",
       });
 
-      navigate(`/admin/makanan/`);
+      navigate(`/admin/wisata/`);
     } catch (err) {
       console.error("Error utama:", err);
       Swal.fire({
         icon: "error",
         title: "Gagal",
-        text: err.response?.data?.message || "Gagal menambahkan makanan.",
+        text: err.response?.data?.message || "Gagal menambahkan tarian.",
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const createFoodCategory = async (title) => {
+  const createTouristCategory = async (title) => {
     try {
       setLoading(true);
 
@@ -107,20 +107,20 @@ const AddFood = () => {
         console.log(pair[0] + ": " + pair[1]);
       }
 
-      const response = await API.post("/food/category", formData);
+      const response = await API.post("/tourist/category", formData);
 
       await getCategories();
       await Swal.fire({
         icon: "success",
         title: "Berhasil!",
-        text: "Kategori Makanan berhasil ditambahkan.",
+        text: "Kategori Tarian berhasil ditambahkan.",
       });
     } catch (err) {
       console.error("Error utama:", err);
       Swal.fire({
         icon: "error",
         title: "Gagal",
-        text: err.response?.data?.message || "Gagal menambahkan makanan.",
+        text: err.response?.data?.message || "Gagal menambahkan Tarian.",
       });
     } finally {
       setLoading(false);
@@ -132,25 +132,25 @@ const AddFood = () => {
       <Breadcrumb
         items={[
           { label: "Dashboard", href: "/admin" },
-          { label: "Makanan", href: "/admin/makanan" },
-          { label: "Tambah Makanan" },
+          { label: "Wisata", href: "/admin/wisata" },
+          { label: "Tambah Wisata" },
         ]}
       />
-      <HeaderAdmin title={"Tambah Data Makanan"} />
+      <HeaderAdmin title={"Tambah Data Tarian"} />
       <div className="w-full h-auto flex justify-between items-start gap-6">
         <div className="w-[60%]">
           <AddItems
-            addItem={createFood}
+            addItem={createTourist}
             categories={categories}
             loading={loading}
           />
         </div>
         <div className="w-[40%]">
-          <AddCategory addItem={createFoodCategory} />
+          <AddCategory addItem={createTouristCategory} />
         </div>
       </div>
     </div>
   );
 };
 
-export default AddFood;
+export default AddTour;
