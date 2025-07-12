@@ -2,10 +2,19 @@ import React from "react";
 import { motion } from "framer-motion";
 import img1 from "../../assets/pelaut ulung.jpg";
 import img2 from "../../assets/filosofi.jpg";
+import { sanitize } from "../adminComponent/utils";
+import { url } from "../../config/route";
 
-const AsalSection = () => {
+const AsalSection = ({ data }) => {
+  const images = data.img;
+  console.log(images, "images");
+  const isOdd = images.length % 2 !== 0;
+  console.log(data, "sejarah");
   return (
-    <div id="asal-section" className="w-full pb-16 px-4 font-montserrat overflow-hidden">
+    <div
+      id="asal-section"
+      className="w-full pb-16 px-4 font-montserrat overflow-hidden"
+    >
       <div className="container mx-auto flex flex-col md:flex-row gap-8">
         {/* Text block di kiri */}
         <motion.div
@@ -18,56 +27,54 @@ const AsalSection = () => {
           <h3 className="text-3xl font-montserrat font-semibold text-gray-900 mb-4">
             Asal Usul <span className="text-[#8B0000]">Tana Toraja</span>
           </h3>
-          <p className="text-gray-700 mb-4 leading-relaxed">
-            Asal-usul masyarakat Toraja, yang bersemayam di dataran tinggi
-            Sulawesi Selatan, sangat kaya akan perpaduan antara{" "}
-            <span className="font-semibold text-[#8B0000]">
-              mitos penciptaan dan tradisi lisan
-            </span>{" "}
-            yang diwariskan dari generasi ke generasi. Menurut kepercayaan
-            paling dominan, nenek moyang orang Toraja bukanlah penduduk asli,
-            melainkan para{" "}
-            <span className="font-semibold text-[#8B0000]">pelaut ulung</span>{" "}
-            yang berlayar dari{" "}
-            <span className="font-semibold text-[#8B0000]">
-              wilayah Indocina atau Asia Tenggara daratan.
-            </span>{" "}
-          </p>
-          <p className="text-gray-700 leading-relaxed mb-6">
-            Salah satu narasi inti dalam kosmologi Toraja adalah cerita tentang
-            <span className="font-semibold text-[#8B0000]">
-              "To Manurung" atau "orang yang turun dari langit"
-            </span>{" "}
-            . Sosok ini dipercaya sebagai leluhur ilahi yang membawa
-            pengetahuan, tatanan sosial, hukum adat (Aluk Todolo), dan
-            keterampilan penting kepada manusia. Kehadiran To Manurung menandai
-            dimulainya peradaban Toraja, mengajarkan mereka cara hidup yang
-            selaras dengan alam dan alam gaib. Kisah-kisah ini tidak hanya
-            berfungsi sebagai catatan historis, tetapi juga sebagai panduan
-            moral dan spiritual, menjelaskan hierarki sosial, sistem kekerabatan
-            yang kuat, dan praktik-praktik ritual yang menjadi tulang punggung
-            budaya Toraja hingga saat ini.
-          </p>
+          <div
+            className="text-gray-700 mb-4 leading-relaxed break-words max-w-full"
+            dangerouslySetInnerHTML={{ __html: sanitize(data.desc) }}
+          ></div>
         </motion.div>
 
         {/* Images di kanan, sejajar kanan-kiri */}
         <motion.div
-          className="grid grid-cols-2 gap-4 md:w-1/2"
-          initial={{ opacity: 0, x: 50 }}
+          className="grid grid-cols-2 md:grid-cols-3 gap-4 md:w-1/2 h-full"
+          initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <img
-            src={img1}
-            alt="Weaving"
-            className="rounded-md object-cover h-[25rem] w-full shadow-md"
-          />
-          <img
-            src={img2}
-            alt="Tongkonan"
-            className="rounded-md object-cover h-[25rem] w-full shadow-md"
-          />
+          {images.slice(0, images.length - (isOdd ? 1 : 0)).map((item, idx) => (
+            <img
+              key={idx}
+              src={`${url}/${item.image}`}
+              alt={item.id}
+              className="rounded-md object-cover h-full w-full shadow-md"
+            />
+          ))}
+
+          {isOdd && (
+            <div className="relative col-span-2 md:col-span-2 h-64 rounded-md overflow-hidden shadow-md">
+              {/* background blur */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  backgroundImage: `url(${url}/${
+                    images[images.length - 1].image
+                  })`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  filter: "blur(8px) brightness(0.7)",
+                }}
+              ></div>
+
+              {/* gambar aslinya */}
+              <div className="relative flex justify-center items-center h-full">
+                <img
+                  src={`${url}/${images[images.length - 1].image}`}
+                  alt={images[images.length - 1].id}
+                  className="h-full w-auto rounded-md shadow-md"
+                />
+              </div>
+            </div>
+          )}
         </motion.div>
       </div>
     </div>

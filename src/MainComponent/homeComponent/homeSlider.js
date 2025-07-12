@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import { motion } from "framer-motion";
@@ -8,28 +8,24 @@ import "swiper/css/pagination";
 import loginBg from "../../assets/login.jpg";
 import sejarah from "../../assets/sejarah-slider.jpg";
 import asal from "../../assets/asal.jpg";
-import filosofi from "../../assets/filosofi.jpg";
 import { Link } from "react-router-dom";
+import API from "../../config/api";
+import { sanitize, stripHtml } from "../adminComponent/utils";
 
-const slides = [
-  {
-    title: "Sejarah Suku Toraja",
-    desc: "Toraja memiliki sejarah panjang sebagai masyarakat pegunungan yang mempertahankan budaya unik sejak abad ke-17, dikenal dengan sistem sosial dan upacara pemakaman megah.",
-    img: asal,
-  },
-  {
-    title: "Asal Usul Leluhur Toraja",
-    desc: "Konon, leluhur suku Toraja berasal dari daratan Tiongkok Selatan yang kemudian menetap di pegunungan Sulawesi, membangun rumah adat Tongkonan yang khas.",
-    img: sejarah,
-  },
-  {
-    title: "Filosofi Hidup Toraja",
-    desc: "Filosofi 'Aluk To Dolo' mengatur tatanan kehidupan suku Toraja: hubungan dengan Tuhan, sesama manusia, dan alam sekitar yang dijunjung tinggi dalam keseharian.",
-    img: filosofi,
-  },
-];
+const HomeSlider = ({ slides }) => {
+  // Hilangkan tag HTML → ambil plain text
 
-const HomeSlider = () => {
+  const formatText = (text) => {
+    const plainText = stripHtml(text);
+    // Potong 15 karakter & tambahkan "......"
+    const preview =
+      plainText.length > 15 ? plainText.substring(0, 300) + "..." : plainText;
+
+    return preview;
+  };
+
+  const duplicatedSlides = slides.length < 4 ? [...slides, ...slides] : slides;
+  console.log(duplicatedSlides);
   return (
     <div className="relative w-full h-screen overflow-hidden font-montserrat">
       {/* Background image */}
@@ -61,7 +57,10 @@ const HomeSlider = () => {
             Toraja yang diwariskan turun-temurun, mencerminkan harmoni antara
             manusia dan alam.
           </p>
-          <Link to={"/sejarah"} className="border w-[15rem] text-toraja-putih border-toraja-putih py-2 px-4 inline-flex items-center hover:bg-toraja-merah hover:border-toraja-merah rounded-lg hover:text-toraja-putih transition">
+          <Link
+            to={"/sejarah"}
+            className="border w-[15rem] text-toraja-putih border-toraja-putih py-2 px-4 inline-flex items-center hover:bg-toraja-merah hover:border-toraja-merah rounded-lg hover:text-toraja-putih transition"
+          >
             Pelajari Lebih Lanjut
             <span className="ml-2">→</span>
           </Link>
@@ -70,22 +69,16 @@ const HomeSlider = () => {
         {/* Right: Slider */}
         <div className="md:w-1/2 flex items-center mr-16">
           <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
+            modules={[Autoplay, Navigation]}
+            autoplay={{ delay: 5000, disableOnInteraction: false }}
             navigation
-            pagination={{ clickable: true }}
-            autoplay={{
-              delay: 2000,
-              disableOnInteraction: false,
-            }}
             loop={true}
             slidesPerView={2}
-            spaceBetween={20}
-            loopedSlides={2} // Diubah menjadi 2
-            loopFillGroupWithBlank={true} // Ditambahkan
-            centeredSlides={false}
+            spaceBetween={30}
+            centeredSlides={true}
             className="w-full"
           >
-            {slides.map((slide, idx) => (
+            {duplicatedSlides.map((slide, idx) => (
               <SwiperSlide key={idx}>
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
@@ -95,7 +88,7 @@ const HomeSlider = () => {
                   className="relative w-[370px] h-[620px] bg-cover bg-center group hover:cursor-pointer shadow-lg rounded-xl overflow-hidden transform hover:scale-105 transition duration-500"
                   style={{ backgroundImage: `url(${slide.img})` }}
                 >
-                  {/* Gradient overlay dari bawah */}
+                  {/* Gradient overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/100 to-transparent"></div>
 
                   {/* Konten */}
@@ -103,7 +96,9 @@ const HomeSlider = () => {
                     <h2 className="text-xl md:text-2xl font-medium text-toraja-kuning group-hover:text-toraja-putih transition">
                       {slide.title}
                     </h2>
-                    <p className="text-sm text-toraja-putih">{slide.desc}</p>
+                    <p className="text-sm text-toraja-putih">
+                      {formatText(slide.desc)}
+                    </p>
                   </div>
                 </motion.div>
               </SwiperSlide>

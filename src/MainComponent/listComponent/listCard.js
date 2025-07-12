@@ -11,26 +11,35 @@ const containerVariants = {
 
 const ListCard = ({ topic, data, categories, title, description, image }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState({
+    value: "All",
+    label: "All",
+  });
+
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Tambah ref untuk container
   const containerRef = useRef(null);
 
-  // Scroll container ke atas saat halaman berubah
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [currentPage]);
 
-  // Filter & search
-  const filteredData = data.filter((dance) => {
+  // Filter & search yang aman
+  const filteredData = data.filter((item) => {
+    const categoryValue = item.category ?? "Unknown";
+
     const matchCategory =
-      selectedCategory === "All" || dance.category === selectedCategory;
-    const matchSearch = dance.title
+      selectedCategory.value === "All"
+        ? true
+        : categoryValue == selectedCategory.value;
+
+    const titleValue = item.title ?? "";
+    const matchSearch = titleValue
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
+
     return matchCategory && matchSearch;
   });
 
@@ -39,6 +48,7 @@ const ListCard = ({ topic, data, categories, title, description, image }) => {
   const indexOfFirst = indexOfLast - itemsPerPage;
   const currentData = filteredData.slice(indexOfFirst, indexOfLast);
 
+  console.log("currentData", selectedCategory, filteredData);
   return (
     <div
       ref={containerRef}
@@ -84,20 +94,20 @@ const ListCard = ({ topic, data, categories, title, description, image }) => {
             className="border-2 border-toraja-emas px-4 py-2 rounded-lg w-full md:w-1/3"
           />
           <div className="flex flex-wrap gap-2">
-            {categories.map((cat) => (
+            {[{ value: "All", label: "All" }, ...categories].map((cat) => (
               <button
-                key={cat}
+                key={cat.value}
                 onClick={() => {
                   setSelectedCategory(cat);
                   setCurrentPage(1);
                 }}
                 className={`px-6 py-1 rounded-xl transition-all text-sm ${
-                  selectedCategory === cat
+                  selectedCategory.value === cat.value
                     ? "bg-toraja-merah text-white"
                     : "bg-toraja-putih text-toraja-merah border border-toraja-merah"
                 }`}
               >
-                {cat}
+                {cat.label}
               </button>
             ))}
           </div>
@@ -124,7 +134,7 @@ const ListCard = ({ topic, data, categories, title, description, image }) => {
                   title={item.title}
                   description={item.description}
                   category={item.category}
-                  image={item.image}
+                  image={item.images}
                   topic={topic}
                 />
               </motion.div>

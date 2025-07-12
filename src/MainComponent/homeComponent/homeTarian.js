@@ -10,68 +10,19 @@ import manganda from "../../assets/Manganda.jpg";
 import madandan from "../../assets/madandan.jpg";
 import lambu from "../../assets/lambu.jpg";
 import { Link } from "react-router-dom";
+import { url } from "../../config/route";
+import { stripHtml } from "../adminComponent/utils";
 
-// Data tarian Toraja
-const tarianToraja = [
-  {
-    id: 1,
-    title: "Tari Pa'gellu' (Ma'gellu')",
-    description:
-      "Tarian riang gembira yang dibawakan oleh remaja putri dengan gerakan gemulai, diiringi musik gendang. Sering ditampilkan dalam acara pernikahan, penyambutan tamu, atau pesta panen.",
-    category: "Tarian Sukacita",
-    image: pagelu,
-  },
-  {
-    id: 2,
-    title: "Tari Manimbong",
-    description:
-      "Tarian khusus untuk upacara Rambu Tuka' oleh penari laki-laki dengan pakaian adat lengkap, tameng bundar kecil, dan parang tua. Mengungkapkan rasa syukur kepada Tuhan.",
-    category: "Tarian Ritual",
-    image: manimbong,
-  },
-  {
-    id: 3,
-    title: "Tari Ma'dandan",
-    description:
-      "Dibawakan oleh penari perempuan dengan kostum putih dan penutup kepala menyerupai Tongkonan. Gemulai dengan tongkat dan nyanyian, sering dipentaskan dengan Tari Manimbong.",
-    category: "Tarian Ritual",
-    image: madandan,
-  },
-  {
-    id: 4,
-    title: "Tari Pa'pondesan",
-    description:
-      "Tarian laki-laki dengan properti kuku palsu dan diiringi seruling. Merupakan bagian dari ekspresi budaya Toraja.",
-    category: "Tarian Tradisional",
-    image: lambu,
-  },
-  {
-    id: 5,
-    title: "Tari Manganda'",
-    description:
-      "Tarian ritual pemujaan Aluk Todolo dengan hiasan tanduk kerbau di kepala, uang logam, dan lonceng. Dibawakan sambil berteriak.",
-    category: "Tarian Ritual",
-    image: manganda,
-  },
-  {
-    id: 6,
-    title: "Tari Pa' Bone Balla'",
-    description:
-      "Mirip dengan Pa'gellu' namun dengan lagu dan ritme gendang yang berbeda. Juga termasuk tarian sukacita.",
-    category: "Tarian Sukacita",
-    image: manimbong,
-  },
-  {
-    id: 7,
-    title: "Tari Pa' Lambu' Pare",
-    description:
-      "Tarian untuk upacara Rambu Tuka' yang memiliki makna spiritual dalam budaya Toraja.",
-    category: "Tarian Ritual",
-    image: lambu,
-  },
-];
-
-const HomeTarian = () => {
+const HomeTarian = ({ data }) => {
+   const formatText = (text) => {
+      const plainText = stripHtml(text);
+      // Potong 15 karakter & tambahkan "......"
+      const preview =
+        plainText.length > 15 ? plainText.substring(0, 300) + "..." : plainText;
+  
+      return preview;
+    };
+  
   return (
     <div className="mx-auto px-10 py-12 bg-white font-montserrat">
       <div className="flex flex-col justify-between items-center mb-8 mt-6 gap-8">
@@ -116,14 +67,16 @@ const HomeTarian = () => {
           }}
           className="w-full"
         >
-          {tarianToraja.map((tarian) => (
+          {data.map((tarian) => (
             <SwiperSlide key={tarian.id}>
               <Link to={`/detail/tarian/${tarian.id}`}>
                 <div className="relative h-[500px] rounded-xl overflow-hidden shadow-lg group hover:cursor-pointer">
                   {/* Gambar dengan efek zoom */}
                   <div
                     className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                    style={{ backgroundImage: `url(${tarian.image})` }}
+                    style={{
+                      backgroundImage: `url(${url}/${tarian.images[0].image})`,
+                    }}
                   ></div>
 
                   {/* Overlay gradient */}
@@ -133,11 +86,11 @@ const HomeTarian = () => {
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <div className="mb-2">
                       <span className="inline-block px-3 py-1 bg-toraja-merah rounded-full text-xs font-semibold">
-                        {tarian.jenis}
+                        {tarian.name_category}
                       </span>
                     </div>
                     <h3 className="text-2xl font-bold mb-2">{tarian.title}</h3>
-                    <p className="text-sm mb-4">{tarian.description}</p>
+                    <p className="text-sm mb-4">{formatText(tarian.description)}</p>
                     <div className="flex items-center">
                       <svg
                         className="w-4 h-4 mr-2"
@@ -153,9 +106,6 @@ const HomeTarian = () => {
                           d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
                         />
                       </svg>
-                      <span className="text-sm font-medium">
-                        Properti: {tarian.properti}
-                      </span>
                     </div>
                   </div>
                 </div>

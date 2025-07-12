@@ -4,6 +4,8 @@ import img1 from "../../assets/weaving.jpg";
 import img2 from "../../assets/tongkonan.jpg";
 import img3 from "../../assets/pagelu.jpeg";
 import img4 from "../../assets/mountain.jpg";
+import { sanitize } from "../adminComponent/utils";
+import { url } from "../../config/route";
 
 // Animasi container
 const containerVariants = {
@@ -15,9 +17,16 @@ const containerVariants = {
   },
 };
 
-const SejarahSection = () => {
+const SejarahSection = ({ data }) => {
+  const images = data.img;
+  console.log(images, "images");
+  const isOdd = images.length % 2 !== 0;
+  console.log(data, "sejarah");
   return (
-    <div id="sejarah-section" className="w-full py-16 px-4 font-montserrat overflow-hidden">
+    <div
+      id="sejarah-section"
+      className="w-full py-16 px-4 font-montserrat overflow-hidden"
+    >
       {/* Header + Map */}
       <motion.div
         variants={containerVariants}
@@ -54,36 +63,49 @@ const SejarahSection = () => {
         </div>
       </motion.div>
 
-      {/* Grid gambar + teks */}
       <div className="container mx-auto flex flex-col md:flex-row gap-8">
         {/* Images grid */}
         <motion.div
-          className="grid grid-cols-2 gap-4 md:w-1/2"
+          className="grid grid-cols-2 md:grid-cols-3 gap-4 md:w-1/2 h-full"
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <img
-            src={img1}
-            alt="Weaving"
-            className="rounded-md object-cover h-64 w-full shadow-md"
-          />
-          <img
-            src={img2}
-            alt="Tongkonan"
-            className="rounded-md object-cover h-64 w-full shadow-md"
-          />
-          <img
-            src={img3}
-            alt="Warrior"
-            className="rounded-md object-cover h-64 w-full shadow-md"
-          />
-          <img
-            src={img4}
-            alt="Mountain"
-            className="rounded-md object-cover h-64 w-full shadow-md"
-          />
+          {images.slice(0, images.length - (isOdd ? 1 : 0)).map((item, idx) => (
+            <img
+              key={idx}
+              src={`${url}/${item.image}`}
+              alt={item.id}
+              className="rounded-md object-cover h-full w-full shadow-md"
+            />
+          ))}
+
+          {isOdd && (
+            <div className="relative col-span-2 md:col-span-2 h-64 rounded-md overflow-hidden shadow-md">
+              {/* background blur */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  backgroundImage: `url(${url}/${
+                    images[images.length - 1].image
+                  })`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  filter: "blur(8px) brightness(0.7)",
+                }}
+              ></div>
+
+              {/* gambar aslinya */}
+              <div className="relative flex justify-center items-center h-full">
+                <img
+                  src={`${url}/${images[images.length - 1].image}`}
+                  alt={images[images.length - 1].id}
+                  className="h-full w-auto rounded-md shadow-md"
+                />
+              </div>
+            </div>
+          )}
         </motion.div>
 
         {/* Text block */}
@@ -97,50 +119,11 @@ const SejarahSection = () => {
           <h3 className="text-3xl font-montserrat font-semibold text-gray-900 mb-4">
             Sejarah <span className="text-[#8B0000]">Tana Toraja</span>
           </h3>
-          <p className="text-gray-700 mb-4 leading-relaxed">
-            Sejarah Toraja, terutama sebelum kedatangan pengaruh eksternal yang
-            signifikan, berpusat pada perkembangan komunitas adat yang mandiri
-            dan terstruktur. Inti dari kehidupan sosial dan politik mereka
-            adalah{" "}
-            <span className="font-semibold text-[#8B0000]">"tongkonan"</span> ,
-            yaitu rumah adat tradisional yang tidak hanya berfungsi sebagai
-            tempat tinggal fisik tetapi juga sebagai pusat silsilah keluarga,
-            kepemilikan harta benda, dan pelaksanaan ritual. Setiap tongkonan
-            memiliki otoritas dan wilayah kekuasaan tertentu, dan jaringan
-            tongkonan ini membentuk tatanan masyarakat Toraja yang kompleks.
-            Meskipun secara geografis terisolasi di pegunungan, Toraja tidak
-            sepenuhnya terputus dari dunia luar. Mereka terlibat dalam
-            perdagangan terbatas dengan kerajaan-kerajaan dataran rendah seperti
-            Luwu dan Bone, menukar hasil bumi dengan garam, besi, atau barang
-            mewah lainnya, meskipun interaksi ini sering kali juga diwarnai
-            dengan konflik atau serangan.
-          </p>
-          <p className="text-gray-700 leading-relaxed mb-6">
-            Perubahan signifikan dalam sejarah Toraja dimulai pada abad ke-17
-            dengan ekspansi pengaruh Belanda di Nusantara. Namun, karena letak
-            geografisnya yang sulit dijangkau, Toraja baru sepenuhnya berada di
-            bawah administrasi kolonial Hindia Belanda secara efektif pada awal
-            abad ke-20, setelah serangkaian ekspedisi militer yang dikenal
-            sebagai "Pasifikasi Toraja". Periode kolonial ini membawa dampak
-            mendalam, terutama dengan masuknya{" "}
-            <span className="font-semibold text-[#8B0000]">
-              misionaris Kristen
-            </span>{" "}
-            . Mayoritas masyarakat Toraja saat ini memeluk agama Kristen, namun
-            uniknya, praktik-praktik kepercayaan animisme leluhur mereka,{" "}
-            <span className="font-semibold text-[#8B0000]">Aluk Todolo</span> ,
-            tetap dipertahankan dan diintegrasikan dengan keyakinan baru,
-            terutama dalam upacara adat seperti pemakaman (rambu solo').
-            Integrasi ini membentuk identitas budaya Toraja yang unik, yang
-            dikenal dunia karena warisan arsitektur megah dan ritual pemakaman
-            yang rumit dan penuh warna. stand out, reflecting deep respect for
-            ancestors. The iconic{" "}
-          </p>
 
-          {/* CTA Button
-          <button className="self-start bg-[#8B0000] text-white px-6 py-2 rounded-full font-semibold hover:bg-[#a00d0d] transition-colors duration-300 shadow-md">
-            Explore More
-          </button> */}
+          <div
+            className="text-gray-700 mb-4 leading-relaxed break-words max-w-full"
+            dangerouslySetInnerHTML={{ __html: sanitize(data.desc) }}
+          ></div>
         </motion.div>
       </div>
     </div>

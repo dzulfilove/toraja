@@ -9,6 +9,8 @@ import paTorro from "../../assets/patorro.jpeg";
 import pantolloPammarasan from "../../assets/pantollo-pammarasan.jpg";
 import deppaTesse from "../../assets/patorro.jpg";
 import { Link } from "react-router-dom";
+import { url } from "../../config/route";
+import { stripHtml } from "../adminComponent/utils";
 
 // Variants untuk animasi
 const containerVariants = {
@@ -33,42 +35,18 @@ const textVariants = {
   },
 };
 
-// Data makanan khas Toraja
-const makananToraja = [
-  {
-    id: 1,
-    title: "Pa'Piong",
-    subtitle: "Hidangan Daging Bumbu Bambu",
-    description:
-      "Olahan daging babi atau ayam yang dimasak dalam bambu dengan bumbu khas Toraja.",
-    image: paPiong,
-  },
-  {
-    id: 2,
-    title: "Pa'Torro",
-    subtitle: "Nasi Kuning Toraja",
-    description:
-      "Nasi yang dimasak dengan kunyit dan santan, simbol kemakmuran.",
-    image: paTorro,
-  },
-  {
-    id: 3,
-    title: "Pantollo' Pammarasan",
-    subtitle: "Sop Daging Kerbau",
-    description: "Hidangan istimewa berbahan daging kerbau dengan kuah kental.",
-    image: pantolloPammarasan,
-  },
-  {
-    id: 4,
-    title: "Deppa Tesse'",
-    subtitle: "Kue Tradisional Toraja",
-    description:
-      "Kue beras ketan dalam daun pisang, tekstur kenyal dan gurih-manis.",
-    image: deppaTesse,
-  },
-];
 
-const HomeMakanan = () => {
+const HomeMakanan = ({data}) => {
+
+   const formatText = (text) => {
+    const plainText = stripHtml(text);
+    // Potong 15 karakter & tambahkan "......"
+    const preview =
+      plainText.length > 15 ? plainText.substring(0, 300) + "..." : plainText;
+
+    return preview;
+  };
+
   return (
     <div className="w-full bg-gray-100 py-16 px-4 font-montserrat">
       <div className="container mx-auto mt-4 ">
@@ -113,7 +91,7 @@ const HomeMakanan = () => {
             centeredSlides={true}
             className="w-full"
           >
-            {makananToraja.map((makanan) => (
+            {data.map((makanan) => (
               <SwiperSlide key={makanan.id}>
                 {({ isActive }) => (
                   <Link to={`/detail/makanan/${makanan.id}`}>
@@ -125,7 +103,7 @@ const HomeMakanan = () => {
                     >
                       <div
                         className="absolute inset-0 bg-cover bg-center"
-                        style={{ backgroundImage: `url(${makanan.image})` }}
+                        style={{ backgroundImage: `url(${url}/${makanan.images[0].image})` }}
                       >
                         <div className="absolute inset-0 bg-black/30"></div>
                       </div>
@@ -141,15 +119,15 @@ const HomeMakanan = () => {
                         >
                           {makanan.title}
                         </h3>
-                        <p
+                        {/* <p
                           className={`${
                             isActive ? "text-lg" : "text-sm"
                           } text-toraja-emas mb-2`}
                         >
                           {makanan.subtitle}
-                        </p>
+                        </p> */}
                         {isActive && (
-                          <p className="text-sm">{makanan.description}</p>
+                          <p className="text-sm">{formatText(makanan.description)}</p>
                         )}
                       </div>
                     </motion.div>

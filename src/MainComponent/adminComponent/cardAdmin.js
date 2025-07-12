@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import { sanitize } from "./utils";
+import { url } from "../../config/route";
 const CardAdmin = ({ id, title, description, image, category, topic }) => {
   return (
     <Link to={`/admin/${topic}/detail/${id}`}>
@@ -9,7 +10,11 @@ const CardAdmin = ({ id, title, description, image, category, topic }) => {
         <div
           className="absolute inset-0 bg-cover bg-center transform transition-transform duration-500 ease-in-out group-hover:scale-125"
           style={{
-            backgroundImage: `url(http://localhost:5000/${image[0].image})`,
+            backgroundImage: `url(${
+              image[0]?.image
+                ? `${url}/${image[0]?.image}`
+                : "https://512pixels.net/wp-content/uploads/2025/06/11-0-Night-thumbnail.jpg"
+            })`,
           }}
         ></div>
 
@@ -21,7 +26,12 @@ const CardAdmin = ({ id, title, description, image, category, topic }) => {
           <h2 className="text-xl md:text-2xl font-medium text-toraja-kuning group-hover:text-toraja-putih transition">
             {title}
           </h2>
-          <p className="text-sm text-toraja-putih">{description}</p>
+          <div
+            className="text-sm text-toraja-putih"
+            dangerouslySetInnerHTML={{
+              __html: sanitize(description.substring(0, 35)+ "......"),
+            }}
+          ></div>
         </div>
       </div>
     </Link>

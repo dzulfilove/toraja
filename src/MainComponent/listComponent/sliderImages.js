@@ -23,7 +23,7 @@ const containerVariants = {
   },
 };
 
-const HomeWisata = ({ data }) => {
+const SliderImage = ({ data, title }) => {
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
     if (section) {
@@ -82,15 +82,7 @@ const HomeWisata = ({ data }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
               className="w-[40%] flex justify-end items-end h-full"
-            >
-              <Link
-                to="/wisata"
-                className="border-2 w-[15rem] font-bold text-toraja-merah border-toraja-merah py-4 px-4 inline-flex items-center hover:bg-toraja-merah hover:border-toraja-merah rounded-lg hover:text-toraja-putih transition"
-              >
-                Lihat Lebih Lanjut
-                <span className="ml-2">→</span>
-              </Link>
-            </motion.div>
+            ></motion.div>
           </div>
         </motion.div>
 
@@ -131,7 +123,7 @@ const HomeWisata = ({ data }) => {
                     viewport={{ once: true }}
                     className="relative w-full cursor-pointer bg-cover bg-center group overflow-hidden shadow-lg rounded-xl"
                     style={{
-                      backgroundImage: `url(${url}/${content.images[0].image})`,
+                      backgroundImage: `url(${url}/${content.image})`,
                     }}
                   >
                     {/* Gradient overlay */}
@@ -140,11 +132,8 @@ const HomeWisata = ({ data }) => {
                     {/* Content */}
                     <div className="absolute bottom-0 p-6 w-full">
                       <h2 className="text-xl md:text-2xl font-medium text-toraja-kuning group-hover:text-toraja-putih transition">
-                        {content.title}
+                        {title}
                       </h2>
-                      <p className="text-sm text-toraja-putih">
-                        {formatText(content.description)}
-                      </p>
                     </div>
                   </motion.div>
                 </Link>
@@ -157,4 +146,4 @@ const HomeWisata = ({ data }) => {
   );
 };
 
-export default HomeWisata;
+export default SliderImage;

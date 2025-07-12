@@ -2,10 +2,20 @@ import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { url } from "../../config/route";
+import { sanitize, stripHtml } from "../adminComponent/utils";
 
-const Card = ({ id,title, description, image, category, topic }) => {
+const Card = ({ id, title, description, image, category, topic }) => {
+  const formatText = (text) => {
+    const plainText = stripHtml(text);
+    // Potong 15 karakter & tambahkan "......"
+    const preview =
+      plainText.length > 15 ? plainText.substring(0, 300) + "..." : plainText;
+
+    return preview;
+  };
   return (
-    <StyledWrapper image={image}>
+    <StyledWrapper image={`${url}/${image[0].image}`}>
       <Link to={`/detail/${topic}/${id}`}>
         <motion.div
           className="cardList-container font-montserrat"
@@ -20,7 +30,7 @@ const Card = ({ id,title, description, image, category, topic }) => {
             </div>
             <div className="content">
               <p className="heading">{title}</p>
-              <p>{description}</p>
+              <p>{formatText(description)}</p>
             </div>
           </div>
         </motion.div>

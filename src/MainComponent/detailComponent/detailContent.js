@@ -1,6 +1,8 @@
 // components/DetailContent.js
 import React from "react";
 import { motion } from "framer-motion";
+import { url } from "../../config/route";
+import { sanitize } from "../adminComponent/utils";
 
 const DetailContent = ({ data }) => {
   return (
@@ -14,12 +16,12 @@ const DetailContent = ({ data }) => {
         {/* Background blur */}
         <div
           className="absolute inset-0 bg-center bg-cover filter blur-md scale-100"
-          style={{ backgroundImage: `url(${data.image})` }}
+          style={{ backgroundImage: `url(${url}/${data.images[0].image})` }}
         ></div>
 
         {/* Gambar asli */}
         <img
-          src={data.image}
+          src={`${url}/${data.images[0].image}`}
           alt={data.title}
           className="relative z-10 w-auto h-full mx-auto object-contain"
         />
@@ -27,7 +29,10 @@ const DetailContent = ({ data }) => {
       <h2 className="text-3xl font-semibold mb-4 mt-8 text-toraja-merah">
         {data.title}
       </h2>
-      <p className="text-gray-700 leading-relaxed">{data.description}</p>
+      <div
+        className="text-gray-700 leading-relaxed"
+        dangerouslySetInnerHTML={{ __html: sanitize(data.description) }}
+      ></div>
 
       {/* Galeri gambar tambahan */}
       {/* {data.image.length > 1 && (

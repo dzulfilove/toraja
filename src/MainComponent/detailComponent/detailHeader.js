@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { url } from "../../config/route";
 
 const DetailHeader = ({ data }) => (
   <motion.div
@@ -11,7 +12,7 @@ const DetailHeader = ({ data }) => (
     {/* Background image */}
     <div
       className="absolute inset-0 bg-cover bg-center"
-      style={{ backgroundImage: `url(${data.image})` }}
+      style={{ backgroundImage: `url(${url}/${data.images[0].image})` }}
     ></div>
 
     {/* Gradient overlay */}
@@ -20,7 +21,7 @@ const DetailHeader = ({ data }) => (
     {/* Content */}
     <div className="relative z-10 px-4">
       <h1 className="text-3xl md:text-4xl font-bold mb-2">{data.title}</h1>
-      <p className="uppercase tracking-widest text-sm">{data.category}</p>
+      <p className="uppercase tracking-widest text-sm">{data.name_category}</p>
     </div>
   </motion.div>
 );

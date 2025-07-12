@@ -6,8 +6,6 @@ import Swal from "sweetalert2";
 
 export default function DancePage() {
   const [data, setData] = useState([]);
-  const [newTitle, setNewTitle] = useState("");
-  const [newDesc, setNewDesc] = useState("");
   const [error, setError] = useState(""); // opsional: untuk tampilkan pesan error
   const [loading, setLoading] = useState(false);
 

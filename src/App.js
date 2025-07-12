@@ -55,6 +55,9 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* <Route path="/" element={<HomePage />} />
+        <Route path="sejarah" element={<SejarahPage />} /> */}
+
         {isLoggedIn == true ? (
           <>
             <Route path="/admin" element={<LayoutAdmin />}>
@@ -82,7 +85,10 @@ function App() {
               <Route path="/admin/add/wisata" element={<AddTour />} />
 
               <Route path="/admin/filosofi" element={<PhilosophyPage />} />
-              <Route path="/admin/filosofi/detail/:id" element={<DetailPhilosohy />} />
+              <Route
+                path="/admin/filosofi/detail/:id"
+                element={<DetailPhilosohy />}
+              />
               <Route path="/admin/add/filosofi" element={<AddPhilosophy />} />
             </Route>
           </>

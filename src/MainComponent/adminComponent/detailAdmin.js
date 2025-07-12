@@ -20,7 +20,7 @@ const DetailAdmin = ({ data, updateText, categories, topic, deleteData }) => {
   const [category, setCategory] = useState(data.category);
 
   // images: [{ id?, url, file?, isEdit?, isNew? }]
-  
+
   const [images, setImages] = useState(() =>
     data.images.map((img) => ({
       id: img.id,
@@ -168,10 +168,12 @@ const DetailAdmin = ({ data, updateText, categories, topic, deleteData }) => {
         </div>
       </motion.div>
 
-      {topic !== "sejarah" || topic !== "filosofi" ? (
+      {topic !== "sejarah"? (
         <>
           <motion.div variants={itemVariants}>
-            <label className="block text-lg font-semibold">Kategori</label>
+            <label className="block text-lg font-semibold">
+              Kategori
+            </label>
             <div className="relative w-full group mt-4">
               <SearchableDropdown
                 options={categories}

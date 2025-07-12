@@ -2,6 +2,7 @@ import React from "react";
 import "../../styles/filosofiCard.css";
 
 import { motion } from "framer-motion";
+import { sanitize } from "../adminComponent/utils";
 
 const filosofiToraja = [
   {
@@ -54,7 +55,7 @@ const filosofiToraja = [
   },
 ];
 
-const ListFilosofi = () => {
+const ListFilosofi = ({ data }) => {
   return (
     <div
       id="filosofi-section"
@@ -85,8 +86,9 @@ const ListFilosofi = () => {
 
         {/* Cards grid */}
         <div className="flex flex-wrap justify-center">
-          {filosofiToraja.map((item) => (
+          {data.map((item, index) => (
             <motion.div
+              key={item.id || index} // pakai key unik, idealnya pakai item.id
               className="card"
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -94,7 +96,10 @@ const ListFilosofi = () => {
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
               <p className="card-title">{item.title}</p>
-              <p className="small-desc">{item.description}</p>
+              <div
+                className="small-desc"
+                dangerouslySetInnerHTML={{ __html: sanitize(item.description) }}
+              ></div>
               <div className="go-corner">
                 <div className="go-arrow">→</div>
               </div>

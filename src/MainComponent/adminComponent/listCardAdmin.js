@@ -160,7 +160,7 @@ const ListCardAdmin = ({
           whileInView="visible"
           viewport={{ once: true }}
           variants={containerVariants}
-          className="flex justify-between items-start w-full flex-wrap gap-8 px-4"
+          className="flex justify-between items-start w-full flex-wrap gap-8"
         >
           {currentData.length > 0 ? (
             currentData.map((item, index) => (
