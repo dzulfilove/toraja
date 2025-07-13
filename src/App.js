@@ -39,7 +39,6 @@ function App() {
         const res = await API.get("/auth/check");
         // asumsikan jika berhasil, berarti login
         if (res.data) setIsLoggedIn(true);
-
         console.log(res);
       } catch (err) {
         setIsLoggedIn(false);
@@ -58,7 +57,7 @@ function App() {
       <Routes>
         {/* <Route path="/" element={<HomePage />} />
         <Route path="sejarah" element={<SejarahPage />} /> */}
-        <div className="p-4">Loading = {isLoggedIn}</div>
+
         {isLoggedIn == true ? (
           <>
             <Route path="/admin" element={<LayoutAdmin />}>
