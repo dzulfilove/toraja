@@ -12,6 +12,26 @@ import { Link } from "react-router-dom";
 import API from "../../config/api";
 import { sanitize, stripHtml } from "../adminComponent/utils";
 
+
+import filosofi from "../../assets/filosofi.jpg";
+
+const slide = [
+  {
+    title: "Sejarah Suku Toraja",
+    desc: "Toraja memiliki sejarah panjang sebagai masyarakat pegunungan yang mempertahankan budaya unik sejak abad ke-17, dikenal dengan sistem sosial dan upacara pemakaman megah.",
+    img: asal,
+  },
+  {
+    title: "Asal Usul Leluhur Toraja",
+    desc: "Konon, leluhur suku Toraja berasal dari daratan Tiongkok Selatan yang kemudian menetap di pegunungan Sulawesi, membangun rumah adat Tongkonan yang khas.",
+    img: sejarah,
+  },
+  {
+    title: "Filosofi Hidup Toraja",
+    desc: "Filosofi 'Aluk To Dolo' mengatur tatanan kehidupan suku Toraja: hubungan dengan Tuhan, sesama manusia, dan alam sekitar yang dijunjung tinggi dalam keseharian.",
+    img: filosofi,
+  },
+];
 const HomeSlider = ({ slides }) => {
   // Hilangkan tag HTML → ambil plain text
 
@@ -69,16 +89,22 @@ const HomeSlider = ({ slides }) => {
         {/* Right: Slider */}
         <div className="md:w-1/2 flex items-center mr-16">
           <Swiper
-            modules={[Autoplay, Navigation]}
-            autoplay={{ delay: 5000, disableOnInteraction: false }}
+            modules={[Navigation, Pagination, Autoplay]}
             navigation
+            pagination={{ clickable: true }}
+            autoplay={{
+              delay: 2000,
+              disableOnInteraction: false,
+            }}
             loop={true}
             slidesPerView={2}
-            spaceBetween={30}
-            centeredSlides={true}
+            spaceBetween={20}
+            loopedSlides={2} // Diubah menjadi 2
+            loopFillGroupWithBlank={true} // Ditambahkan
+            centeredSlides={false}
             className="w-full"
           >
-            {duplicatedSlides.map((slide, idx) => (
+            {slides.map((slide, idx) => (
               <SwiperSlide key={idx}>
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}

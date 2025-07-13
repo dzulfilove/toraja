@@ -39,6 +39,10 @@ const HomeWisata = ({ data }) => {
 
     return preview;
   };
+
+  const duplicatedSlides = data.length < 5 ? [...data, ...data] : data;
+  console.log(duplicatedSlides);
+
   return (
     <div className="w-full py-16 px-4 font-montserrat relative">
       {/* Background image with gradient overlay */}
@@ -106,7 +110,7 @@ const HomeWisata = ({ data }) => {
             modules={[Navigation, Pagination, Autoplay]}
             navigation
             pagination={{ clickable: true }}
-            autoplay={{ delay: 5000 }}
+            autoplay={{ delay: 2000 }}
             loop={true}
             slidesPerView={1}
             spaceBetween={30}
@@ -120,7 +124,7 @@ const HomeWisata = ({ data }) => {
             }}
             className="w-full"
           >
-            {data.map((content) => (
+            {duplicatedSlides.map((content) => (
               <SwiperSlide key={content.id}>
                 <Link to={`/detail/wisata/${content.id}`}>
                   <motion.div

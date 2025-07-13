@@ -9,95 +9,66 @@ import HomeWisata from "../MainComponent/homeComponent/homeWisata";
 import API from "../config/api";
 import filosofi from "../assets/filosofi.jpg";
 import { url } from "../config/route";
+import LoaderPage from "./loader"; // pastikan file loader sudah ada
 
 const HomePage = () => {
   const [dataSejarah, setDataSejarah] = useState([]);
-  const [error, setError] = useState(""); // opsional: untuk tampilkan pesan error
   const [dataDance, setDataDance] = useState([]);
   const [dataFood, setDataFood] = useState([]);
   const [dataTour, setDataTour] = useState([]);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
-  const getDataSejarah = async () => {
+  const fetchAllData = async () => {
+    setIsLoading(true);
     try {
-      const res = await API.get("/history");
-      console.log(res.data);
-      let transformedData = res.data.map((item) => ({
+      const resHistory = await API.get("/history");
+      const resPhilosophy = await API.get("/philosophy");
+      const resDance = await API.get("/dance/part");
+      const resFood = await API.get("/food/part");
+      const resTour = await API.get("/tourist/part");
+
+      // Transform history data
+      let transformedHistory = resHistory.data.map((item) => ({
         id: item.id,
         title: item.title,
         desc: item.description,
         img: `${url}/${item.images[0].image}`,
       }));
-      const philosophy = await getDataPhilosophy();
-      transformedData.push({
-        id: philosophy[0].id,
-        title: philosophy[0].title,
-        desc: philosophy[0].description,
-        img: filosofi,
-      });
+      // Tambahkan data filosofi
+      if (resPhilosophy.data.length > 0) {
+        transformedHistory.push({
+          id: resPhilosophy.data[0].id,
+          title: resPhilosophy.data[0].title,
+          desc: resPhilosophy.data[0].description,
+          img: filosofi,
+        });
+      }
 
-      console.log(transformedData, "final data");
-      setDataSejarah(transformedData);
+      setDataSejarah(transformedHistory);
+      setDataDance(resDance.data || []);
+      setDataFood(resFood.data || []);
+      setDataTour(resTour.data || []);
       setError(""); // clear error
     } catch (err) {
       console.error("Error loading data:", err);
-      setError("Gagal memuat data");
+      setError("Gagal memuat data.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    getDataSejarah();
-    getDataDance();
-    getDataFood();
-    getDataTour();
+    fetchAllData();
   }, []);
 
-  const getDataPhilosophy = async () => {
-    try {
-      const res = await API.get("/philosophy");
-      console.log("filosofi", res.data);
-      setError(""); // clear error
-      return res.data;
-    } catch (err) {
-      console.error("Error loading data:", err);
-      setError("Gagal memuat data");
-    }
-  };
-
-  const getDataDance = async () => {
-    try {
-      const res = await API.get("/dance");
-
-      setDataDance(res.data);
-      setError(""); // clear error
-    } catch (err) {
-      console.error("Error loading data:", err);
-      setError("Gagal memuat data");
-    }
-  };
-
-  const getDataFood = async () => {
-    try {
-      const res = await API.get("/food");
-
-      setDataFood(res.data);
-      setError(""); // clear error
-    } catch (err) {
-      console.error("Error loading data:", err);
-      setError("Gagal memuat data");
-    }
-  };
-
-  const getDataTour = async () => {
-    try {
-      const res = await API.get("/tourist");
-
-      setDataTour(res.data);
-      setError(""); // clear error
-    } catch (err) {
-      console.error("Error loading data:", err);
-      setError("Gagal memuat data");
-    }
-  };
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <LoaderPage />
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen overflow-y-auto snap-y snap-mandatory">
@@ -108,8 +79,6 @@ const HomePage = () => {
       <div className="snap-start h-screen">
         <MapSection />
       </div>
-
-      {/* Slider Section */}
       <div className="snap-start h-screen">
         <HomeSlider slides={dataSejarah} />
       </div>
@@ -128,4 +97,5 @@ const HomePage = () => {
     </div>
   );
 };
+
 export default HomePage;

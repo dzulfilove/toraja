@@ -14,15 +14,18 @@ import { url } from "../../config/route";
 import { stripHtml } from "../adminComponent/utils";
 
 const HomeTarian = ({ data }) => {
-   const formatText = (text) => {
-      const plainText = stripHtml(text);
-      // Potong 15 karakter & tambahkan "......"
-      const preview =
-        plainText.length > 15 ? plainText.substring(0, 300) + "..." : plainText;
-  
-      return preview;
-    };
-  
+  const formatText = (text) => {
+    const plainText = stripHtml(text);
+    // Potong 15 karakter & tambahkan "......"
+    const preview =
+      plainText.length > 15 ? plainText.substring(0, 300) + "..." : plainText;
+
+    return preview;
+  };
+
+  const duplicatedSlides = data.length < 5 ? [...data, ...data] : data;
+  console.log(duplicatedSlides);
+
   return (
     <div className="mx-auto px-10 py-12 bg-white font-montserrat">
       <div className="flex flex-col justify-between items-center mb-8 mt-6 gap-8">
@@ -50,7 +53,7 @@ const HomeTarian = ({ data }) => {
           modules={[Navigation, Pagination, Autoplay]}
           navigation
           pagination={{ clickable: true }}
-          autoplay={{ delay: 5000 }}
+          autoplay={{ delay: 2000 }}
           loop={true}
           slidesPerView={1}
           spaceBetween={30}
@@ -67,7 +70,7 @@ const HomeTarian = ({ data }) => {
           }}
           className="w-full"
         >
-          {data.map((tarian) => (
+          {duplicatedSlides.map((tarian) => (
             <SwiperSlide key={tarian.id}>
               <Link to={`/detail/tarian/${tarian.id}`}>
                 <div className="relative h-[500px] rounded-xl overflow-hidden shadow-lg group hover:cursor-pointer">
@@ -90,7 +93,9 @@ const HomeTarian = ({ data }) => {
                       </span>
                     </div>
                     <h3 className="text-2xl font-bold mb-2">{tarian.title}</h3>
-                    <p className="text-sm mb-4">{formatText(tarian.description)}</p>
+                    <p className="text-sm mb-4">
+                      {formatText(tarian.description)}
+                    </p>
                     <div className="flex items-center">
                       <svg
                         className="w-4 h-4 mr-2"

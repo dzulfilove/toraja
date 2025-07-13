@@ -46,6 +46,8 @@ const HomeMakanan = ({data}) => {
 
     return preview;
   };
+  const duplicatedSlides = data.length < 5 ? [...data, ...data] : data;
+  console.log(duplicatedSlides);
 
   return (
     <div className="w-full bg-gray-100 py-16 px-4 font-montserrat">
@@ -83,7 +85,7 @@ const HomeMakanan = ({data}) => {
         >
           <Swiper
             modules={[Autoplay, Navigation]}
-            autoplay={{ delay: 5000, disableOnInteraction: false }}
+            autoplay={{ delay: 2000, disableOnInteraction: false }}
             navigation
             loop={true}
             slidesPerView={3}
@@ -91,7 +93,7 @@ const HomeMakanan = ({data}) => {
             centeredSlides={true}
             className="w-full"
           >
-            {data.map((makanan) => (
+            {duplicatedSlides.map((makanan) => (
               <SwiperSlide key={makanan.id}>
                 {({ isActive }) => (
                   <Link to={`/detail/makanan/${makanan.id}`}>

@@ -24,7 +24,7 @@ const DetailAdmin = ({ data, updateText, categories, topic, deleteData }) => {
   const [images, setImages] = useState(() =>
     data.images.map((img) => ({
       id: img.id,
-      url: `http://localhost:5000/${img.image}`,
+      url: `https://toraja-tbbec3faqq-uc.a.run.app/${img.image}`,
     }))
   );
 
@@ -168,12 +168,10 @@ const DetailAdmin = ({ data, updateText, categories, topic, deleteData }) => {
         </div>
       </motion.div>
 
-      {topic !== "sejarah"? (
+      {topic !== "sejarah" ? (
         <>
           <motion.div variants={itemVariants}>
-            <label className="block text-lg font-semibold">
-              Kategori
-            </label>
+            <label className="block text-lg font-semibold">Kategori</label>
             <div className="relative w-full group mt-4">
               <SearchableDropdown
                 options={categories}
