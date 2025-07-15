@@ -38,7 +38,9 @@
 .card {
   display: block;
   position: relative;
-  max-width: 300px;
+  /* max-width: 300px; */
+  width: 15rem;
+  height: auto;
   cursor: pointer;
   background-color: #f2f8f9;
   border-radius: 10px;

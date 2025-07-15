@@ -6,110 +6,94 @@ import HeaderAdmin from "../../../MainComponent/adminComponent/headerAdmin";
 import Breadcrumb from "../../../MainComponent/adminComponent/breadcrumb";
 import Swal from "sweetalert2";
 import AddCategory from "../../../MainComponent/adminComponent/addCategory";
+import LoaderPage from "../../loader";
 
 const DetailFood = () => {
   const { id } = useParams();
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const [data, setData] = useState(null);
   const [categories, setCategories] = useState([]);
-  // Load detail data
-  const loadData = async () => {
-    try {
-      setLoading(true);
-      const res = await API.get(`/food/${id}`);
-      setData(res.data);
-    } catch (err) {
-      console.error(err);
-      alert("Gagal memuat data.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [loadingPage, setLoadingPage] = useState(true);
+  const [loadingUpdate, setLoadingUpdate] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
+  const [loadingCategory, setLoadingCategory] = useState(false);
 
   useEffect(() => {
-    getCategories();
-  }, []);
+    loadPageData();
+  }, [id]);
 
-  const getCategories = async () => {
+  const loadPageData = async () => {
     try {
-      setLoading(true);
-      const res = await API.get(`/food/categories`);
-      const transformedData = res.data.map((item) => ({
+      setLoadingPage(true);
+      const [detailRes, categoryRes] = await Promise.all([
+        API.get(`/food/${id}`),
+        API.get(`/food/categories`),
+      ]);
+
+      setData(detailRes.data);
+      const transformed = categoryRes.data.map((item) => ({
         value: item.id,
         label: item.name_category,
       }));
-      setCategories(transformedData);
+      setCategories(transformed);
     } catch (err) {
       console.error(err);
       Swal.fire({
         icon: "error",
-        title: "Error",
-        text: "Gagal memuat kategori makanan.",
+        title: "Gagal memuat data",
+        text: "Periksa koneksi atau coba lagi nanti.",
       });
     } finally {
-      setLoading(false);
+      setLoadingPage(false);
     }
   };
-  useEffect(() => {
-    loadData();
-  }, [id]);
 
   const createFoodCategory = async (title) => {
     try {
-      setLoading(true);
-
+      setLoadingCategory(true);
       const formData = new FormData();
       formData.append("name", title);
 
-      console.log(title, "title");
+      await API.post("/food/category", formData);
+      await loadPageData();
 
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ": " + pair[1]);
-      }
-
-      const response = await API.post("/food/category", formData);
-
-      await getCategories();
       await Swal.fire({
         icon: "success",
         title: "Berhasil!",
         text: "Kategori Makanan berhasil ditambahkan.",
       });
     } catch (err) {
-      console.error("Error utama:", err);
+      console.error(err);
       Swal.fire({
         icon: "error",
         title: "Gagal",
-        text: err.response?.data?.message || "Gagal menambahkan makanan.",
+        text: err.response?.data?.message || "Gagal menambahkan kategori.",
       });
     } finally {
-      setLoading(false);
+      setLoadingCategory(false);
     }
   };
-  // ✅ Update title & description + update/tambah gambar
+
   const updateText = async (title, category, description, images) => {
     try {
-      console.log("update begin");
+      setLoadingUpdate(true);
       await API.put(`/food/${id}`, { title, category, description });
-      console.log("Update title & description sukses");
 
       const editedImages = images.filter(
-        (img) => img.isEdit === true && img.id && img.file
+        (img) => img.isEdit && img.id && img.file
       );
       for (const img of editedImages) {
         await updateSingleImage(img.id, img.file);
       }
 
-      const newImages = images.filter((img) => img.isNew === true && img.file);
+      const newImages = images.filter((img) => img.isNew && img.file);
       for (const img of newImages) {
         await addImage(img.file);
       }
-      const deletedImage = images.filter(
-        (img) => img.isDeleted === true && img.id
-      );
-      for (const img of deletedImage) {
+
+      const deletedImages = images.filter((img) => img.isDeleted && img.id);
+      for (const img of deletedImages) {
         await deleteSingleImage(img.id);
       }
 
@@ -118,50 +102,44 @@ const DetailFood = () => {
         title: "Berhasil!",
         text: "Data berhasil diperbarui.",
       });
-      loadData(); // refresh data
+      loadPageData(); // refresh data
     } catch (err) {
       console.error(err);
       Swal.fire({
         icon: "error",
-        title: "Oops...",
+        title: "Gagal",
         text: "Gagal memperbarui data!",
       });
+    } finally {
+      setLoadingUpdate(false);
     }
   };
 
-  // Tambah gambar baru
   const addImage = async (file) => {
     const formData = new FormData();
     formData.append("image", file);
-    console.log(file, "ADD");
     await API.post(`/food/${id}/image`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
   };
 
-  // Update gambar lama
   const updateSingleImage = async (imageId, file) => {
     const formData = new FormData();
     formData.append("image", file);
-    console.log(file, "UPDATE");
-
     await API.put(`/food/${id}/image/${imageId}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
   };
-  const deleteSingleImage = async (imageId) => {
-    const formData = new FormData();
 
-    await API.delete(`/food/${id}/image/${imageId}`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+  const deleteSingleImage = async (imageId) => {
+    await API.delete(`/food/${id}/image/${imageId}`);
   };
 
   const deleteFood = async () => {
     try {
-      const result = await Swal.fire({
+      const confirm = await Swal.fire({
         title: "Hapus Makanan?",
-        text: "Apakah Anda yakin ingin menghapus makanan ini? Tindakan ini tidak dapat dibatalkan!",
+        text: "Tindakan ini tidak dapat dibatalkan!",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#d33",
@@ -170,36 +148,36 @@ const DetailFood = () => {
         cancelButtonText: "Batal",
       });
 
-      if (result.isConfirmed) {
-        const formData = new FormData();
-
-        await API.delete(`/food/${id}`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-
+      if (confirm.isConfirmed) {
+        setLoadingDelete(true);
+        await API.delete(`/food/${id}`);
         await Swal.fire({
+          icon: "success",
           title: "Berhasil!",
           text: "Makanan berhasil dihapus.",
-          icon: "success",
-          confirmButtonText: "OK",
         });
         navigate(`/admin/makanan/`);
-
-        // opsional: reload halaman atau update state
-        // window.location.reload();
       }
     } catch (error) {
       console.error(error);
       Swal.fire({
+        icon: "error",
         title: "Gagal!",
         text: "Terjadi kesalahan saat menghapus makanan.",
-        icon: "error",
-        confirmButtonText: "OK",
       });
+    } finally {
+      setLoadingDelete(false);
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loadingPage) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <LoaderPage />
+      </div>
+    );
+  }
+
   if (!data) return <p>Data tidak ditemukan</p>;
 
   return (
@@ -208,10 +186,10 @@ const DetailFood = () => {
         items={[
           { label: "Dashboard", href: "/admin" },
           { label: "Makanan", href: "/admin/makanan" },
-          { label: "Detail" }, // halaman aktif biasanya tidak ada href
+          { label: "Detail" },
         ]}
       />
-      <HeaderAdmin title={"Update Detail Data Makanan "} />
+      <HeaderAdmin title={"Update Detail Data Makanan"} />
       <div className="w-full h-auto flex justify-between items-start gap-6">
         <div className="w-[60%]">
           <DetailAdmin
@@ -220,10 +198,12 @@ const DetailFood = () => {
             updateText={updateText}
             categories={categories}
             topic={"makanan"}
+            loadingUpdate={loadingUpdate}
+            loadingDelete={loadingDelete}
           />
         </div>
         <div className="w-[40%]">
-          <AddCategory addItem={createFoodCategory} />
+          <AddCategory addItem={createFoodCategory} loading={loadingCategory} />
         </div>
       </div>
     </div>

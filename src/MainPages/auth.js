@@ -18,7 +18,7 @@ function Login() {
       localStorage.setItem("token", res.data.token);
       alert("Login berhasil");
       navigate(`/admin`);
-      // window.location.reload();
+      window.location.reload();
 
       // TODO: navigate ke dashboard
     } catch (err) {

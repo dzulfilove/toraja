@@ -160,7 +160,7 @@ const ListCardAdmin = ({
           whileInView="visible"
           viewport={{ once: true }}
           variants={containerVariants}
-          className="flex justify-between items-start w-full flex-wrap gap-8"
+          className="flex justify-start items-start w-full flex-wrap gap-8"
         >
           {currentData.length > 0 ? (
             currentData.map((item, index) => (
@@ -194,7 +194,8 @@ const ListCardAdmin = ({
               </motion.div>
             ))
           ) : (
-            <p className="text-center col-span-full">Data tidak ditemukan.</p>
+            // <p className="text-center col-span-full">Data tidak ditemukan.</p>
+            <></>
           )}
         </motion.div>
 

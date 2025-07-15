@@ -6,110 +6,99 @@ import HeaderAdmin from "../../../MainComponent/adminComponent/headerAdmin";
 import Breadcrumb from "../../../MainComponent/adminComponent/breadcrumb";
 import Swal from "sweetalert2";
 import AddCategory from "../../../MainComponent/adminComponent/addCategory";
+import LoaderPage from "../../loader";
 
 const DetailDance = () => {
   const { id } = useParams();
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const [data, setData] = useState(null);
   const [categories, setCategories] = useState([]);
+
+  const [loadingPage, setLoadingPage] = useState(true);
+  const [loadingCategory, setLoadingCategory] = useState(false);
+
   // Load detail data
   const loadData = async () => {
     try {
-      setLoading(true);
+      setLoadingPage(true);
       const res = await API.get(`/dance/${id}`);
       setData(res.data);
     } catch (err) {
       console.error(err);
-      alert("Gagal memuat data.");
+      Swal.fire({ icon: "error", title: "Gagal memuat data." });
     } finally {
-      setLoading(false);
+      setLoadingPage(false);
     }
   };
 
-  useEffect(() => {
-    getCategories();
-  }, []);
-
   const getCategories = async () => {
     try {
-      setLoading(true);
       const res = await API.get(`/dance/categories`);
-      const transformedData = res.data.map((item) => ({
+      const transformed = res.data.map((item) => ({
         value: item.id,
         label: item.name_category,
       }));
-      setCategories(transformedData);
+      setCategories(transformed);
     } catch (err) {
       console.error(err);
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Gagal memuat kategori Tarian.",
+        text: "Gagal memuat kategori tarian.",
       });
-    } finally {
-      setLoading(false);
     }
   };
+
   useEffect(() => {
-    loadData();
+    const loadAll = async () => {
+      setLoadingPage(true);
+      await Promise.all([loadData(), getCategories()]);
+      setLoadingPage(false);
+    };
+    loadAll();
   }, [id]);
 
   const createDanceCategory = async (title) => {
     try {
-      setLoading(true);
-
+      setLoadingCategory(true);
       const formData = new FormData();
       formData.append("name", title);
-
-      console.log(title, "title");
-
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ": " + pair[1]);
-      }
-
-      const response = await API.post("/dance/category", formData);
-
+      await API.post("/dance/category", formData);
       await getCategories();
       await Swal.fire({
         icon: "success",
         title: "Berhasil!",
-        text: "Kategori Tarian berhasil ditambahkan.",
+        text: "Kategori tarian berhasil ditambahkan.",
       });
     } catch (err) {
-      console.error("Error utama:", err);
+      console.error(err);
       Swal.fire({
         icon: "error",
         title: "Gagal",
-        text: err.response?.data?.message || "Gagal menambahkan Tarian.",
+        text: err.response?.data?.message || "Gagal menambahkan kategori.",
       });
     } finally {
-      setLoading(false);
+      setLoadingCategory(false);
     }
   };
-  // ✅ Update title & description + update/tambah gambar
+
   const updateText = async (title, category, description, images) => {
     try {
-      console.log("update begin");
       await API.put(`/dance/${id}`, { title, category, description });
-      console.log("Update title & description sukses");
 
-      const editedImages = images.filter(
-        (img) => img.isEdit === true && img.id && img.file
-      );
-      for (const img of editedImages) {
+      const edited = images.filter((img) => img.isEdit && img.id && img.file);
+      for (const img of edited) {
         await updateSingleImage(img.id, img.file);
       }
 
-      const newImages = images.filter((img) => img.isNew === true && img.file);
-      for (const img of newImages) {
+      const added = images.filter((img) => img.isNew && img.file);
+      for (const img of added) {
         await addImage(img.file);
       }
-      const deletedImage = images.filter(
-        (img) => img.isDeleted === true && img.id
-      );
-      for (const img of deletedImage) {
+
+      const deleted = images.filter((img) => img.isDeleted && img.id);
+      for (const img of deleted) {
         await deleteSingleImage(img.id);
       }
 
@@ -118,7 +107,7 @@ const DetailDance = () => {
         title: "Berhasil!",
         text: "Data berhasil diperbarui.",
       });
-      loadData(); // refresh data
+      loadData(); // refresh
     } catch (err) {
       console.error(err);
       Swal.fire({
@@ -129,78 +118,63 @@ const DetailDance = () => {
     }
   };
 
-  // Tambah gambar baru
   const addImage = async (file) => {
     const formData = new FormData();
     formData.append("image", file);
-    console.log(file, "ADD");
     await API.post(`/dance/${id}/image`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
   };
 
-  // Update gambar lama
   const updateSingleImage = async (imageId, file) => {
     const formData = new FormData();
     formData.append("image", file);
-    console.log(file, "UPDATE");
-
     await API.put(`/dance/${id}/image/${imageId}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
   };
-  const deleteSingleImage = async (imageId) => {
-    const formData = new FormData();
 
-    await API.delete(`/dance/${id}/image/${imageId}`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+  const deleteSingleImage = async (imageId) => {
+    await API.delete(`/dance/${id}/image/${imageId}`);
   };
 
   const deleteDance = async () => {
     try {
       const result = await Swal.fire({
         title: "Hapus Tarian?",
-        text: "Apakah Anda yakin ingin menghapus Tarian ini? Tindakan ini tidak dapat dibatalkan!",
+        text: "Tindakan ini tidak dapat dibatalkan!",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#d33",
         cancelButtonColor: "#3085d6",
         confirmButtonText: "Ya, hapus!",
-        cancelButtonText: "Batal",
       });
-
       if (result.isConfirmed) {
-        const formData = new FormData();
-
-        await API.delete(`/dance/${id}`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-
+        await API.delete(`/dance/${id}`);
         await Swal.fire({
           title: "Berhasil!",
           text: "Tarian berhasil dihapus.",
           icon: "success",
-          confirmButtonText: "OK",
         });
-        navigate(`/admin/Tarian/`);
-
-        // opsional: reload halaman atau update state
-        // window.location.reload();
+        navigate(`/admin/tarian/`);
       }
     } catch (error) {
       console.error(error);
       Swal.fire({
         title: "Gagal!",
-        text: "Terjadi kesalahan saat menghapus Tarian.",
+        text: "Terjadi kesalahan saat menghapus.",
         icon: "error",
-        confirmButtonText: "OK",
       });
     }
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (!data) return <p>Data tidak ditemukan</p>;
+  if (loadingPage) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <LoaderPage />
+      </div>
+    );
+  }
 
   return (
     <div className="relative h-screen overflow-y-auto snap-y snap-mandatory font-montserrat p-4 bg-white">
@@ -208,7 +182,7 @@ const DetailDance = () => {
         items={[
           { label: "Dashboard", href: "/admin" },
           { label: "Tarian", href: "/admin/tarian" },
-          { label: "Detail" }, // halaman aktif biasanya tidak ada href
+          { label: "Detail" },
         ]}
       />
       <HeaderAdmin title={"Update Detail Data Tarian "} />
@@ -223,7 +197,10 @@ const DetailDance = () => {
           />
         </div>
         <div className="w-[40%]">
-          <AddCategory addItem={createDanceCategory} />
+          <AddCategory
+            addItem={createDanceCategory}
+            loading={loadingCategory}
+          />
         </div>
       </div>
     </div>

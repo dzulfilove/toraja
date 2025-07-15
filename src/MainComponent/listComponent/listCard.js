@@ -119,7 +119,7 @@ const ListCard = ({ topic, data, categories, title, description, image }) => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={containerVariants}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4"
+          className="flex flex-wrap justify-around gap-6 px-4"
         >
           {currentData.length > 0 ? (
             currentData.map((item, index) => (

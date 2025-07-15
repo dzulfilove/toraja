@@ -2,19 +2,21 @@ import { useEffect, useState } from "react";
 import API from "../../../config/api";
 import HeaderAdmin from "../../../MainComponent/adminComponent/headerAdmin";
 import ListCardAdmin from "../../../MainComponent/adminComponent/listCardAdmin";
+import LoaderPage from "../../loader"; // pastikan file ini ada
 import Swal from "sweetalert2";
 
 export default function TourPage() {
   const [data, setData] = useState([]);
   const [newTitle, setNewTitle] = useState("");
   const [newDesc, setNewDesc] = useState("");
-  const [error, setError] = useState(""); // opsional: untuk tampilkan pesan error
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     getCategories();
+    getData();
   }, []);
 
   const getCategories = async () => {
@@ -31,7 +33,7 @@ export default function TourPage() {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Gagal memuat kategori Tarian.",
+        text: "Gagal memuat kategori wisata.",
       });
     } finally {
       setLoading(false);
@@ -40,19 +42,25 @@ export default function TourPage() {
 
   const getData = async () => {
     try {
+      setLoading(true); // tambahkan loading di sini juga
       const res = await API.get("/tourist");
-
       setData(res.data);
-      setError(""); // clear error
+      setError("");
     } catch (err) {
       console.error("Error loading data:", err);
       setError("Gagal memuat data");
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <LoaderPage />
+      </div>
+    );
+  }
 
   return (
     <div className="relative h-screen overflow-y-auto snap-y snap-mandatory font-montserrat p-10 bg-white">

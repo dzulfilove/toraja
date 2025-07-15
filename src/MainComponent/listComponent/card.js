@@ -3,19 +3,31 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { url } from "../../config/route";
-import { sanitize, stripHtml } from "../adminComponent/utils";
+import { stripHtml } from "../adminComponent/utils";
 
 const Card = ({ id, title, description, image, category, topic }) => {
-  const formatText = (text) => {
-    const plainText = stripHtml(text);
-    // Potong 15 karakter & tambahkan "......"
-    const preview =
-      plainText.length > 15 ? plainText.substring(0, 300) + "..." : plainText;
+  // Tentukan page sekali saja (tidak pakai state)
+  const page =
+    topic === "food"
+      ? "makanan"
+      : topic === "dance"
+      ? "tarian"
+      : topic === "tourist"
+      ? "wisata"
+      : "detail";
 
-    return preview;
+  const formatText = (text) => {
+    const plainText = stripHtml(text || "");
+    return plainText.length > 300
+      ? plainText.substring(0, 300) + "..."
+      : plainText;
   };
+
+  const imageUrl =
+    image && image.length > 0 ? `${url}/${image[0].image}` : "/default.jpg";
+
   return (
-    <StyledWrapper image={`${url}/${image[0].image}`}>
+    <StyledWrapper image={imageUrl}>
       <Link to={`/detail/${topic}/${id}`}>
         <motion.div
           className="cardList-container font-montserrat"
@@ -38,6 +50,7 @@ const Card = ({ id, title, description, image, category, topic }) => {
     </StyledWrapper>
   );
 };
+
 const StyledWrapper = styled.div`
   .cardList-container {
     width: 340px;
@@ -81,7 +94,7 @@ const StyledWrapper = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.4); /* gelap transparan */
+    background: rgba(0, 0, 0, 0.4);
     border-radius: inherit;
   }
 
@@ -90,7 +103,6 @@ const StyledWrapper = styled.div`
     font-weight: 700;
     z-index: 1;
     background: #f5f5dc;
-
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -112,7 +124,6 @@ const StyledWrapper = styled.div`
     text-align: center;
     gap: 10px;
     background: linear-gradient(-45deg, #b8860b 0%, #8b0000 100%);
-
     color: #e8e8e8;
     padding: 20px;
     line-height: 1.5;

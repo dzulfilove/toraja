@@ -5,54 +5,55 @@ import DetailAdmin from "../../../MainComponent/adminComponent/detailAdmin";
 import HeaderAdmin from "../../../MainComponent/adminComponent/headerAdmin";
 import Breadcrumb from "../../../MainComponent/adminComponent/breadcrumb";
 import Swal from "sweetalert2";
+import LoaderPage from "../../loader";
 
 const DetailHistory = () => {
   const { id } = useParams();
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  // Load detail data
-  const loadData = async () => {
-    try {
-      setLoading(true);
-      const res = await API.get(`/history/${id}`);
-      console.log(res.data, "data detail");
-      setData(res.data);
-    } catch (err) {
-      console.error(err);
-      alert("Gagal memuat data.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [loadingPage, setLoadingPage] = useState(true);
+  const [loadingUpdate, setLoadingUpdate] = useState(false);
 
   useEffect(() => {
     loadData();
   }, [id]);
 
-  // ✅ Update title & description + update/tambah gambar
+  const loadData = async () => {
+    try {
+      setLoadingPage(true);
+      const res = await API.get(`/history/${id}`);
+      console.log(res.data, "data detail");
+      setData(res.data);
+    } catch (err) {
+      console.error(err);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal memuat data",
+        text: "Periksa koneksi atau coba lagi nanti.",
+      });
+    } finally {
+      setLoadingPage(false);
+    }
+  };
+
   const updateText = async (title, description, images) => {
     try {
-      console.log("update begin");
+      setLoadingUpdate(true);
       await API.put(`/history/${id}`, { title, description });
       console.log("Update title & description sukses");
-      console.log(images);
-      const editedImages = images.filter(
-        (img) => img.isEdit === true && img.id && img.file
-      );
-      const deletedImage = images.filter(
-        (img) => img.isDeleted === true && img.id
-      );
-      for (const img of deletedImage) {
-        await deleteSingleImage(img.id, img.file);
-      }
+
+      const editedImages = images.filter((img) => img.isEdit && img.id && img.file);
       for (const img of editedImages) {
         await updateSingleImage(img.id, img.file);
       }
 
-      const newImages = images.filter((img) => img.isNew === true && img.file);
+      const newImages = images.filter((img) => img.isNew && img.file);
       for (const img of newImages) {
         await addImage(img.file);
+      }
+
+      const deletedImages = images.filter((img) => img.isDeleted && img.id);
+      for (const img of deletedImages) {
+        await deleteSingleImage(img.id);
       }
 
       await Swal.fire({
@@ -68,10 +69,11 @@ const DetailHistory = () => {
         title: "Oops...",
         text: "Gagal memperbarui data!",
       });
+    } finally {
+      setLoadingUpdate(false);
     }
   };
 
-  // Tambah gambar baru
   const addImage = async (file) => {
     const formData = new FormData();
     formData.append("image", file);
@@ -81,25 +83,27 @@ const DetailHistory = () => {
     });
   };
 
-  // Update gambar lama
   const updateSingleImage = async (imageId, file) => {
     const formData = new FormData();
     formData.append("image", file);
     console.log(file, "UPDATE");
-
     await API.put(`/history/${id}/image/${imageId}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
   };
 
   const deleteSingleImage = async (imageId) => {
-    const formData = new FormData();
-
-    await API.delete(`/history/${id}/image/${imageId}`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    await API.delete(`/history/${id}/image/${imageId}`);
   };
-  if (loading) return <p>Loading...</p>;
+
+  if (loadingPage) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <LoaderPage />
+      </div>
+    );
+  }
+
   if (!data) return <p>Data tidak ditemukan</p>;
 
   return (
@@ -108,15 +112,16 @@ const DetailHistory = () => {
         items={[
           { label: "Dashboard", href: "/admin" },
           { label: "Sejarah", href: "/admin/sejarah" },
-          { label: "Detail" }, // halaman aktif biasanya tidak ada href
+          { label: "Detail" },
         ]}
       />
       <HeaderAdmin title={"Update Detail Data Sejarah"} />
       <DetailAdmin
         data={data}
         updateText={updateText}
-        categories={[]}
+        categories={[]} // history tidak ada kategori
         topic={"sejarah"}
+        loadingUpdate={loadingUpdate}
       />
     </div>
   );

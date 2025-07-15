@@ -3,10 +3,11 @@ import API from "../../../config/api";
 import HeaderAdmin from "../../../MainComponent/adminComponent/headerAdmin";
 import ListCardAdmin from "../../../MainComponent/adminComponent/listCardAdmin";
 import Swal from "sweetalert2";
+import LoaderPage from "../../loader";
 
 export default function DancePage() {
   const [data, setData] = useState([]);
-  const [error, setError] = useState(""); // opsional: untuk tampilkan pesan error
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [categories, setCategories] = useState([]);
@@ -38,19 +39,29 @@ export default function DancePage() {
 
   const getData = async () => {
     try {
+      setLoading(true); // tambahkan loading saat load data juga
       const res = await API.get("/dance");
-
       setData(res.data);
-      setError(""); // clear error
+      setError("");
     } catch (err) {
       console.error("Error loading data:", err);
       setError("Gagal memuat data");
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     getData();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <LoaderPage />
+      </div>
+    );
+  }
 
   return (
     <div className="relative h-screen overflow-y-auto snap-y snap-mandatory font-montserrat p-10 bg-white">
