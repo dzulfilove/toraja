@@ -33,7 +33,7 @@ const HomePage = () => {
         id: item.id,
         title: item.title,
         desc: item.description,
-        img: `${url}/${item.images[0].image}`,
+        img: `${item.images[0].image}`,
       }));
       // Tambahkan data filosofi
       if (resPhilosophy.data.length > 0) {

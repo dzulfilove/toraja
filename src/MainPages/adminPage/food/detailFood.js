@@ -7,7 +7,8 @@ import Breadcrumb from "../../../MainComponent/adminComponent/breadcrumb";
 import Swal from "sweetalert2";
 import AddCategory from "../../../MainComponent/adminComponent/addCategory";
 import LoaderPage from "../../loader";
-
+import { storage } from "../../../config/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 const DetailFood = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -52,10 +53,8 @@ const DetailFood = () => {
   const createFoodCategory = async (title) => {
     try {
       setLoadingCategory(true);
-      const formData = new FormData();
-      formData.append("name", title);
 
-      await API.post("/food/category", formData);
+      await API.post("/food/category", { name: title });
       await loadPageData();
 
       await Swal.fire({
@@ -77,7 +76,8 @@ const DetailFood = () => {
 
   const updateText = async (title, category, description, images) => {
     try {
-      setLoadingUpdate(true);
+      await setLoadingUpdate(true);
+
       await API.put(`/food/${id}`, { title, category, description });
 
       const editedImages = images.filter(
@@ -102,6 +102,8 @@ const DetailFood = () => {
         title: "Berhasil!",
         text: "Data berhasil diperbarui.",
       });
+      setLoadingUpdate(false);
+
       loadPageData(); // refresh data
     } catch (err) {
       console.error(err);
@@ -116,19 +118,31 @@ const DetailFood = () => {
   };
 
   const addImage = async (file) => {
-    const formData = new FormData();
-    formData.append("image", file);
-    await API.post(`/food/${id}/image`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    try {
+      const storageRef = ref(storage, `foods/${Date.now()}-${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+
+      await API.post(`/food/${id}/image`, {
+        images: [downloadURL], // karena backend expects array of URLs
+      });
+    } catch (err) {
+      console.error("Gagal menambahkan gambar:", err);
+    }
   };
 
   const updateSingleImage = async (imageId, file) => {
-    const formData = new FormData();
-    formData.append("image", file);
-    await API.put(`/food/${id}/image/${imageId}`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    try {
+      const storageRef = ref(storage, `foods/${Date.now()}-${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+
+      await API.put(`/food/${id}/image/${imageId}`, {
+        image: downloadURL, // backend expects a single image URL
+      });
+    } catch (err) {
+      console.error("Gagal update gambar:", err);
+    }
   };
 
   const deleteSingleImage = async (imageId) => {

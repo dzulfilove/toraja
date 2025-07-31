@@ -7,7 +7,8 @@ import Swal from "sweetalert2";
 import DetailAdmin from "../../../MainComponent/adminComponent/detailAdmin";
 import AddCategory from "../../../MainComponent/adminComponent/addCategory";
 import LoaderPage from "../../loader";
-
+import { storage } from "../../../config/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 const DetailTour = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -64,10 +65,9 @@ const DetailTour = () => {
   const createTourCategory = async (title) => {
     try {
       setLoading(true);
-      const formData = new FormData();
-      formData.append("name", title);
+    
 
-      await API.post("/tourist/category", formData);
+      await API.post("/tourist/category",  { name: title });
       await getCategories();
       await Swal.fire({
         icon: "success",
@@ -128,21 +128,34 @@ const DetailTour = () => {
     }
   };
 
-  const addImage = async (file) => {
-    const formData = new FormData();
-    formData.append("image", file);
-    await API.post(`/tourist/${id}/image`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    const addImage = async (file) => {
+    try {
+      const storageRef = ref(storage, `tourists/${Date.now()}-${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+
+      await API.post(`/tourist/${id}/image`, {
+        images: [downloadURL], // karena backend expects array of URLs
+      });
+    } catch (err) {
+      console.error("Gagal menambahkan gambar:", err);
+    }
   };
 
   const updateSingleImage = async (imageId, file) => {
-    const formData = new FormData();
-    formData.append("image", file);
-    await API.put(`/tourist/${id}/image/${imageId}`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    try {
+      const storageRef = ref(storage, `tourists/${Date.now()}-${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+
+      await API.put(`/tourist/${id}/image/${imageId}`, {
+        image: downloadURL, // backend expects a single image URL
+      });
+    } catch (err) {
+      console.error("Gagal update gambar:", err);
+    }
   };
+
 
   const deleteSingleImage = async (imageId) => {
     await API.delete(`/tourist/${id}/image/${imageId}`);

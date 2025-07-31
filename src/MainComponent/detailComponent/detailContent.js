@@ -16,12 +16,12 @@ const DetailContent = ({ data }) => {
         {/* Background blur */}
         <div
           className="absolute inset-0 bg-center bg-cover filter blur-md scale-100"
-          style={{ backgroundImage: `url(${url}/${data.images[0].image})` }}
+          style={{ backgroundImage: `url(${data.images[0].image})` }}
         ></div>
 
         {/* Gambar asli */}
         <img
-          src={`${url}/${data.images[0].image}`}
+          src={`${data.images[0].image}`}
           alt={data.title}
           className="relative z-10 w-auto h-full mx-auto object-contain"
         />

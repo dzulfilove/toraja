@@ -8,7 +8,8 @@ import Swal from "sweetalert2";
 import AddItems from "../../../MainComponent/adminComponent/addItems";
 import AddCategory from "../../../MainComponent/adminComponent/addCategory";
 import LoaderPage from "../../loader";
-
+import { storage } from "../../../config/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 const AddDance = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -48,31 +49,37 @@ const AddDance = () => {
     try {
       setLoadingDance(true);
 
-      const formData = new FormData();
-      formData.append("name", title);
-      formData.append("description", description);
-      formData.append("category", category);
-
-      const response = await API.post("/dance", formData);
+      const response = await API.post("/dance", {
+        name: title,
+        description: description,
+        category: category,
+      });
       const newDanceId = response.data.id;
 
-      // Upload gambar satu per satu
+      const imageUrls = [];
+
+      // Upload gambar ke Firebase
       if (images && images.length > 0) {
         for (const img of images) {
           if (!img.file) continue;
 
-          const imgFormData = new FormData();
-          imgFormData.append("image", img.file);
-
           try {
-            await API.post(`/dance/${newDanceId}/image`, imgFormData, {
-              headers: { "Content-Type": "multipart/form-data" },
-            });
+            const storageRef = ref(
+              storage,
+              `dances/${Date.now()}-${img.file.name}`
+            );
+            const snapshot = await uploadBytes(storageRef, img.file);
+            const downloadURL = await getDownloadURL(snapshot.ref);
+            imageUrls.push(downloadURL);
           } catch (err) {
-            console.error(`Gagal upload ${img.file.name}:`, err);
-            continue;
+            console.error(`Gagal upload ke Firebase: ${img.file.name}`, err);
           }
         }
+      }
+
+      // Kirim URL gambar ke backend
+      if (imageUrls.length > 0) {
+        await API.post(`/dance/${newDanceId}/image`, { images: imageUrls });
       }
 
       await Swal.fire({
@@ -80,6 +87,7 @@ const AddDance = () => {
         title: "Berhasil!",
         text: "Tarian dan gambar berhasil ditambahkan.",
       });
+
       navigate(`/admin/tarian/`);
     } catch (err) {
       console.error("Error utama:", err);
@@ -96,10 +104,8 @@ const AddDance = () => {
   const createDanceCategory = async (title) => {
     try {
       setLoadingCategory(true);
-      const formData = new FormData();
-      formData.append("name", title);
 
-      await API.post("/dance/category", formData);
+      await API.post("/dance/category", { name: title });
       await getCategories();
 
       await Swal.fire({

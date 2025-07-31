@@ -12,7 +12,7 @@ const CardAdmin = ({ id, title, description, image, category, topic }) => {
           style={{
             backgroundImage: `url(${
               image[0]?.image
-                ? `${url}/${image[0]?.image}`
+                ? `${image[0]?.image}`
                 : "https://512pixels.net/wp-content/uploads/2025/06/11-0-Night-thumbnail.jpg"
             })`,
           }}

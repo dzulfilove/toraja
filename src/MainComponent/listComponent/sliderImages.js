@@ -123,7 +123,7 @@ const SliderImage = ({ data, title }) => {
                     viewport={{ once: true }}
                     className="relative w-full cursor-pointer bg-cover bg-center group overflow-hidden shadow-lg rounded-xl"
                     style={{
-                      backgroundImage: `url(${url}/${content.image})`,
+                      backgroundImage: `url(${content.image})`,
                     }}
                   >
                     {/* Gradient overlay */}

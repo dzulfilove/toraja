@@ -35,10 +35,8 @@ const textVariants = {
   },
 };
 
-
-const HomeMakanan = ({data}) => {
-
-   const formatText = (text) => {
+const HomeMakanan = ({ data }) => {
+  const formatText = (text) => {
     const plainText = stripHtml(text);
     // Potong 15 karakter & tambahkan "......"
     const preview =
@@ -105,7 +103,9 @@ const HomeMakanan = ({data}) => {
                     >
                       <div
                         className="absolute inset-0 bg-cover bg-center"
-                        style={{ backgroundImage: `url(${url}/${makanan.images[0].image})` }}
+                        style={{
+                          backgroundImage: `url(${makanan.images[0].image})`,
+                        }}
                       >
                         <div className="absolute inset-0 bg-black/30"></div>
                       </div>
@@ -129,7 +129,9 @@ const HomeMakanan = ({data}) => {
                           {makanan.subtitle}
                         </p> */}
                         {isActive && (
-                          <p className="text-sm">{formatText(makanan.description)}</p>
+                          <p className="text-sm">
+                            {formatText(makanan.description)}
+                          </p>
                         )}
                       </div>
                     </motion.div>

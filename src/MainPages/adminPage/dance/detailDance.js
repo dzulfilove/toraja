@@ -7,6 +7,8 @@ import Breadcrumb from "../../../MainComponent/adminComponent/breadcrumb";
 import Swal from "sweetalert2";
 import AddCategory from "../../../MainComponent/adminComponent/addCategory";
 import LoaderPage from "../../loader";
+import { storage } from "../../../config/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const DetailDance = () => {
   const { id } = useParams();
@@ -62,9 +64,8 @@ const DetailDance = () => {
   const createDanceCategory = async (title) => {
     try {
       setLoadingCategory(true);
-      const formData = new FormData();
-      formData.append("name", title);
-      await API.post("/dance/category", formData);
+
+      await API.post("/dance/category", { name: title });
       await getCategories();
       await Swal.fire({
         icon: "success",
@@ -84,6 +85,7 @@ const DetailDance = () => {
   };
 
   const updateText = async (title, category, description, images) => {
+    setLoadingPage(true);
     try {
       await API.put(`/dance/${id}`, { title, category, description });
 
@@ -107,6 +109,7 @@ const DetailDance = () => {
         title: "Berhasil!",
         text: "Data berhasil diperbarui.",
       });
+      setLoadingPage(false);
       loadData(); // refresh
     } catch (err) {
       console.error(err);
@@ -115,23 +118,36 @@ const DetailDance = () => {
         title: "Oops...",
         text: "Gagal memperbarui data!",
       });
+      setLoadingPage(false);
     }
   };
 
   const addImage = async (file) => {
-    const formData = new FormData();
-    formData.append("image", file);
-    await API.post(`/dance/${id}/image`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    try {
+      const storageRef = ref(storage, `dances/${Date.now()}-${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+
+      await API.post(`/dance/${id}/image`, {
+        images: [downloadURL], // karena backend expects array of URLs
+      });
+    } catch (err) {
+      console.error("Gagal menambahkan gambar:", err);
+    }
   };
 
   const updateSingleImage = async (imageId, file) => {
-    const formData = new FormData();
-    formData.append("image", file);
-    await API.put(`/dance/${id}/image/${imageId}`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    try {
+      const storageRef = ref(storage, `dances/${Date.now()}-${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+
+      await API.put(`/dance/${id}/image/${imageId}`, {
+        image: downloadURL, // backend expects a single image URL
+      });
+    } catch (err) {
+      console.error("Gagal update gambar:", err);
+    }
   };
 
   const deleteSingleImage = async (imageId) => {

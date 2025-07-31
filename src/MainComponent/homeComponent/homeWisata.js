@@ -135,7 +135,7 @@ const HomeWisata = ({ data }) => {
                     viewport={{ once: true }}
                     className="relative w-full cursor-pointer bg-cover bg-center group overflow-hidden shadow-lg rounded-xl"
                     style={{
-                      backgroundImage: `url(${url}/${content.images[0].image})`,
+                      backgroundImage: `url(${content.images[0].image})`,
                     }}
                   >
                     {/* Gradient overlay */}

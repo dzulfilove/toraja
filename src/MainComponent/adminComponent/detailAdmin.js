@@ -24,7 +24,7 @@ const DetailAdmin = ({ data, updateText, categories, topic, deleteData }) => {
   const [images, setImages] = useState(() =>
     data.images.map((img) => ({
       id: img.id,
-      url: `https://toraja-tbbec3faqq-uc.a.run.app/${img.image}`,
+      url: `${img.image}`,
     }))
   );
 

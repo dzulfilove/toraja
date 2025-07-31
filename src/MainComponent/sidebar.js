@@ -29,11 +29,11 @@ const Sidebar = () => {
       icon: <FaMountainSun className="text-xl " />,
       href: "/admin/filosofi",
     },
-    {
-      label: "Pengaturan",
-      icon: <Settings size={20} />,
-      href: "/admin/settings",
-    },
+    // {
+    //   label: "Pengaturan",
+    //   icon: <Settings size={20} />,
+    //   href: "/admin/settings",
+    // },
   ];
 
   const navigate = useNavigate();

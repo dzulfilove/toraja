@@ -75,7 +75,7 @@ const SejarahSection = ({ data }) => {
           {images.slice(0, images.length - (isOdd ? 1 : 0)).map((item, idx) => (
             <img
               key={idx}
-              src={`${url}/${item.image}`}
+              src={`${item.image}`}
               alt={item.id}
               className="rounded-md object-cover h-full w-full shadow-md"
             />
@@ -87,9 +87,7 @@ const SejarahSection = ({ data }) => {
               <div
                 className="absolute inset-0"
                 style={{
-                  backgroundImage: `url(${url}/${
-                    images[images.length - 1].image
-                  })`,
+                  backgroundImage: `url(${images[images.length - 1].image})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   filter: "blur(8px) brightness(0.7)",
@@ -99,7 +97,7 @@ const SejarahSection = ({ data }) => {
               {/* gambar aslinya */}
               <div className="relative flex justify-center items-center h-full">
                 <img
-                  src={`${url}/${images[images.length - 1].image}`}
+                  src={`${images[images.length - 1].image}`}
                   alt={images[images.length - 1].id}
                   className="h-full w-auto rounded-md shadow-md"
                 />

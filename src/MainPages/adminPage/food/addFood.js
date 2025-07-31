@@ -7,7 +7,8 @@ import Swal from "sweetalert2";
 import AddItems from "../../../MainComponent/adminComponent/addItems";
 import AddCategory from "../../../MainComponent/adminComponent/addCategory";
 import LoaderPage from "../../loader";
-
+import { storage } from "../../../config/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 const AddFood = () => {
   const navigate = useNavigate();
 
@@ -41,62 +42,71 @@ const AddFood = () => {
     }
   };
 
-  const createFood = async (title, description, category, images) => {
-    try {
-      setLoadingAdd(true);
 
-      const formData = new FormData();
-      formData.append("name", title);
-      formData.append("description", description);
-      formData.append("category", category);
+const createFood = async (title, description, category, images) => {
+  try {
+    setLoadingAdd(true);
 
-      const response = await API.post("/food", formData);
-      const newFoodId = response.data.id;
+    // 1. Kirim data makanan ke backend (tanpa gambar)
+    const response = await API.post("/food", {
+      name: title,
+      description: description,
+      category: category,
+    });
 
-      if (images && images.length > 0) {
-        for (const img of images) {
-          if (!img.file) continue;
+    const newFoodId = response.data.id;
+    const imageUrls = [];
 
-          const imgFormData = new FormData();
-          imgFormData.append("image", img.file);
+    // 2. Upload gambar ke Firebase dan ambil URL-nya
+    if (images && images.length > 0) {
+      for (const img of images) {
+        if (!img.file) continue;
 
-          try {
-            await API.post(`/food/${newFoodId}/image`, imgFormData, {
-              headers: { "Content-Type": "multipart/form-data" },
-            });
-          } catch (err) {
-            console.error(`Gagal upload ${img.file.name}:`, err);
-            continue;
-          }
+        try {
+          const storageRef = ref(
+            storage,
+            `foods/${Date.now()}-${img.file.name}`
+          );
+          const snapshot = await uploadBytes(storageRef, img.file);
+          const downloadURL = await getDownloadURL(snapshot.ref);
+          imageUrls.push(downloadURL);
+        } catch (err) {
+          console.error(`Gagal upload ke Firebase: ${img.file.name}`, err);
         }
       }
-
-      await Swal.fire({
-        icon: "success",
-        title: "Berhasil!",
-        text: "Makanan dan gambar berhasil ditambahkan.",
-      });
-
-      navigate(`/admin/makanan/`);
-    } catch (err) {
-      console.error("Error utama:", err);
-      Swal.fire({
-        icon: "error",
-        title: "Gagal",
-        text: err.response?.data?.message || "Gagal menambahkan makanan.",
-      });
-    } finally {
-      setLoadingAdd(false);
     }
-  };
+
+    // 3. Kirim URL gambar ke backend
+    if (imageUrls.length > 0) {
+      await API.post(`/food/${newFoodId}/image`, { images: imageUrls });
+    }
+
+    await Swal.fire({
+      icon: "success",
+      title: "Berhasil!",
+      text: "Makanan dan gambar berhasil ditambahkan.",
+    });
+
+    navigate(`/admin/makanan/`);
+  } catch (err) {
+    console.error("Error utama:", err);
+    Swal.fire({
+      icon: "error",
+      title: "Gagal",
+      text: err.response?.data?.message || "Gagal menambahkan makanan.",
+    });
+  } finally {
+    setLoadingAdd(false);
+  }
+};
+
 
   const createFoodCategory = async (title) => {
     try {
       setLoadingCategory(true);
-      const formData = new FormData();
-      formData.append("name", title);
+      
 
-      await API.post("/food/category", formData);
+      await API.post("/food/category",  { name: title });
       await getCategories();
 
       await Swal.fire({

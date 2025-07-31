@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://toraja-tbbec3faqq-uc.a.run.app/api",
+  baseURL:
+    "https://asia-southeast2-the-fulcrum-467402-d8.cloudfunctions.net/toraja/api",
 });
 
 // Interceptor → tambahkan token

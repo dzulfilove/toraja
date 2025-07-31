@@ -7,7 +7,8 @@ import Swal from "sweetalert2";
 import AddItems from "../../../MainComponent/adminComponent/addItems";
 import AddCategory from "../../../MainComponent/adminComponent/addCategory";
 import LoaderPage from "../../loader";
-
+import { storage } from "../../../config/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 const AddTour = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
@@ -38,60 +39,70 @@ const AddTour = () => {
     }
   };
 
-  const createTourist = async (title, description, category, images) => {
-    try {
-      setLoading(true);
-      const formData = new FormData();
-      formData.append("name", title);
-      formData.append("description", description);
-      formData.append("category", category);
+const createTourist = async (title, description, category, images) => {
+  try {
+    setLoading(true);
 
-      const response = await API.post("/tourist", formData);
-      const newTouristId = response.data.id;
+    // 1. Kirim data wisata ke backend
+    const response = await API.post("/tourist", {
+      name: title,
+      description: description,
+      category: category,
+    });
 
-      if (images && images.length > 0) {
-        for (const img of images) {
-          if (!img.file) continue;
-          const imgFormData = new FormData();
-          imgFormData.append("image", img.file);
+    const newTouristId = response.data.id;
+    const imageUrls = [];
 
-          try {
-            await API.post(`/tourist/${newTouristId}/image`, imgFormData, {
-              headers: { "Content-Type": "multipart/form-data" },
-            });
-          } catch (err) {
-            console.error(`Gagal upload ${img.file.name}:`, err);
-            continue;
-          }
+    // 2. Upload gambar ke Firebase dan simpan URL-nya
+    if (images && images.length > 0) {
+      for (const img of images) {
+        if (!img.file) continue;
+
+        try {
+          const storageRef = ref(
+            storage,
+            `tourists/${Date.now()}-${img.file.name}`
+          );
+          const snapshot = await uploadBytes(storageRef, img.file);
+          const downloadURL = await getDownloadURL(snapshot.ref);
+          imageUrls.push(downloadURL);
+        } catch (err) {
+          console.error(`Gagal upload ke Firebase: ${img.file.name}`, err);
         }
       }
-
-      await Swal.fire({
-        icon: "success",
-        title: "Berhasil!",
-        text: "Wisata dan gambar berhasil ditambahkan.",
-      });
-
-      navigate(`/admin/wisata/`);
-    } catch (err) {
-      console.error("Error utama:", err);
-      Swal.fire({
-        icon: "error",
-        title: "Gagal",
-        text: err.response?.data?.message || "Gagal menambahkan wisata.",
-      });
-    } finally {
-      setLoading(false);
     }
-  };
+
+    // 3. Kirim URL gambar ke backend
+    if (imageUrls.length > 0) {
+      await API.post(`/tourist/${newTouristId}/image`, { images: imageUrls });
+    }
+
+    // 4. Notifikasi sukses dan navigasi
+    await Swal.fire({
+      icon: "success",
+      title: "Berhasil!",
+      text: "Wisata dan gambar berhasil ditambahkan.",
+    });
+
+    navigate(`/admin/wisata/`);
+  } catch (err) {
+    console.error("Error utama:", err);
+    Swal.fire({
+      icon: "error",
+      title: "Gagal",
+      text: err.response?.data?.message || "Gagal menambahkan wisata.",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
   const createTouristCategory = async (title) => {
     try {
       setLoading(true);
-      const formData = new FormData();
-      formData.append("name", title);
+   
 
-      await API.post("/tourist/category", formData);
+      await API.post("/tourist/category",  { name: title });
       await getCategories();
       await Swal.fire({
         icon: "success",

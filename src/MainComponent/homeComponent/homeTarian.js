@@ -78,7 +78,7 @@ const HomeTarian = ({ data }) => {
                   <div
                     className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
                     style={{
-                      backgroundImage: `url(${url}/${tarian.images[0].image})`,
+                      backgroundImage: `url(${tarian.images[0].image})`,
                     }}
                   ></div>
 

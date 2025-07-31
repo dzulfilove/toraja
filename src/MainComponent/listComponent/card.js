@@ -24,7 +24,7 @@ const Card = ({ id, title, description, image, category, topic }) => {
   };
 
   const imageUrl =
-    image && image.length > 0 ? `${url}/${image[0].image}` : "/default.jpg";
+    image && image.length > 0 ? `${image[0].image}` : "/default.jpg";
 
   return (
     <StyledWrapper image={imageUrl}>

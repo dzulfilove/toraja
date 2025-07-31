@@ -6,7 +6,8 @@ import HeaderAdmin from "../../../MainComponent/adminComponent/headerAdmin";
 import Breadcrumb from "../../../MainComponent/adminComponent/breadcrumb";
 import Swal from "sweetalert2";
 import LoaderPage from "../../loader";
-
+import { storage } from "../../../config/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 const DetailHistory = () => {
   const { id } = useParams();
   const [data, setData] = useState(null);
@@ -74,22 +75,32 @@ const DetailHistory = () => {
     }
   };
 
-  const addImage = async (file) => {
-    const formData = new FormData();
-    formData.append("image", file);
-    console.log(file, "ADD");
-    await API.post(`/history/${id}/image`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    const addImage = async (file) => {
+    try {
+      const storageRef = ref(storage, `historys/${Date.now()}-${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+
+      await API.post(`/history/${id}/image`, {
+        images: [downloadURL], // karena backend expects array of URLs
+      });
+    } catch (err) {
+      console.error("Gagal menambahkan gambar:", err);
+    }
   };
 
   const updateSingleImage = async (imageId, file) => {
-    const formData = new FormData();
-    formData.append("image", file);
-    console.log(file, "UPDATE");
-    await API.put(`/history/${id}/image/${imageId}`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    try {
+      const storageRef = ref(storage, `historys/${Date.now()}-${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+
+      await API.put(`/history/${id}/image/${imageId}`, {
+        image: downloadURL, // backend expects a single image URL
+      });
+    } catch (err) {
+      console.error("Gagal update gambar:", err);
+    }
   };
 
   const deleteSingleImage = async (imageId) => {

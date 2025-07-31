@@ -14,11 +14,9 @@ const AddPhilosophy = () => {
   const createPhilosophy = async (title, description) => {
     try {
       setLoading(true);
-      const formData = new FormData();
-      formData.append("name", title);
-      formData.append("description", description);
+   
 
-      await API.post("/philosophy", formData);
+      await API.post("/philosophy", {name:title, description});
 
       await Swal.fire({
         icon: "success",

@@ -12,7 +12,7 @@ const DetailHeader = ({ data }) => (
     {/* Background image */}
     <div
       className="absolute inset-0 bg-cover bg-center"
-      style={{ backgroundImage: `url(${url}/${data.images[0].image})` }}
+      style={{ backgroundImage: `url(${data.images[0].image})` }}
     ></div>
 
     {/* Gradient overlay */}
