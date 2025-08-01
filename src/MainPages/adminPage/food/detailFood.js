@@ -103,6 +103,7 @@ const DetailFood = () => {
         text: "Data berhasil diperbarui.",
       });
       setLoadingUpdate(false);
+        navigate(`/admin/makanan/`);
 
       loadPageData(); // refresh data
     } catch (err) {
@@ -184,7 +185,7 @@ const DetailFood = () => {
     }
   };
 
-  if (loadingPage) {
+  if (loadingPage||loadingCategory||loadingDelete||loadingUpdate) {
     return (
       <div className="flex justify-center items-center h-screen">
         <LoaderPage />

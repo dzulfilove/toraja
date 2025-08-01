@@ -54,11 +54,7 @@ const AddItemsFilosofi = ({ addItem, categories }) => {
   };
 
   const handleSave = () => {
-    addItem(title, description);
-  };
-
-  const handleSelect = (data) => {
-    setCategory(data.value);
+    addItem(title, description, images);
   };
 
   // Variants untuk animasi container dan children
@@ -102,18 +98,6 @@ const AddItemsFilosofi = ({ addItem, categories }) => {
         </div>
       </motion.div>
 
-      {/* <motion.div variants={itemVariants}>
-        <label className="block text-lg font-semibold">Kategori</label>
-        <div className="relative w-full group mt-4">
-          <SearchableDropdown
-            options={categories}
-            onSelect={handleSelect}
-            placeholder="Select an option"
-            searchPlaceholder="Search options..."
-          />
-        </div>
-      </motion.div> */}
-
       <motion.div variants={itemVariants}>
         <label className="block text-lg font-semibold">Deskripsi</label>
         <div className="relative w-full group mt-4 shadow-md">
@@ -121,7 +105,7 @@ const AddItemsFilosofi = ({ addItem, categories }) => {
         </div>
       </motion.div>
 
-      {/* <motion.div variants={itemVariants}>
+      <motion.div variants={itemVariants}>
         <label className="block text-lg font-semibold mb-2">Gambar</label>
         <div className="flex flex-row gap-4 flex-wrap justify-start bg-toraja-putih p-8 rounded-xl mt-4">
           {images.map((img, idx) => (
@@ -188,7 +172,7 @@ const AddItemsFilosofi = ({ addItem, categories }) => {
             Tambah Gambar
           </motion.button>
         </div>
-      </motion.div> */}
+      </motion.div>
 
       <motion.div variants={itemVariants}>
         <div className="w-full py-4 flex justify-start items-start">

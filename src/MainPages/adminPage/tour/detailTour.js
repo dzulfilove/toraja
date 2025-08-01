@@ -65,9 +65,8 @@ const DetailTour = () => {
   const createTourCategory = async (title) => {
     try {
       setLoading(true);
-    
 
-      await API.post("/tourist/category",  { name: title });
+      await API.post("/tourist/category", { name: title });
       await getCategories();
       await Swal.fire({
         icon: "success",
@@ -114,6 +113,7 @@ const DetailTour = () => {
         title: "Berhasil!",
         text: "Data berhasil diperbarui.",
       });
+      navigate("/admin/wisata/");
 
       loadData();
     } catch (err) {
@@ -128,7 +128,7 @@ const DetailTour = () => {
     }
   };
 
-    const addImage = async (file) => {
+  const addImage = async (file) => {
     try {
       const storageRef = ref(storage, `tourists/${Date.now()}-${file.name}`);
       const snapshot = await uploadBytes(storageRef, file);
@@ -155,7 +155,6 @@ const DetailTour = () => {
       console.error("Gagal update gambar:", err);
     }
   };
-
 
   const deleteSingleImage = async (imageId) => {
     await API.delete(`/tourist/${id}/image/${imageId}`);

@@ -170,27 +170,14 @@ const ListCardAdmin = ({
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
               >
-                {topic == "filosofi" ? (
-                  <>
-                    <CardAdminFilosofi
-                      id={item.id}
-                      title={item.title}
-                      description={item.description}
-                      topic={topic}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <CardAdmin
-                      id={item.id}
-                      title={item.title}
-                      description={item.description}
-                      category={item.category}
-                      image={item.images}
-                      topic={topic}
-                    />
-                  </>
-                )}
+                <CardAdmin
+                  id={item.id}
+                  title={item.title}
+                  description={item.description}
+                  category={item.category}
+                  image={item.images}
+                  topic={topic}
+                />
               </motion.div>
             ))
           ) : (

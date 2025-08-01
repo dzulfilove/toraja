@@ -126,7 +126,7 @@ const createFood = async (title, description, category, images) => {
     }
   };
 
-  if (loadingPage) {
+  if (loadingPage||loadingAdd||loadingCategory) {
     return (
       <div className="flex justify-center items-center h-screen">
         <LoaderPage />

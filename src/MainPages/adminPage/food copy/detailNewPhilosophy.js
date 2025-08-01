@@ -5,26 +5,30 @@ import DetailAdmin from "../../../MainComponent/adminComponent/detailAdmin";
 import HeaderAdmin from "../../../MainComponent/adminComponent/headerAdmin";
 import Breadcrumb from "../../../MainComponent/adminComponent/breadcrumb";
 import Swal from "sweetalert2";
+import AddCategory from "../../../MainComponent/adminComponent/addCategory";
 import LoaderPage from "../../loader";
 import { storage } from "../../../config/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-const DetailHistory = () => {
+const DetailNewPhilosophy = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const [data, setData] = useState(null);
   const [loadingPage, setLoadingPage] = useState(true);
   const [loadingUpdate, setLoadingUpdate] = useState(false);
-  const navigate = useNavigate();
+  const [loadingDelete, setLoadingDelete] = useState(false);
+  const [loadingCategory, setLoadingCategory] = useState(false);
 
   useEffect(() => {
-    loadData();
+    loadPageData();
   }, [id]);
 
-  const loadData = async () => {
+  const loadPageData = async () => {
     try {
       setLoadingPage(true);
-      const res = await API.get(`/history/${id}`);
-      console.log(res.data, "data detail");
-      setData(res.data);
+      const [detailRes] = await Promise.all([API.get(`/philosophy/${id}`)]);
+
+      setData(detailRes.data);
     } catch (err) {
       console.error(err);
       Swal.fire({
@@ -39,11 +43,13 @@ const DetailHistory = () => {
 
   const updateText = async (title, description, images) => {
     try {
-      setLoadingUpdate(true);
-      await API.put(`/history/${id}`, { title, description });
-      console.log("Update title & description sukses");
+      await setLoadingPage(true);
 
-      const editedImages = images.filter((img) => img.isEdit && img.id && img.file);
+      await API.put(`/philosophy/${id}`, { title, description });
+
+      const editedImages = images.filter(
+        (img) => img.isEdit && img.id && img.file
+      );
       for (const img of editedImages) {
         await updateSingleImage(img.id, img.file);
       }
@@ -63,28 +69,29 @@ const DetailHistory = () => {
         title: "Berhasil!",
         text: "Data berhasil diperbarui.",
       });
-        navigate(`/admin/sejarah/`);
+      setLoadingPage(false);
+      navigate(`/admin/filosofi/`);
 
-      loadData(); // refresh data
+      loadPageData(); // refresh data
     } catch (err) {
       console.error(err);
       Swal.fire({
         icon: "error",
-        title: "Oops...",
+        title: "Gagal",
         text: "Gagal memperbarui data!",
       });
     } finally {
-      setLoadingUpdate(false);
+      setLoadingPage(false);
     }
   };
 
-    const addImage = async (file) => {
+  const addImage = async (file) => {
     try {
-      const storageRef = ref(storage, `historys/${Date.now()}-${file.name}`);
+      const storageRef = ref(storage, `philosophys/${Date.now()}-${file.name}`);
       const snapshot = await uploadBytes(storageRef, file);
       const downloadURL = await getDownloadURL(snapshot.ref);
 
-      await API.post(`/history/${id}/image`, {
+      await API.post(`/philosophy/${id}/image`, {
         images: [downloadURL], // karena backend expects array of URLs
       });
     } catch (err) {
@@ -94,11 +101,11 @@ const DetailHistory = () => {
 
   const updateSingleImage = async (imageId, file) => {
     try {
-      const storageRef = ref(storage, `historys/${Date.now()}-${file.name}`);
+      const storageRef = ref(storage, `philosophys/${Date.now()}-${file.name}`);
       const snapshot = await uploadBytes(storageRef, file);
       const downloadURL = await getDownloadURL(snapshot.ref);
 
-      await API.put(`/history/${id}/image/${imageId}`, {
+      await API.put(`/philosophy/${id}/image/${imageId}`, {
         image: downloadURL, // backend expects a single image URL
       });
     } catch (err) {
@@ -107,10 +114,46 @@ const DetailHistory = () => {
   };
 
   const deleteSingleImage = async (imageId) => {
-    await API.delete(`/history/${id}/image/${imageId}`);
+    await API.delete(`/philosophy/${id}/image/${imageId}`);
   };
 
-  if (loadingPage||loadingUpdate) {
+  const deleteFood = async () => {
+    try {
+      const confirm = await Swal.fire({
+        title: "Hapus Filosofi?",
+        text: "Tindakan ini tidak dapat dibatalkan!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Ya, hapus!",
+        cancelButtonText: "Batal",
+      });
+
+      if (confirm.isConfirmed) {
+        setLoadingPage(true);
+        console.log(id)
+        await API.delete(`/philosophy/${id}`);
+        await Swal.fire({
+          icon: "success",
+          title: "Berhasil!",
+          text: "Filosofi berhasil dihapus.",
+        });
+        navigate(`/admin/filosofi/`);
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal!",
+        text: "Terjadi kesalahan saat menghapus filosofi.",
+      });
+    } finally {
+      setLoadingPage(false);
+    }
+  };
+
+  if (loadingPage) {
     return (
       <div className="flex justify-center items-center h-screen">
         <LoaderPage />
@@ -125,20 +168,25 @@ const DetailHistory = () => {
       <Breadcrumb
         items={[
           { label: "Dashboard", href: "/admin" },
-          { label: "Sejarah", href: "/admin/sejarah" },
+          { label: "Filosofi", href: "/admin/filosofi" },
           { label: "Detail" },
         ]}
       />
-      <HeaderAdmin title={"Update Detail Data Sejarah"} />
-      <DetailAdmin
-        data={data}
-        updateText={updateText}
-        categories={[]} // history tidak ada kategori
-        topic={"sejarah"}
-        loadingUpdate={loadingUpdate}
-      />
+      <HeaderAdmin title={"Update Detail Data Filosofi"} />
+      <div className="w-full h-auto flex justify-center items-start gap-6">
+        <div className="w-[60%]">
+          <DetailAdmin
+            data={data}
+            deleteData={deleteFood}
+            updateText={updateText}
+            topic={"filosofi"}
+            loadingUpdate={loadingUpdate}
+            loadingDelete={loadingDelete}
+          />
+        </div>
+      </div>
     </div>
   );
 };
 
-export default DetailHistory;
+export default DetailNewPhilosophy;

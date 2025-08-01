@@ -5,8 +5,7 @@ import { Link } from "react-router-dom";
 import { url } from "../../config/route";
 import { stripHtml } from "../adminComponent/utils";
 
-const Card = ({ id, title, description, image, category, topic }) => {
-  // Tentukan page sekali saja (tidak pakai state)
+const Card = ({ id, title, description, image, topic }) => {
   const page =
     topic === "food"
       ? "makanan"
@@ -18,8 +17,8 @@ const Card = ({ id, title, description, image, category, topic }) => {
 
   const formatText = (text) => {
     const plainText = stripHtml(text || "");
-    return plainText.length > 300
-      ? plainText.substring(0, 300) + "..."
+    return plainText.length > 200
+      ? plainText.substring(0, 200) + "..."
       : plainText;
   };
 
@@ -27,7 +26,7 @@ const Card = ({ id, title, description, image, category, topic }) => {
     image && image.length > 0 ? `${image[0].image}` : "/default.jpg";
 
   return (
-    <StyledWrapper image={imageUrl}>
+    <StyledWrapper>
       <Link to={`/detail/${topic}/${id}`}>
         <motion.div
           className="cardList-container font-montserrat"
@@ -37,6 +36,7 @@ const Card = ({ id, title, description, image, category, topic }) => {
         >
           <div className="cardList">
             <div className="front-content">
+              <img src={imageUrl} alt={title} className="cover-image" />
               <div className="overlay" />
               <p>{title}</p>
             </div>
@@ -53,8 +53,11 @@ const Card = ({ id, title, description, image, category, topic }) => {
 
 const StyledWrapper = styled.div`
   .cardList-container {
-    width: 340px;
-    height: 400px;
+    width: 100%;
+    min-height: 460px;
+    max-height: 460px;
+    max-width: 380px;
+    aspect-ratio: 3 / 4;
     cursor: pointer;
     position: relative;
     border-radius: 10px;
@@ -62,8 +65,7 @@ const StyledWrapper = styled.div`
     overflow: hidden;
 
     @media (max-width: 500px) {
-      width: 90%;
-      height: 250px;
+      max-width: 90%;
     }
   }
 
@@ -77,15 +79,25 @@ const StyledWrapper = styled.div`
   .cardList .front-content {
     width: 100%;
     height: 100%;
+    aspect-ratio: 3 / 4;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-    background-image: url(${(props) => props.image});
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     position: relative;
+    overflow: hidden;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .cardList .front-content .cover-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
   }
 
   .cardList .front-content .overlay {
@@ -95,13 +107,13 @@ const StyledWrapper = styled.div`
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.4);
-    border-radius: inherit;
+    z-index: 1;
   }
 
   .cardList .front-content p {
     font-size: 28px;
     font-weight: 700;
-    z-index: 1;
+    z-index: 2;
     background: #f5f5dc;
     background-clip: text;
     -webkit-background-clip: text;

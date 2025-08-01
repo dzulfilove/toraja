@@ -110,6 +110,8 @@ const DetailDance = () => {
         text: "Data berhasil diperbarui.",
       });
       setLoadingPage(false);
+      navigate(`/admin/tarian/`);
+
       loadData(); // refresh
     } catch (err) {
       console.error(err);
@@ -184,7 +186,7 @@ const DetailDance = () => {
     }
   };
 
-  if (loadingPage) {
+  if (loadingPage||loadingCategory) {
     return (
       <div className="flex justify-center items-center h-screen">
         <LoaderPage />
