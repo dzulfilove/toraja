@@ -3,57 +3,7 @@ import "../../styles/filosofiCard.css";
 
 import { motion } from "framer-motion";
 import { sanitize } from "../adminComponent/utils";
-
-const filosofiToraja = [
-  {
-    id: 1,
-    title: "Tongkonan",
-    description:
-      "Lambang ikatan keluarga dan gotong royong. Rumah adat yang dibangun bersama oleh seluruh keluarga.",
-  },
-  {
-    id: 2,
-    title: "Aluk To Dolo",
-    description:
-      "Hukum adat dan kepercayaan leluhur yang menjadi pedoman hidup masyarakat Toraja.",
-  },
-  {
-    id: 3,
-    title: "Rambu Solo’",
-    description:
-      "Upacara kematian sebagai penghormatan terakhir kepada leluhur, menjaga keseimbangan alam.",
-  },
-  {
-    id: 4,
-    title: "Rambu Tuka’",
-    description:
-      "Upacara syukur atas kebahagiaan seperti pernikahan dan pembangunan rumah baru.",
-  },
-  {
-    id: 5,
-    title: "Tongkonan",
-    description:
-      "Lambang ikatan keluarga dan gotong royong. Rumah adat yang dibangun bersama oleh seluruh keluarga.",
-  },
-  {
-    id: 6,
-    title: "Aluk To Dolo",
-    description:
-      "Hukum adat dan kepercayaan leluhur yang menjadi pedoman hidup masyarakat Toraja.",
-  },
-  {
-    id: 7,
-    title: "Rambu Solo’",
-    description:
-      "Upacara kematian sebagai penghormatan terakhir kepada leluhur, menjaga keseimbangan alam.",
-  },
-  {
-    id: 8,
-    title: "Rambu Tuka’",
-    description:
-      "Upacara syukur atas kebahagiaan seperti pernikahan dan pembangunan rumah baru.",
-  },
-];
+import { Link } from "react-router-dom";
 
 const ListFilosofi = ({ data }) => {
   return (
@@ -87,23 +37,29 @@ const ListFilosofi = ({ data }) => {
         {/* Cards grid */}
         <div className="flex flex-wrap justify-center">
           {data.map((item, index) => (
-            <motion.div
-              key={item.id || index} // pakai key unik, idealnya pakai item.id
-              className="card"
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-            >
-              <p className="card-title">{item.title}</p>
-              <div
-                className="small-desc"
-                dangerouslySetInnerHTML={{ __html: sanitize(item.description) }}
-              ></div>
-              <div className="go-corner">
-                <div className="go-arrow">→</div>
-              </div>
-            </motion.div>
+            <Link to={`/detail/philosophy/${item.id}`}>
+              <motion.div
+                key={item.id || index} // pakai key unik, idealnya pakai item.id
+                className="card"
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+              >
+                <p className="card-title">{item.title}</p>
+                <div
+                  className="small-desc"
+                  dangerouslySetInnerHTML={{
+                    __html: sanitize(
+                      item.description.substring(0, 100) + "......"
+                    ),
+                  }}
+                ></div>
+                <div className="go-corner">
+                  <div className="go-arrow">→</div>
+                </div>
+              </motion.div>
+            </Link>
           ))}
         </div>
       </div>

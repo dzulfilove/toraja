@@ -33,17 +33,6 @@ const DetailPage = () => {
     }
   };
 
-  // const getData = async () => {
-  //   try {
-  //     const res = await API.get(`/${topic}`);
-
-  //     setAllData(res.data);
-  //     setError(""); // clear error
-  //   } catch (err) {
-  //     console.error("Error loading data:", err);
-  //     setError("Gagal memuat data");
-  //   }
-  // };
 
   useEffect(() => {
     loadData();

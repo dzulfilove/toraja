@@ -72,7 +72,7 @@ const HomeTarian = ({ data }) => {
         >
           {duplicatedSlides.map((tarian) => (
             <SwiperSlide key={tarian.id}>
-              <Link to={`/detail/tarian/${tarian.id}`}>
+              {/* <Link to={`/detail/tarian/${tarian.id}`}> */}
                 <div className="relative h-[500px] rounded-xl overflow-hidden shadow-lg group hover:cursor-pointer">
                   {/* Gambar dengan efek zoom */}
                   <div
@@ -114,7 +114,7 @@ const HomeTarian = ({ data }) => {
                     </div>
                   </div>
                 </div>
-              </Link>
+              {/* </Link> */}
             </SwiperSlide>
           ))}
         </Swiper>

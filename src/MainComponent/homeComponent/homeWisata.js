@@ -126,7 +126,7 @@ const HomeWisata = ({ data }) => {
           >
             {duplicatedSlides.map((content) => (
               <SwiperSlide key={content.id}>
-                <Link to={`/detail/wisata/${content.id}`}>
+                {/* <Link to={`/detail/wisata/${content.id}`}> */}
                   <motion.div
                     initial={{ opacity: 0, y: 30, height: 460 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -151,7 +151,7 @@ const HomeWisata = ({ data }) => {
                       </p>
                     </div>
                   </motion.div>
-                </Link>
+                {/* </Link> */}
               </SwiperSlide>
             ))}
           </Swiper>

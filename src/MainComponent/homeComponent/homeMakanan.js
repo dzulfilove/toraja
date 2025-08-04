@@ -94,7 +94,7 @@ const HomeMakanan = ({ data }) => {
             {duplicatedSlides.map((makanan) => (
               <SwiperSlide key={makanan.id}>
                 {({ isActive }) => (
-                  <Link to={`/detail/makanan/${makanan.id}`}>
+                  // <Link to={`/detail/makanan/${makanan.id}`}>
                     <motion.div
                       variants={textVariants}
                       className={`relative rounded-xl overflow-hidden transition-all duration-500 ${
@@ -135,7 +135,7 @@ const HomeMakanan = ({ data }) => {
                         )}
                       </div>
                     </motion.div>
-                  </Link>
+                  // </Link>
                 )}
               </SwiperSlide>
             ))}

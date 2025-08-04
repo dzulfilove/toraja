@@ -8,6 +8,8 @@ import { IoEyeSharp } from "react-icons/io5";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { FaRegSave } from "react-icons/fa";
 // Helper: revoke blob URL jika ada
+import imageCompression from "browser-image-compression";
+
 const revokeIfBlob = (url) => {
   if (url && url.startsWith("blob:")) {
     URL.revokeObjectURL(url);
@@ -57,34 +59,121 @@ const DetailAdmin = ({ data, updateText, categories, topic, deleteData }) => {
   };
 
   // Saat user pilih file
-  const handleFileChange = (index, file) => {
+
+  const compressImageIfNeeded = async (file) => {
+    if (file.size <= 2 * 1024 * 1024) {
+      // Jika kurang dari 2MB, return file asli
+      return file;
+    }
+
+    const options = {
+      maxSizeMB: 1.5, // Ukuran maksimal setelah kompresi (2MB)
+      maxWidthOrHeight: 1920, // Resolusi maksimal
+      useWebWorker: true, // Gunakan web worker untuk performa lebih baik
+      fileType: file.type, // Pertahankan tipe file asli
+    };
+
+    try {
+      return await imageCompression(file, options);
+    } catch (error) {
+      console.error("Error compressing image:", error);
+      return file; // Return file asli jika kompresi gagal
+    }
+  };
+
+  const handleFileChange = async (index, file) => {
     if (!file) return;
-    setImages((prev) => {
-      const updated = [...prev];
-      const old = updated[index];
 
-      revokeIfBlob(old?.url);
+    try {
+      const processedFile = await compressImageIfNeeded(file);
 
-      if (old && old.id) {
-        // Gambar lama, tandai isEdit
-        updated[index] = {
-          ...old,
-          file,
-          isEdit: true,
-          url: URL.createObjectURL(file),
-        };
-      } else {
-        // Slot baru / belum punya id
-        updated[index] = {
-          ...old,
-          file,
-          isNew: true,
-          url: URL.createObjectURL(file),
-        };
-      }
+      setImages((prev) => {
+        const updated = [...prev];
+        const old = updated[index];
 
-      return updated;
-    });
+        revokeIfBlob(old?.url);
+
+        // Cari index gambar null dengan isNew true
+        const nullImgIndex = prev.findIndex((a) => a.file == null && a.isNew);
+
+        if (nullImgIndex !== -1) {
+          // Jika ditemukan nullImg, update propertinya dengan file baru
+          updated[nullImgIndex] = {
+            ...updated[nullImgIndex],
+            file: processedFile,
+            url: URL.createObjectURL(processedFile),
+            isNew: false,
+            isEdit: true,
+          };
+
+          // Jika index yang diupdate berbeda dengan nullImgIndex, hapus entry lama
+          if (nullImgIndex !== index) {
+            updated.splice(index, 1);
+          }
+        } else {
+          // Jika tidak ada nullImg, lakukan update normal
+          if (old && old.id) {
+            updated[index] = {
+              ...old,
+              file: processedFile,
+              isEdit: true,
+              url: URL.createObjectURL(processedFile),
+            };
+          } else {
+            updated[index] = {
+              ...old,
+              file: processedFile,
+              isNew: true,
+              url: URL.createObjectURL(processedFile),
+            };
+          }
+        }
+
+        return updated;
+      });
+    } catch (error) {
+      console.error("Error processing file:", error);
+      // Fallback ke file asli jika ada error
+      setImages((prev) => {
+        const updated = [...prev];
+        const old = updated[index];
+
+        revokeIfBlob(old?.url);
+
+        const nullImgIndex = prev.findIndex((a) => a.file == null && a.isNew);
+
+        if (nullImgIndex !== -1) {
+          updated[nullImgIndex] = {
+            ...updated[nullImgIndex],
+            file: file,
+            url: URL.createObjectURL(file),
+            isNew: true,
+          };
+
+          if (nullImgIndex !== index) {
+            updated.splice(index, 1);
+          }
+        } else {
+          if (old && old.id) {
+            updated[index] = {
+              ...old,
+              file: file,
+              isEdit: true,
+              url: URL.createObjectURL(file),
+            };
+          } else {
+            updated[index] = {
+              ...old,
+              file: file,
+              isNew: true,
+              url: URL.createObjectURL(file),
+            };
+          }
+        }
+
+        return updated;
+      });
+    }
   };
 
   const handleSelect = (data) => {
@@ -168,7 +257,7 @@ const DetailAdmin = ({ data, updateText, categories, topic, deleteData }) => {
         </div>
       </motion.div>
 
-      {topic !== "sejarah" &&topic !== "filosofi" ? (
+      {topic !== "sejarah" && topic !== "filosofi" ? (
         <>
           <motion.div variants={itemVariants}>
             <label className="block text-lg font-semibold">Kategori</label>

@@ -24,7 +24,7 @@
   overflow: hidden;
   top: 0;
   right: 0;
-  background: linear-gradient(135deg, #B8860B, #8B4513);
+  background: linear-gradient(135deg, #b8860b, #8b4513);
   border-radius: 0 4px 0 32px;
 }
 
@@ -39,7 +39,9 @@
   display: block;
   position: relative;
   /* max-width: 300px; */
-  width: 15rem;
+  width: 20rem;
+  min-height: 12rem;
+  max-height: 14rem;
   height: auto;
   cursor: pointer;
   background-color: #f2f8f9;
@@ -49,7 +51,7 @@
   text-decoration: none;
   z-index: 0;
   overflow: hidden;
-  background: linear-gradient(to bottom, #F5F5DC, #e0bd66);
+  background: linear-gradient(to bottom, #f5f5dc, #e0bd66);
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -59,7 +61,7 @@
   z-index: -1;
   top: -16px;
   right: -16px;
-  background: linear-gradient(135deg, #B8860B, #8B4513);
+  background: linear-gradient(135deg, #b8860b, #8b4513);
   height: 32px;
   width: 32px;
   border-radius: 32px;
@@ -79,10 +81,8 @@
 
 .card:hover .card-title {
   transition: all 0.5s ease-out;
-  color: #F5F5DC;
+  color: #f5f5dc;
 }
-
-
 
 /* From Uiverse.io by SouravBandyopadhyay */
 .card-admin-title {
@@ -110,7 +110,7 @@
   overflow: hidden;
   top: 0;
   right: 0;
-  background: linear-gradient(135deg, #d11414, #8B0000);
+  background: linear-gradient(135deg, #d11414, #8b0000);
   border-radius: 0 4px 0 32px;
 }
 
@@ -124,7 +124,7 @@
 .card-admin {
   display: block;
   position: relative;
-  width:18rem;
+  width: 18rem;
   height: 12rem;
   max-width: 300px;
   cursor: pointer;
@@ -145,7 +145,7 @@
   z-index: -1;
   top: -16px;
   right: -16px;
-  background: linear-gradient(135deg, #d11414, #8B0000);
+  background: linear-gradient(135deg, #d11414, #8b0000);
   height: 32px;
   width: 32px;
   border-radius: 32px;
@@ -165,5 +165,5 @@
 
 .card-admin:hover .card-admin-title {
   transition: all 0.5s ease-out;
-  color: #F5F5DC;
+  color: #f5f5dc;
 }
