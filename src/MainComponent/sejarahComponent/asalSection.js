@@ -28,14 +28,14 @@ const AsalSection = ({ data }) => {
             Asal Usul <span className="text-[#8B0000]">Tana Toraja</span>
           </h3>
           <div
-            className="text-gray-700 mb-4 leading-relaxed break-words max-w-full"
+            className="text-gray-700 mb-4 leading-relaxed break-words max-w-full text-justify"
             dangerouslySetInnerHTML={{ __html: sanitize(data.desc) }}
           ></div>
         </motion.div>
 
         {/* Images di kanan, sejajar kanan-kiri */}
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-3 gap-4 md:w-1/2 h-full"
+          className="grid grid-cols-2 md:grid-cols-3 gap-4 md:w-1/2 h-full items-end"
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}

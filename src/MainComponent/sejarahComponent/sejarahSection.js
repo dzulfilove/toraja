@@ -119,7 +119,7 @@ const SejarahSection = ({ data }) => {
           </h3>
 
           <div
-            className="text-gray-700 mb-4 leading-relaxed break-words max-w-full"
+            className="text-gray-700 mb-4 leading-relaxed break-words max-w-full text-justify"
             dangerouslySetInnerHTML={{ __html: sanitize(data.desc) }}
           ></div>
         </motion.div>

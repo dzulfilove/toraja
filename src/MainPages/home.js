@@ -28,27 +28,66 @@ const HomePage = () => {
       const resFood = await API.get("/food/part");
       const resTour = await API.get("/tourist/part");
 
+      // Default image URL
+      const defaultImage =
+        "https://512pixels.net/wp-content/uploads/2025/06/11-0-Night-thumbnail.jpg";
+
       // Transform history data
       let transformedHistory = resHistory.data.map((item) => ({
         id: item.id,
         title: item.title,
         desc: item.description,
-        img: `${item.images[0].image}`,
+        img: item.images?.[0]?.image || defaultImage,
       }));
-      // Tambahkan data filosofi
+
+      // Add philosophy data
       if (resPhilosophy.data.length > 0) {
         transformedHistory.push({
           id: resPhilosophy.data[0].id,
           title: resPhilosophy.data[0].title,
           desc: resPhilosophy.data[0].description,
-          img: filosofi,
+          img: filosofi || defaultImage,
         });
       }
 
+      // Transform dance data
+      const transformedDance =
+        resDance.data?.map((item) => ({
+          ...item,
+          images: [
+            {
+              image: item.images?.[0]?.image || defaultImage,
+            },
+          ],
+        })) || [];
+
+      // Transform food data
+      const transformedFood =
+        resFood.data?.map((item) => ({
+          ...item,
+          images: [
+            {
+              image: item.images?.[0]?.image || defaultImage,
+            },
+          ],
+        })) || [];
+
+      // Transform tour data
+      const transformedTour =
+        resTour.data?.map((item) => ({
+          ...item,
+          images: [
+            {
+              image: item.images?.[0]?.image || defaultImage,
+            },
+          ],
+        })) || [];
+
+      console.log(transformedDance);
       setDataSejarah(transformedHistory);
-      setDataDance(resDance.data || []);
-      setDataFood(resFood.data || []);
-      setDataTour(resTour.data || []);
+      setDataDance(transformedDance);
+      setDataFood(transformedFood);
+      setDataTour(transformedTour);
       setError(""); // clear error
     } catch (err) {
       console.error("Error loading data:", err);
