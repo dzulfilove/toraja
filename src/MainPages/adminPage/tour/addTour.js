@@ -39,70 +39,70 @@ const AddTour = () => {
     }
   };
 
-const createTourist = async (title, description, category, images) => {
-  try {
-    setLoading(true);
+  const createTourist = async (title, description, category, images) => {
+    try {
+      setLoading(true);
 
-    // 1. Kirim data wisata ke backend
-    const response = await API.post("/tourist", {
-      name: title,
-      description: description,
-      category: category,
-    });
+      console.log(title);
+      // 1. Kirim data wisata ke backend
+      const response = await API.post("/tourist", {
+        title: title,
+        description: description,
+        category: category,
+      });
 
-    const newTouristId = response.data.id;
-    const imageUrls = [];
+      const newTouristId = response.data.id;
+      const imageUrls = [];
 
-    // 2. Upload gambar ke Firebase dan simpan URL-nya
-    if (images && images.length > 0) {
-      for (const img of images) {
-        if (!img.file) continue;
+      // 2. Upload gambar ke Firebase dan simpan URL-nya
+      if (images && images.length > 0) {
+        for (const img of images) {
+          if (!img.file) continue;
 
-        try {
-          const storageRef = ref(
-            storage,
-            `tourists/${Date.now()}-${img.file.name}`
-          );
-          const snapshot = await uploadBytes(storageRef, img.file);
-          const downloadURL = await getDownloadURL(snapshot.ref);
-          imageUrls.push(downloadURL);
-        } catch (err) {
-          console.error(`Gagal upload ke Firebase: ${img.file.name}`, err);
+          try {
+            const storageRef = ref(
+              storage,
+              `tourists/${Date.now()}-${img.file.name}`
+            );
+            const snapshot = await uploadBytes(storageRef, img.file);
+            const downloadURL = await getDownloadURL(snapshot.ref);
+            imageUrls.push(downloadURL);
+          } catch (err) {
+            console.error(`Gagal upload ke Firebase: ${img.file.name}`, err);
+          }
         }
       }
+
+      // 3. Kirim URL gambar ke backend
+      if (imageUrls.length > 0) {
+        await API.post(`/tourist/${newTouristId}/image`, { images: imageUrls });
+      }
+
+      // 4. Notifikasi sukses dan navigasi
+      await Swal.fire({
+        icon: "success",
+        title: "Berhasil!",
+        text: "Wisata dan gambar berhasil ditambahkan.",
+      });
+
+      navigate(`/admin/wisata/`);
+    } catch (err) {
+      console.error("Error utama:", err);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: err.response?.data?.message || "Gagal menambahkan wisata.",
+      });
+    } finally {
+      setLoading(false);
     }
-
-    // 3. Kirim URL gambar ke backend
-    if (imageUrls.length > 0) {
-      await API.post(`/tourist/${newTouristId}/image`, { images: imageUrls });
-    }
-
-    // 4. Notifikasi sukses dan navigasi
-    await Swal.fire({
-      icon: "success",
-      title: "Berhasil!",
-      text: "Wisata dan gambar berhasil ditambahkan.",
-    });
-
-    navigate(`/admin/wisata/`);
-  } catch (err) {
-    console.error("Error utama:", err);
-    Swal.fire({
-      icon: "error",
-      title: "Gagal",
-      text: err.response?.data?.message || "Gagal menambahkan wisata.",
-    });
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const createTouristCategory = async (title) => {
     try {
       setLoading(true);
-   
 
-      await API.post("/tourist/category",  { name: title });
+      await API.post("/tourist/category", { name: title });
       await getCategories();
       await Swal.fire({
         icon: "success",
@@ -114,7 +114,8 @@ const createTourist = async (title, description, category, images) => {
       Swal.fire({
         icon: "error",
         title: "Gagal",
-        text: err.response?.data?.message || "Gagal menambahkan kategori wisata.",
+        text:
+          err.response?.data?.message || "Gagal menambahkan kategori wisata.",
       });
     } finally {
       setLoading(false);
@@ -141,7 +142,11 @@ const createTourist = async (title, description, category, images) => {
       <HeaderAdmin title="Tambah Data Wisata" />
       <div className="w-full h-auto flex justify-between items-start gap-6">
         <div className="w-[60%]">
-          <AddItems addItem={createTourist} categories={categories} loading={loading} />
+          <AddItems
+            addItem={createTourist}
+            categories={categories}
+            loading={loading}
+          />
         </div>
         <div className="w-[40%]">
           <AddCategory addItem={createTouristCategory} />
