@@ -16,19 +16,18 @@ const CardAdmin = ({ id, title, description, image, category, topic }) => {
   return (
     <Link to={`/admin/${topic}/detail/${id}`}>
       <div className="relative w-[16.5rem] h-[20rem] cursor-pointer overflow-hidden shadow-lg rounded-xl group">
-        {/* Background image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center transform transition-transform duration-500 ease-in-out group-hover:scale-125"
-          style={{
-            backgroundImage: `url(${imageUrl})`,
-          }}
-        ></div>
+        {/* Gambar langsung pakai <img /> */}
+        <img
+          src={imageUrl}
+          alt={title}
+          className="absolute inset-0 w-full h-full object-cover transform transition-transform duration-500 ease-in-out group-hover:scale-125"
+        />
 
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/100 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
 
         {/* Content */}
-        <div className="absolute bottom-0 p-6 w-full">
+        <div className="absolute bottom-0 p-6 w-full z-20">
           <h2 className="text-xl md:text-2xl font-medium text-toraja-kuning group-hover:text-toraja-putih transition">
             {title}
           </h2>

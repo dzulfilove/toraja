@@ -49,7 +49,7 @@ const SliderImage = ({ data, title }) => {
             backgroundImage: `url(https://res.cloudinary.com/diipdl14x/image/upload/v1751214175/w3pnscgi3igm4fs5anvx.jpg)`,
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/100 to-white/0" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/100 to-white/40" />
       </div>
 
       {/* Content */}
@@ -121,18 +121,25 @@ const SliderImage = ({ data, title }) => {
                     whileHover={{ height: 520 }}
                     transition={{ duration: 0.5, ease: "easeInOut" }}
                     viewport={{ once: true }}
-                    className="relative w-full cursor-pointer bg-cover bg-center group overflow-hidden shadow-lg rounded-xl"
-                    style={{
-                      backgroundImage: `url(${content.image})`,
-                    }}
+                    className="relative w-full cursor-pointer group overflow-hidden shadow-lg rounded-xl"
                   >
+                    {/* Gambar sebagai elemen <img> */}
+                    <img
+                      src={
+                        content.image ||
+                        "https://via.placeholder.com/800x600?text=No+Image"
+                      }
+                      alt={content.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+
                     {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/100 to-transparent"></div>
+                    {/* <div className="absolute inset-0 bg-gradient-to-t from-black/100 to-transparent z-10"></div> */}
 
                     {/* Content */}
-                    <div className="absolute bottom-0 p-6 w-full">
+                    <div className="absolute bottom-0 p-6 w-full z-20">
                       <h2 className="text-xl md:text-2xl font-medium text-toraja-kuning group-hover:text-toraja-putih transition">
-                        {title}
+                        {content.title}
                       </h2>
                     </div>
                   </motion.div>
