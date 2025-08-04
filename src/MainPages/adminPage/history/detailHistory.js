@@ -41,7 +41,7 @@ const DetailHistory = () => {
     try {
       setLoadingUpdate(true);
       await API.put(`/history/${id}`, { title, description });
-      console.log("Update title & description sukses");
+      console.log("Update title & description sukses",images);
 
       const editedImages = images.filter((img) => img.isEdit && img.id && img.file);
       for (const img of editedImages) {

@@ -153,7 +153,7 @@ const AddItems = ({ addItem, categories }) => {
 
       <motion.div variants={itemVariants}>
         <label className="block text-lg font-semibold mb-2">Gambar</label>
-        <div className="flex flex-row gap-4 flex-wrap justify-start bg-toraja-putih p-8 rounded-xl mt-4">
+        <div className="flex flex-row gap-4 flex-wrap justify-start bg-slate-300 p-8 rounded-xl mt-4">
           {images.map((img, idx) => (
             <motion.div
               key={idx}

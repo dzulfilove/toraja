@@ -92,48 +92,82 @@ const DetailAdmin = ({ data, updateText, categories, topic, deleteData }) => {
         const old = updated[index];
 
         revokeIfBlob(old?.url);
+        console.log(prev, "prev");
 
-        // Cari index gambar null dengan isNew true
-        const nullImgIndex = prev.findIndex((a) => a.file == null && a.isNew);
+        if (prev.length > 2) {
+          const notDeleted = updated.filter((a) => !a.isDeleted);
+          const deleted = updated.filter((a) => a.isDeleted);
 
-        if (nullImgIndex !== -1) {
-          // Jika ditemukan nullImg, update propertinya dengan file baru
-          updated[nullImgIndex] = {
-            ...updated[nullImgIndex],
-            file: processedFile,
-            url: URL.createObjectURL(processedFile),
-            isNew: false,
-            isEdit: true,
-          };
+          const target = notDeleted[index]; // karena index sekarang mengacu ke elemen notDeleted
 
-          // Jika index yang diupdate berbeda dengan nullImgIndex, hapus entry lama
-          if (nullImgIndex !== index) {
-            updated.splice(index, 1);
-          }
-        } else {
-          // Jika tidak ada nullImg, lakukan update normal
-          if (old && old.id) {
-            updated[index] = {
-              ...old,
+          if (target?.id) {
+            notDeleted[index] = {
+              ...target,
               file: processedFile,
               isEdit: true,
               url: URL.createObjectURL(processedFile),
             };
           } else {
-            updated[index] = {
-              ...old,
+            notDeleted[index] = {
+              ...target,
               file: processedFile,
               isNew: true,
               url: URL.createObjectURL(processedFile),
             };
           }
+
+          const merged = [];
+
+          // Gabungkan kembali: letakkan deleted di posisi aslinya
+          let ndIndex = 0;
+          for (let i = 0; i < updated.length; i++) {
+            if (updated[i].isDeleted) {
+              merged.push(updated[i]);
+            } else {
+              merged.push(notDeleted[ndIndex++]);
+            }
+          }
+
+          return merged;
+        } else if (prev.length === 2) {
+          const nullImgIndex = prev.findIndex((a) => a.file == null && a.isNew);
+          const delImg = prev.find((a) => a.isDeleted);
+
+          if (nullImgIndex !== -1 && delImg) {
+            updated[nullImgIndex] = {
+              ...updated[nullImgIndex],
+              file: processedFile,
+              url: URL.createObjectURL(processedFile),
+              isNew: true,
+              isEdit: false,
+            };
+          } else {
+            // fallback ke update normal
+            if (old?.id) {
+              updated[index] = {
+                ...old,
+                file: processedFile,
+                isEdit: true,
+                url: URL.createObjectURL(processedFile),
+              };
+            } else {
+              updated[index] = {
+                ...old,
+                file: processedFile,
+                isNew: true,
+                url: URL.createObjectURL(processedFile),
+              };
+            }
+          }
+
+          return updated;
         }
 
         return updated;
       });
     } catch (error) {
       console.error("Error processing file:", error);
-      // Fallback ke file asli jika ada error
+
       setImages((prev) => {
         const updated = [...prev];
         const old = updated[index];
@@ -154,7 +188,7 @@ const DetailAdmin = ({ data, updateText, categories, topic, deleteData }) => {
             updated.splice(index, 1);
           }
         } else {
-          if (old && old.id) {
+          if (old?.id) {
             updated[index] = {
               ...old,
               file: file,
@@ -208,7 +242,7 @@ const DetailAdmin = ({ data, updateText, categories, topic, deleteData }) => {
   };
 
   const displayImages = images.filter((a) => !a.isDeleted);
-  console.log(displayImages);
+  // console.log(displayImages);
   return (
     <motion.div
       className="p-8 w-full mt-6 mx-auto bg-white rounded-3xl shadow-lg space-y-4 font-montserrat"
@@ -300,7 +334,7 @@ const DetailAdmin = ({ data, updateText, categories, topic, deleteData }) => {
                 </div>
               ) : (
                 <div className="w-full h-[15rem] bg-gray-100 flex items-center justify-center mb-2 rounded-xl">
-                  <span className="text-gray-400">Kosong</span>
+                  <span className="text-gray-400">Kosong {idx}</span>
                 </div>
               )}
 
