@@ -48,7 +48,7 @@ const HomeMakanan = ({ data }) => {
   console.log(duplicatedSlides);
 
   return (
-    <div className="w-full bg-gray-100 py-16 px-4 font-montserrat">
+    <div className="w-full bg-white py-16 px-4 font-montserrat">
       <div className="container mx-auto mt-4 ">
         {/* Header */}
         <div className="flex px-6 justify-between items-center mb-8">
