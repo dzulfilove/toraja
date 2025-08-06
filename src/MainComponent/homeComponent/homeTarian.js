@@ -73,47 +73,46 @@ const HomeTarian = ({ data }) => {
           {duplicatedSlides.map((tarian) => (
             <SwiperSlide key={tarian.id}>
               {/* <Link to={`/detail/tarian/${tarian.id}`}> */}
-                <div className="relative h-[500px] rounded-xl overflow-hidden shadow-lg group hover:cursor-pointer">
-                  {/* Gambar dengan efek zoom */}
-                  <div
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                    style={{
-                      backgroundImage: `url(${tarian.images[0].image})`,
-                    }}
-                  ></div>
+              <div className="relative h-[500px] rounded-xl overflow-hidden shadow-lg group hover:cursor-pointer">
+                {/* Gambar dengan efek zoom */}
+                <img
+                  src={tarian.images[0].image}
+                  alt="Tarian"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
 
-                  {/* Overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                {/* Overlay gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
 
-                  {/* Konten card */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <div className="mb-2">
-                      <span className="inline-block px-3 py-1 bg-toraja-merah rounded-full text-xs font-semibold">
-                        {tarian.name_category}
-                      </span>
-                    </div>
-                    <h3 className="text-2xl font-bold mb-2">{tarian.title}</h3>
-                    <p className="text-sm mb-4">
-                      {formatText(tarian.description)}
-                    </p>
-                    <div className="flex items-center">
-                      <svg
-                        className="w-4 h-4 mr-2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                        />
-                      </svg>
-                    </div>
+                {/* Konten card */}
+                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                  <div className="mb-2">
+                    <span className="inline-block px-3 py-1 bg-toraja-merah rounded-full text-xs font-semibold">
+                      {tarian.name_category}
+                    </span>
+                  </div>
+                  <h3 className="text-2xl font-bold mb-2">{tarian.title}</h3>
+                  <p className="text-sm mb-4">
+                    {formatText(tarian.description)}
+                  </p>
+                  <div className="flex items-center">
+                    <svg
+                      className="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                      />
+                    </svg>
                   </div>
                 </div>
+              </div>
               {/* </Link> */}
             </SwiperSlide>
           ))}
