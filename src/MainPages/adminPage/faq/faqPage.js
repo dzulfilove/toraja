@@ -9,6 +9,7 @@ import { LuCopy } from "react-icons/lu";
 import { TbMailShare } from "react-icons/tb";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { FiSave } from "react-icons/fi";
+import { MdDelete } from "react-icons/md";
 const FAQPage = () => {
   const [openId, setOpenId] = useState(null);
   const [questions, setQuestions] = useState([]);
@@ -54,6 +55,42 @@ const FAQPage = () => {
       setError("Gagal memuat data pertanyaan.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const confirm = await Swal.fire({
+        title: "Hapus Pertanyaan?",
+        text: "Tindakan ini tidak dapat dibatalkan!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Ya, hapus!",
+        cancelButtonText: "Batal",
+      });
+
+      if (confirm.isConfirmed) {
+       
+        console.log(id)
+        await API.delete(`/question/${id}`);
+        await Swal.fire({
+          icon: "success",
+          title: "Berhasil!",
+          text: "Pertanyaan berhasil dihapus.",
+        });
+       
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal!",
+        text: "Terjadi kesalahan saat menghapus Pertanyaan.",
+      });
+    } finally {
+     
     }
   };
 
@@ -246,7 +283,21 @@ const FAQPage = () => {
                               </div>
                             </a>
                           )}
+                            <div className ="flex justify-end w-[50%] items-center">
+                             <button
+                            className="bg-toraja-merah text-white px-4 py-2 rounded hover:bg-white hover:text-toraja-merah transition-all border border-toraja-merah"
+                            onClick={() => handleDelete(q.id)}
+                            disabled={submittingAnswerId === q.id}
+                          >
+                            <div className="flex items-center gap-4">
+                              <p className=" text-sm">
+                                Hapus
+                              </p>
+                              <MdDelete className="text-xl " />
+                            </div>
+                          </button>
                         </div>
+                                                        </div>
                       </>
                     ) : (
                       <>
