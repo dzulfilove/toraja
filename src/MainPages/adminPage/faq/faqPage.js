@@ -4,6 +4,7 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Swal from "sweetalert2";
 import API from "../../../config/api";
+import HeaderAdmin from "../../../MainComponent/adminComponent/headerAdmin";
 import { FaInbox } from "react-icons/fa"; // Tambahkan import
 import { LuCopy } from "react-icons/lu";
 import { TbMailShare } from "react-icons/tb";
@@ -145,6 +146,7 @@ const FAQPage = () => {
 
   return (
     <div className="h-screen overflow-y-auto snap-y snap-mandatory">
+     <HeaderAdmin title={"Data Pertanyaan "} />
       <motion.div
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
