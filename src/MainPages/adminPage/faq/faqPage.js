@@ -83,6 +83,7 @@ const FAQPage = () => {
         });
        
       }
+       await fetchQuestions();
     } catch (error) {
       console.error(error);
       Swal.fire({
@@ -285,7 +286,7 @@ const FAQPage = () => {
                               </div>
                             </a>
                           )}
-                            <div className ="flex justify-end w-[50%] items-center">
+                            <div className ="flex justify-end w-[80%] items-center">
                              <button
                             className="bg-toraja-merah text-white px-4 py-2 rounded hover:bg-white hover:text-toraja-merah transition-all border border-toraja-merah"
                             onClick={() => handleDelete(q.id)}
