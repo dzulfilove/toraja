@@ -57,13 +57,13 @@ const FAQPage = () => {
     }
   };
 
-  const handleAnswerChange = (id, value) => {
-    setAnswerInputs((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
-  };
-
+ const handleAnswerChange = (id, value) => {
+  setAnswerInputs((prev) => ({
+    ...prev,
+    [id]: value,
+  }));
+};
+  
   const handleAnswerSubmit = async (id) => {
     const answer = answerInputs[id];
     if (!answer || answer.trim() === "") {
@@ -210,10 +210,8 @@ const FAQPage = () => {
                           className="w-full p-3 border rounded-md mb-3"
                           placeholder="Tulis jawaban di sini..."
                           rows={4}
-                          value={q.answer || ""}
-                          onChange={(e) =>
-                            handleAnswerChange(q.id, e.target.value)
-                          }
+                          value={answerInputs[q.id] || ""}
+  onChange={(e) => handleAnswerChange(q.id, e.target.value)}
                         />
                         <div className="flex justify-start gap-4 items-center w-full">
                           <button
