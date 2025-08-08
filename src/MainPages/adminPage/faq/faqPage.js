@@ -59,7 +59,7 @@ const FAQPage = () => {
     }
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (id) => {
     try {
       const confirm = await Swal.fire({
         title: "Hapus Pertanyaan?",
