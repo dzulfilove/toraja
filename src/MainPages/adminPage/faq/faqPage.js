@@ -146,7 +146,7 @@ const FAQPage = () => {
   }, []);
 
   return (
-    <div className="h-screen overflow-y-auto snap-y snap-mandatory">
+    <div className="h-screen overflow-y-auto snap-y snap-mandatory p-10">
      <HeaderAdmin title={"Data Pertanyaan "} />
       <motion.div
         initial={{ opacity: 0, y: -30 }}
