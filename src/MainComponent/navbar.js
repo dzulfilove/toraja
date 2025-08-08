@@ -43,6 +43,11 @@ const Navbar = () => {
               Wisata
             </Link>
           </li>
+            <li>
+            <Link to="/faq" className="hover:text-toraja-kuning">
+              FAQ
+            </Link>
+          </li>
           <li>
             <Link to="/login" className="hover:text-toraja-kuning">
               Login

@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { MdEmojiFoodBeverage } from "react-icons/md";
 import { FaMountainSun } from "react-icons/fa6";
 import { FaPeoplePulling } from "react-icons/fa6";
+import { FaPersonCircleQuestion } from "react-icons/fa6";
 const Sidebar = () => {
   const menuItems = [
     { label: "Dashboard", icon: <Home size={20} />, href: "/admin" },
@@ -28,6 +29,11 @@ const Sidebar = () => {
       label: "Filosofi",
       icon: <FaMountainSun className="text-xl " />,
       href: "/admin/filosofi",
+    },
+          {
+      label: "Pertanyaan",
+      icon: <FaPersonCircleQuestion className="text-xl " />,
+      href: "/admin/faq",
     },
     // {
     //   label: "Pengaturan",

@@ -35,6 +35,8 @@ import AddNewPhilosophy from "./MainPages/adminPage/food copy/addNewPhilosophy";
 import DetailNewPhilosophy from "./MainPages/adminPage/food copy/detailNewPhilosophy";
 
 import API from "./config/api";
+import FAQList from "./MainPages/faq";
+import FAQPage from "./MainPages/adminPage/faq/faqPage";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -68,6 +70,7 @@ function App() {
             <Route path="tarian" element={<TarianPage />} />
             <Route path="makanan" element={<MakananPage />} />
             <Route path="wisata" element={<WisataPage />} />
+            <Route path="faq" element={<FAQList />} />
             <Route path="/detail/:topic/:id" element={<DetailPage />} />
           </Route>
         </Route>
@@ -80,6 +83,7 @@ function App() {
             <Route path="sejarah/detail/:id" element={<DetailHistory />} />
             <Route path="makanan" element={<FoodPage />} />
             <Route path="makanan/detail/:id" element={<DetailFood />} />
+            <Route path="faq" element={<FAQPage />} />
             <Route path="add/makanan" element={<AddFood />} />
             <Route path="tarian" element={<DancePage />} />
             <Route path="tarian/detail/:id" element={<DetailDance />} />
