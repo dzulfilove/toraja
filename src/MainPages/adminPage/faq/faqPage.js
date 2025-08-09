@@ -73,17 +73,15 @@ const FAQPage = () => {
       });
 
       if (confirm.isConfirmed) {
-       
-        console.log(id)
+        console.log(id);
         await API.delete(`/question/${id}`);
         await Swal.fire({
           icon: "success",
           title: "Berhasil!",
           text: "Pertanyaan berhasil dihapus.",
         });
-       
       }
-       await fetchQuestions();
+      await fetchQuestions();
     } catch (error) {
       console.error(error);
       Swal.fire({
@@ -92,17 +90,16 @@ const FAQPage = () => {
         text: "Terjadi kesalahan saat menghapus Pertanyaan.",
       });
     } finally {
-     
     }
   };
 
- const handleAnswerChange = (id, value) => {
-  setAnswerInputs((prev) => ({
-    ...prev,
-    [id]: value,
-  }));
-};
-  
+  const handleAnswerChange = (id, value) => {
+    setAnswerInputs((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
   const handleAnswerSubmit = async (id) => {
     const answer = answerInputs[id];
     if (!answer || answer.trim() === "") {
@@ -147,7 +144,7 @@ const FAQPage = () => {
 
   return (
     <div className="h-screen overflow-y-auto snap-y snap-mandatory p-10">
-     <HeaderAdmin title={"Data Pertanyaan "} />
+      <HeaderAdmin title={"Data Pertanyaan "} />
       <motion.div
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -250,8 +247,10 @@ const FAQPage = () => {
                           className="w-full p-3 border rounded-md mb-3"
                           placeholder="Tulis jawaban di sini..."
                           rows={4}
-                          value={answerInputs[q.id] || ""}
-  onChange={(e) => handleAnswerChange(q.id, e.target.value)}
+                          value={answerInputs[q.id] || q.answer ? q.answer : ""}
+                          onChange={(e) =>
+                            handleAnswerChange(q.id, e.target.value)
+                          }
                         />
                         <div className="flex justify-start gap-4 items-center w-full">
                           <button
@@ -271,11 +270,16 @@ const FAQPage = () => {
                           </button>
                           {q.answer && (
                             <a
-                              href={`https://mail.google.com/mail/?view=cm&fs=1&to=${
+                              href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
                                 q.email
-                              }&su=${encodeURIComponent(
+                              )}&su=${encodeURIComponent(
                                 "Balasan Resmi dari Tim Toraja Budaya atas Pertanyaan Anda"
-                              )}&body=${encodeURIComponent(q.answer)}`}
+                              )}&body=${encodeURIComponent(
+                                "Pertanyaan Anda: " +
+                                  q.question +
+                                  "\nJawaban Kami: " +
+                                  q.answer
+                              )}`}
                               className="bg-toraja-merah text-white px-4 py-2 rounded hover:bg-white hover:text-toraja-merah transition-all border border-toraja-merah"
                               target="_blank"
                               rel="noopener noreferrer"
@@ -286,21 +290,19 @@ const FAQPage = () => {
                               </div>
                             </a>
                           )}
-                            <div className ="flex justify-end w-[60%] items-center">
-                             <button
-                            className="bg-toraja-merah text-white px-4 py-2 rounded hover:bg-white hover:text-toraja-merah transition-all border border-toraja-merah"
-                            onClick={() => handleDelete(q.id)}
-                            disabled={submittingAnswerId === q.id}
-                          >
-                            <div className="flex items-center gap-4">
-                              <p className=" text-sm">
-                                Hapus
-                              </p>
-                              <MdDelete className="text-xl " />
-                            </div>
-                          </button>
+                          <div className="flex justify-end w-[60%] items-center">
+                            <button
+                              className="bg-toraja-merah text-white px-4 py-2 rounded hover:bg-white hover:text-toraja-merah transition-all border border-toraja-merah"
+                              onClick={() => handleDelete(q.id)}
+                              disabled={submittingAnswerId === q.id}
+                            >
+                              <div className="flex items-center gap-4">
+                                <p className=" text-sm">Hapus</p>
+                                <MdDelete className="text-xl " />
+                              </div>
+                            </button>
+                          </div>
                         </div>
-                                                        </div>
                       </>
                     ) : (
                       <>
